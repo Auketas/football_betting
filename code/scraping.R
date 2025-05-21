@@ -111,6 +111,7 @@ extract_data <- function(league,timezone){
     
     matuse <- data.frame(Date = final_dates, dif = dif, matchmatuse = matchmatuse_mat, oddsmatuse = oddsmatuse, stringsAsFactors = FALSE)
     matuse$id <- paste0(matuse$Date,"_",matuse$matchmatuse.1,"_",matuse$matchmatuse.2)
+    matuse <- matuse[matuse$dif<21,]
     return(matuse)
   }
 }
