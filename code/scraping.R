@@ -219,7 +219,7 @@ write_league <- function(league,timezone){
         new_data[[colname2]][i] <- data$oddsmatuse.2[i]
         new_data[[colname3]][i] <- data$oddsmatuse.3[i]
       }
-      assert_that(ncol(fulldata)==numcol,msg=paste0("Adding data has changed the number of columns for league ",league))
+      assert_that(ncol(new_data)==numcol,msg=paste0("Adding data has changed the number of columns for league ",league))
       write.csv(new_data,paste0("data/new/",name,".csv"),row.names=FALSE)
     }
   }
