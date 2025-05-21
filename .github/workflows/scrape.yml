@@ -18,7 +18,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          Rscript -e 'install.packages(c("tidyverse","httr","jsonlite","assertthat","fs","lubridate","rvest"), repos="https://cloud.r-project.org")'
+          Rscript -e 'install.packages(c("tidyverse","httr","jsonlite","assertthat","fs","lubridate","rvest","xml2", "stringr", "readr"), repos="https://cloud.r-project.org")'
 
       - name: Run daily scraper
         run: Rscript code/daily_scraper.R
