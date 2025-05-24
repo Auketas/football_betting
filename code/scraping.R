@@ -107,7 +107,7 @@ extract_data <- function(league,timezone){
     
     dif <- final_dates-local_date
     
-    matchmatuse_mat <- matrix(matchmatuse, ncol = 2, byrow = TRUE)
+    matchmatuse_mat <- matrix(matchmatuse, ncol = 2)
     
     matuse <- data.frame(Date = final_dates, dif = dif, matchmatuse = matchmatuse_mat, oddsmatuse = oddsmatuse, stringsAsFactors = FALSE)
     matuse$id <- paste0(matuse$Date,"_",matuse$matchmatuse.1,"_",matuse$matchmatuse.2)
