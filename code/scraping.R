@@ -164,7 +164,7 @@ extract_leagues <- function(){
 
 write_league <- function(league,timezone){
   data <- extract_data(league,timezone)
-  if(length(data)>0){
+  if(length(data)>0&&nrow(data)>0){
     trimmed <- sub("^/football/", "", league)
     trimmed <- sub("/$", "", trimmed)
     
