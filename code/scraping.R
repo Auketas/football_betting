@@ -2,11 +2,15 @@ library(rvest)
 library(lubridate)
 library(fs)
 library(assertthat)
+library(httr)
 #Add correct time zone for each league
 extract_data <- function(league,timezone){
   local_date <- as.Date(as.POSIXlt(Sys.time(), tz = timezone))
   link <- paste0("https://www.betexplorer.com",league,"fixtures")
-  page <- read_html(link)
+  headers <- add_headers("User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/58.0.3029.110 Safari/537.3")
+  res <- httr::GET(link,headers)
+  stop_for_status(res)
+  page <- read_html(res)
   
   odds_section <- html_nodes(page, ".table-main__odds")
   
@@ -228,7 +232,10 @@ write_league <- function(league,timezone){
 
 add_results <- function(league){
   link <- paste0("https://www.betexplorer.com",league,"results")
-  page <- read_html(link)
+  headers <- add_headers("User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/58.0.3029.110 Safari/537.3")
+  res <- httr::GET(link,headers)
+  stop_for_status(res)
+  page <- read_html(res)
   result_section <- html_nodes(page, ".h-text-center")
   results <- html_text(result_section)
   results <- results[!(results %in%  c("1","2","X"))]
