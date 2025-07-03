@@ -22,6 +22,7 @@ extract_data <- function(league,timezone){
   if(length(odds)>0){
     dates_section <- html_nodes(page, ".table-main__datetime")
     dates <- html_text(dates_section)
+    if(length(dates)>0){
     for(i in 1:length(dates)){
       if(nchar(dates[i])==1){
         dates[i] <- dates[i-1]
@@ -117,6 +118,7 @@ extract_data <- function(league,timezone){
     matuse$id <- paste0(matuse$Date,"_",matuse$matchmatuse.1,"_",matuse$matchmatuse.2)
     matuse <- matuse[matuse$dif<21,]
     return(matuse)
+  }
   }
 }
 
