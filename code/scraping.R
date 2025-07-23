@@ -453,6 +453,6 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
     return(allgames)
   }
   if(write==TRUE){
-    write.csv(allgames,"C:/Users/Auke/OneDrive/betting_model/data/dump/modeldata.csv")
+    write.csv(allgames,"data/dump/modeldata.csv")
   }
 }
