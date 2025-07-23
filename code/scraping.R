@@ -359,7 +359,7 @@ write_to_train_test <- function(){
   temptrain <- temptrain[,c(1,ncol(temptrain),2:(ncol(temptrain)-1))]
   temptest <- temptrain
     
-  leaguelist <- read.csv("data/hold/leaguelist_git.csv")
+  leaguelist <- read.csv("data/hold/leaguelist.csv")
   leagues <- leaguelist[, 2]
   timezones <- leaguelist[, 3]
   
