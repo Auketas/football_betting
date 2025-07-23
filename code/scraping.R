@@ -353,13 +353,106 @@ loop_over_leagues <- function(start = 1) {
   }
 }
 
-leaguelist <- read.csv("data/hold/leaguelist.csv")
-countries <- c()
-for(i in 1:nrow(leaguelist)){
-  league <- leaguelist[i,2]
-  parts <- strsplit(league, "/")[[1]]
-  name <- parts[3]
-  countries <- c(countries,name)
+write_to_train_test <- function(){
+  temptrain <- read.csv("data/new/hold.csv")
+  temptrain$league <- 0
+  temptrain <- temptrain[,c(1,ncol(temptrain),2:(ncol(temptrain)-1))]
+  temptest <- temptrain
+    
+  leaguelist <- read.csv("data/hold/leaguelist_git.csv")
+  leagues <- leaguelist[, 2]
+  timezones <- leaguelist[, 3]
+  
+  for (i in 1:nrow(leaguelist)) {
+    league <- leagues[i]
+    trimmed <- sub("^/football/", "", league)
+    trimmed <- sub("/$", "", trimmed)
+    
+    # Split by "/"
+    parts <- strsplit(trimmed, "/")[[1]]
+    
+    # Capitalize the first letter of the first part
+    parts[1] <- paste0(toupper(substring(parts[1], 1, 1)), substring(parts[1], 2))
+    
+    # Join with underscore
+    name <- paste(parts, collapse = "_")
+    if(file.exists(paste0("data/new/",name,".csv"))){
+      tempdata <- read.csv(paste0("data/new/",name,".csv"))
+      tempdata$league <- name
+      tempdata <- tempdata[,c(1,ncol(tempdata),2:(ncol(tempdata)-1))]
+      finished <- tempdata[!is.na(tempdata$result),]
+      finished <- finished[,1:ncol(temptrain)]
+      ongoing <- tempdata[is.na(tempdata$result),]
+      ongoing <- ongoing[,1:ncol(temptrain)]
+      temptrain <- rbind(temptrain,finished)
+      temptest <- rbind(temptest,ongoing)  
+    }
+  }
+  temptrain <- temptrain[nchar(temptrain$id)>2,]
+  temptest <- temptest[nchar(temptest$id)>2,]
+  temptrain_formatted <- convert_data_to_model_format(temptrain,return=TRUE,write=FALSE)
+  temptest_formatted <- convert_data_to_model_format(temptest,return=TRUE,write=FALSE)
+  temptest_formatted <- temptest_formatted %>%
+    group_by(id, outcome) %>%
+    slice_min(order_by = daysout, n = 1, with_ties = FALSE) %>%
+    ungroup()
+  temptrain_formatted$saveid <- paste0(temptrain_formatted$id,"-",temptrain_formatted$daysout,"-",temptrain_formatted$outcome)
+  train_file <- "data/model/train.rds"
+  if (file.exists(train_file)) {
+    train <- readRDS(train_file)
+    train <- rbind(temptrain_formatted, train)
+    train <- train[!duplicated(train$saveid), ]
+  } else {
+    train <- temptrain_formatted
+  }
+  saveRDS(train, file = "data/model/train.rds")
+  saveRDS(temptest_formatted,file = "data/model/test.rds")
 }
-leaguelist <- cbind(leaguelist,countries)
 
+convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
+  allgames <- matrix(ncol=9)
+  allgames <- data.frame(allgames)
+  colnames(allgames) <- c("id","league","daysout","outcome","odds_history","final_result","payoff","odds","ndays")
+  for(i in 1:nrow(rawdata)){
+    row <- rawdata[i,]
+    days <- 21-which(!is.na(row[3:23]))
+    league <- row$league
+    id  <- row$id
+    result  <- row$result
+    gamemat <- matrix(ncol=9)
+    gamemat <- data.frame(gamemat)
+    colnames(gamemat) <- colnames(allgames)
+    for(j in days){
+      homeodds <- row[1,23-j]
+      drawodds <- row[1,44-j]
+      awayodds <- row[1,65-j]
+      oddsvechome <- c(as.numeric(row[ , 3:(23 - j)]),rep(NA,j))
+      oddsvecdraw <- c(as.numeric(row[ , 24:(44 - j)]),rep(NA,j))
+      oddsvecaway <- c(as.numeric(row[ , 45:(65 - j)]),rep(NA,j))
+      minimat <- matrix(ncol=9,nrow=3)
+      minimat  <- data.frame(minimat)
+      colnames(minimat) <- colnames(gamemat)
+      minimat$id <- rep(id,3)
+      minimat$league <- rep(league,3)
+      minimat$daysout <- rep(j,3)
+      minimat$outcome <- rep(result,3)
+      minimat$odds_history <- list(oddsvechome,oddsvecdraw,oddsvecaway)
+      minimat$final_result <- c("1","2","X")
+      homepay <- ifelse(result=="1",homeodds-1,-1)
+      drawpay <- ifelse(result=="X",drawodds-1,-1)
+      awaypay <- ifelse(result=="2",awayodds-1,-1)
+      minimat$payoff <- c(homepay,drawpay,awaypay)
+      minimat$odds <- c(homeodds,drawodds,awayodds)
+      minimat$ndays <- c(sum(!is.na(oddsvechome)),sum(!is.na(oddsvecdraw)),sum(!is.na(oddsvecaway)))
+      gamemat <- rbind(gamemat,minimat)
+    }
+    allgames  <- rbind(allgames,gamemat)
+  }
+  allgames <- allgames[!is.na(allgames$id),]
+  if(return==TRUE){
+    return(allgames)
+  }
+  if(write==TRUE){
+    write.csv(allgames,"C:/Users/Auke/OneDrive/betting_model/data/dump/modeldata.csv")
+  }
+}
