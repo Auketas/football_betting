@@ -23,7 +23,7 @@ jobs:
 
 
       - name: Install base dependencies
-        run: Rscript -e 'install.packages(c("tidyverse", "httr", "jsonlite", "assertthat", "fs", "lubridate", "xml2", "stringr", "readr"), repos = "https://cloud.r-project.org")'
+        run: Rscript -e 'install.packages(c("dplyr","tidyverse", "httr", "jsonlite", "assertthat", "fs", "lubridate", "xml2", "stringr", "readr"), repos = "https://cloud.r-project.org")'
 
       - name: Install rvest
         run: Rscript -e 'install.packages("rvest", repos = "https://cloud.r-project.org")'
