@@ -3,6 +3,7 @@ library(lubridate)
 library(fs)
 library(assertthat)
 library(httr)
+library(dplyr)
 #Add correct time zone for each league
 extract_data <- function(league,timezone){
   local_date <- as.Date(as.POSIXlt(Sys.time(), tz = timezone))
