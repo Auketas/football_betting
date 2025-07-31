@@ -355,6 +355,7 @@ loop_over_leagues <- function(start = 1) {
 }
 
 write_to_train_test <- function(){
+  print("writing to train/test")
   temptrain <- read.csv("data/new/hold.csv")
   temptrain$league <- 0
   temptrain <- temptrain[,c(1,ncol(temptrain),2:(ncol(temptrain)-1))]
@@ -406,6 +407,7 @@ write_to_train_test <- function(){
   } else {
     train <- temptrain_formatted
   }
+  print("Saving  files")
   saveRDS(train, file = "data/model/train.rds")
   saveRDS(temptest_formatted,file = "data/model/test.rds")
 }
