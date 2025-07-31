@@ -1,0 +1,29 @@
+name: Test
+
+on:
+  workflow_dispatch:   # Only run manually from GitHub UI
+
+jobs:
+  run-r-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libxml2-dev libssl-dev
+
+      - name: Install base dependencies
+        run: Rscript -e 'install.packages(c("dplyr","tidyverse","httr","jsonlite","assertthat","fs","lubridate","xml2","stringr","readr"), repos="https://cloud.r-project.org")'
+
+      - name: Install rvest
+        run: Rscript -e 'install.packages("rvest", repos="https://cloud.r-project.org")'
+
+      - name: Run test script
+        run: Rscript code/testscript.R
