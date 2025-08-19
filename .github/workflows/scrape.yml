@@ -23,7 +23,7 @@ jobs:
 
 
       - name: Install base dependencies
-        run: Rscript -e 'install.packages(c("tidyverse", "httr", "jsonlite", "assertthat", "fs", "lubridate", "xml2", "stringr", "readr"), repos = "https://cloud.r-project.org")'
+        run: Rscript -e 'install.packages(c("dplyr","tidyverse", "httr", "jsonlite", "assertthat", "fs", "lubridate", "xml2", "stringr", "readr"), repos = "https://cloud.r-project.org")'
 
       - name: Install rvest
         run: Rscript -e 'install.packages("rvest", repos = "https://cloud.r-project.org")'
@@ -39,6 +39,7 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git add data/new/*.csv
+          git add data/model/*.rds
           git commit -m "Update scraped data [$(date +'%Y-%m-%d')]"
           git push
         env:

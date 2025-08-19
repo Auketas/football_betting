@@ -3,11 +3,15 @@ library(lubridate)
 library(fs)
 library(assertthat)
 library(httr)
+library(tictoc)
+library(dplyr)
+library(chromote)
 #Add correct time zone for each league
 extract_data <- function(league,timezone){
   local_date <- as.Date(as.POSIXlt(Sys.time(), tz = timezone))
   link <- paste0("https://www.betexplorer.com",league,"fixtures")
   headers <- add_headers("User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/58.0.3029.110 Safari/537.3")
+  
   res <- httr::GET(link,headers)
   stop_for_status(res)
   page <- read_html(res)
@@ -23,12 +27,13 @@ extract_data <- function(league,timezone){
     dates_section <- html_nodes(page, ".table-main__datetime")
     dates <- html_text(dates_section)
     if(length(dates)>0){
-    for(i in 1:length(dates)){
-      if(nchar(dates[i])==1){
-        dates[i] <- dates[i-1]
+      print("Matches to scrape")
+      for(i in 1:length(dates)){
+        if(nchar(dates[i])==1){
+          dates[i] <- dates[i-1]
+        }
       }
-    }
-    normalize_dates <- function(dates) {
+      normalize_dates <- function(dates) {
       today <- local_date
       
       # Loop through each entry
@@ -55,21 +60,67 @@ extract_data <- function(league,timezone){
     
     matches_section <- html_nodes(page,".h-text-left")
     
+    match_links <- html_nodes(page, 'a.in-match') %>% html_text(trim=TRUE)
+    
     a_node <- html_node(matches_section, "a.in-match")
-    team_names_mat <- matrix(nrow=length(dates),ncol=2)
+    team_names_mat <- matrix(nrow=length(dates),ncol=6)
     j <- 1
     for(i in 1:length(a_node)){
       if(length(a_node[[i]])>0){
         team_names <- html_nodes(a_node[[i]],"span") %>% html_text(trim = TRUE)
+        link  <- paste0("https://www.betexplorer.com",html_attr(a_node[[i]],"href"))
         team_names_mat[j,1] <- team_names[1]
         team_names_mat[j,2] <- team_names[2]
+        team_names_mat[j,3] <- link
+        
         j <- j+1
       }
     }
-    
     oddsmatuse <- matrix(odds,nrow=length(odds)/3,ncol=3,byrow=TRUE)
-    matchmatuse <- team_names_mat[1:nrow(oddsmatuse),]
-    datesuse <- dates[1:nrow(oddsmatuse)]
+    
+    
+    base_year <- format(Sys.Date(), "%Y")
+    parsed_dates <- as.POSIXct(
+      ifelse(grepl("\\d{4}", dates), 
+             dates, 
+             paste0(dates, base_year)),
+      format = ifelse(grepl("\\d{4}", dates),
+                      "%d.%m.%Y %H:%M",  # has year
+                      "%d.%m. %H:%M%Y")  # no year
+    )
+    ordered_indices <- order(parsed_dates)
+    x <- nrow(oddsmatuse)
+    first_x_indices <- ordered_indices[1:x]
+    
+    matchmatuse <- team_names_mat[first_x_indices, ]
+    matchmatuse <- as.matrix(matchmatuse)
+    if(ncol(matchmatuse)==1){
+      matchmatuse <- t(as.matrix(matchmatuse))
+    }
+    for (i in seq_len(nrow(matchmatuse))) {
+      
+      success <- FALSE
+      attempts <- 0
+      
+      while (!success && attempts < 3) {  # Retry up to 3 times
+        attempts <- attempts + 1
+        tryCatch({
+          Sys.sleep(2)  # small delay between requests
+          matchmatuse[i, 4:6] <- extract_sd(matchmatuse[i, 3])
+          success <- TRUE
+        }, error = function(e) {
+          cat(paste0("⚠️ Error in game ", i, ": ", e$message, "\n"))
+          cat("⏳ Retrying this game in 10 seconds...\n")
+          Sys.sleep(10)
+        })
+      }
+      
+      if (!success) {
+        cat(paste0("❌ Skipping game ", i, " after 3 failed attempts.\n"))
+      }
+    }
+    
+    datesuse <- dates[first_x_indices]
     day_month <- sub("(\\d{2}\\.\\d{2})\\..*", "\\1", datesuse)
     # Explanation:
     # (\\d{2}\\.\\d{2}) captures "dd.mm"
@@ -112,14 +163,37 @@ extract_data <- function(league,timezone){
     
     dif <- final_dates-local_date
     
-    matchmatuse_mat <- matrix(matchmatuse, ncol = 2)
+    matchmatuse_mat <- matrix(matchmatuse, ncol = 6)
     
     matuse <- data.frame(Date = final_dates, dif = dif, matchmatuse = matchmatuse_mat, oddsmatuse = oddsmatuse, stringsAsFactors = FALSE)
     matuse$id <- paste0(matuse$Date,"_",matuse$matchmatuse.1,"_",matuse$matchmatuse.2)
     matuse <- matuse[matuse$dif<21,]
     return(matuse)
+    }
   }
+}
+
+extract_sd <- function(link){
+  b <- ChromoteSession$new()
+  b$Page$navigate(link)  # Replace with your actual URL
+  
+  # Wait a few seconds for JS to run (basic workaround)
+  Sys.sleep(5)  # Adjust if needed
+  
+  # Get full HTML of rendered page
+  html <- b$Runtime$evaluate("document.documentElement.outerHTML")$result$value
+  page <- read_html(html)
+  
+  odds_nodes <- html_nodes(page, "a.archiveOdds")
+  if(length(odds_nodes)==0){
+    return(c(NA,NA,NA))
   }
+  text <- odds_nodes %>% html_text(trim=TRUE)
+  
+  home <- as.numeric(text[seq(1, length(text), by = 3)])
+  draw <- as.numeric(text[seq(2, length(text), by = 3)])
+  away <- as.numeric(text[seq(3, length(text), by = 3)])
+  return(c(sd(home),sd(draw),sd(away)))
 }
 
 extract_leagues <- function(){
@@ -149,12 +223,11 @@ extract_leagues <- function(){
       league_urls <- c(league_urls, league_links)
     }
   }
-  filtered_urls <- league_urls[!grepl("\\d{4}", league_urls)]
   
-  country_tags <- sub("^/football/([^/]+)/.*$", "\\1", filtered_urls)
+  country_tags <- sub("^/football/([^/]+)/.*$", "\\1", league_urls)
   
   # Combine into data.frame for easier handling
-  df <- data.frame(country = country_tags, url = filtered_urls, stringsAsFactors = FALSE)
+  df <- data.frame(country = country_tags, url = league_urls, stringsAsFactors = FALSE)
   
   # Keep top 2 leagues per country
   library(dplyr)
@@ -165,12 +238,13 @@ extract_leagues <- function(){
   
   # Extract final URLs
   final_league_urls <- top_leagues$url
+  filtered_urls <- final_league_urls[!grepl("\\d{4}", final_league_urls)]
   return(final_league_urls)
 }
 
 write_league <- function(league,timezone){
   data <- extract_data(league,timezone)
-  if(length(data)>0&&nrow(data)>0){
+  if(nrow(data)>0&&length(data)>0){
     trimmed <- sub("^/football/", "", league)
     trimmed <- sub("/$", "", trimmed)
     
@@ -203,9 +277,15 @@ write_league <- function(league,timezone){
             colname1 <- paste0("home_odds_l",data$dif[i])
             colname2 <- paste0("draw_odds_l",data$dif[i])
             colname3 <- paste0("away_odds_l",data$dif[i])
+            colname4 <- paste0("home_sd_l",data$dif[i])
+            colname5 <- paste0("draw_sd_l",data$dif[i])
+            colname6 <- paste0("away_sd_l",data$dif[i])
             new_data[[colname1]][i] <- data$oddsmatuse.1[i]
             new_data[[colname2]][i] <- data$oddsmatuse.2[i]
             new_data[[colname3]][i] <- data$oddsmatuse.3[i]
+            new_data[[colname4]][i] <- data$matchmatuse.4[i]
+            new_data[[colname5]][i] <- data$matchmatuse.5[i]
+            new_data[[colname6]][i] <- data$matchmatuse.6[i]
           }
           fulldata <- rbind(fulldata,new_data)
         }
@@ -222,9 +302,15 @@ write_league <- function(league,timezone){
         colname1 <- paste0("home_odds_l",data$dif[i])
         colname2 <- paste0("draw_odds_l",data$dif[i])
         colname3 <- paste0("away_odds_l",data$dif[i])
+        colname4 <- paste0("home_sd_l",data$dif[i])
+        colname5 <- paste0("draw_sd_l",data$dif[i])
+        colname6 <- paste0("away_sd_l",data$dif[i])
         new_data[[colname1]][i] <- data$oddsmatuse.1[i]
         new_data[[colname2]][i] <- data$oddsmatuse.2[i]
         new_data[[colname3]][i] <- data$oddsmatuse.3[i]
+        new_data[[colname4]][i] <- data$matchmatuse.4[i]
+        new_data[[colname5]][i] <- data$matchmatuse.5[i]
+        new_data[[colname6]][i] <- data$matchmatuse.6[i]
       }
       assert_that(ncol(new_data)==numcol,msg=paste0("Adding data has changed the number of columns for league ",league))
       write.csv(new_data,paste0("data/new/",name,".csv"),row.names=FALSE)
@@ -327,6 +413,7 @@ add_results <- function(league){
 }
 
 loop_over_leagues <- function(start = 1) {
+  newgames <- 
   leaguelist <- read.csv("data/hold/leaguelist.csv")
   leagues <- leaguelist[, 2]
   timezones <- leaguelist[, 3]
@@ -353,13 +440,106 @@ loop_over_leagues <- function(start = 1) {
   }
 }
 
-leaguelist <- read.csv("data/hold/leaguelist.csv")
-countries <- c()
-for(i in 1:nrow(leaguelist)){
-  league <- leaguelist[i,2]
-  parts <- strsplit(league, "/")[[1]]
-  name <- parts[3]
-  countries <- c(countries,name)
+write_to_train_test <- function(){
+  temptrain <- read.csv("data/new/hold.csv")
+  temptrain$league <- 0
+  temptrain <- temptrain[,c(1,ncol(temptrain),2:(ncol(temptrain)-1))]
+  temptest <- temptrain
+    
+  leaguelist <- read.csv("data/hold/leaguelist_git.csv")
+  leagues <- leaguelist[, 2]
+  timezones <- leaguelist[, 3]
+  
+  for (i in 1:nrow(leaguelist)) {
+    league <- leagues[i]
+    trimmed <- sub("^/football/", "", league)
+    trimmed <- sub("/$", "", trimmed)
+    
+    # Split by "/"
+    parts <- strsplit(trimmed, "/")[[1]]
+    
+    # Capitalize the first letter of the first part
+    parts[1] <- paste0(toupper(substring(parts[1], 1, 1)), substring(parts[1], 2))
+    
+    # Join with underscore
+    name <- paste(parts, collapse = "_")
+    if(file.exists(paste0("data/new/",name,".csv"))){
+      tempdata <- read.csv(paste0("data/new/",name,".csv"))
+      tempdata$league <- name
+      tempdata <- tempdata[,c(1,ncol(tempdata),2:(ncol(tempdata)-1))]
+      finished <- tempdata[!is.na(tempdata$result),]
+      finished <- finished[,1:ncol(temptrain)]
+      ongoing <- tempdata[is.na(tempdata$result),]
+      ongoing <- ongoing[,1:ncol(temptrain)]
+      temptrain <- rbind(temptrain,finished)
+      temptest <- rbind(temptest,ongoing)  
+    }
+  }
+  temptrain <- temptrain[nchar(temptrain$id)>2,]
+  temptest <- temptest[nchar(temptest$id)>2,]
+  temptrain_formatted <- convert_data_to_model_format(temptrain,return=TRUE,write=FALSE)
+  temptest_formatted <- convert_data_to_model_format(temptest,return=TRUE,write=FALSE)
+  temptest_formatted <- temptest_formatted %>%
+    group_by(id, outcome) %>%
+    slice_min(order_by = daysout, n = 1, with_ties = FALSE) %>%
+    ungroup()
+  temptrain_formatted$saveid <- paste0(temptrain_formatted$id,"-",temptrain_formatted$daysout,"-",temptrain_formatted$outcome)
+  train_file <- "data/model/train.rds"
+  if (file.exists(train_file)) {
+    train <- readRDS(train_file)
+    train <- rbind(temptrain_formatted, train)
+    train <- train[!duplicated(train$saveid), ]
+  } else {
+    train <- temptrain_formatted
+  }
+  saveRDS(train, file = "data/model/train.rds")
+  saveRDS(temptest_formatted,file = "data/model/test.rds")
 }
-leaguelist <- cbind(leaguelist,countries)
 
+convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
+  allgames <- matrix(ncol=9)
+  allgames <- data.frame(allgames)
+  colnames(allgames) <- c("id","league","daysout","outcome","odds_history","final_result","payoff","odds","ndays")
+  for(i in 1:nrow(rawdata)){
+    row <- rawdata[i,]
+    days <- 21-which(!is.na(row[3:23]))
+    league <- row$league
+    id  <- row$id
+    result  <- row$result
+    gamemat <- matrix(ncol=9)
+    gamemat <- data.frame(gamemat)
+    colnames(gamemat) <- colnames(allgames)
+    for(j in days){
+      homeodds <- row[1,23-j]
+      drawodds <- row[1,44-j]
+      awayodds <- row[1,65-j]
+      oddsvechome <- c(as.numeric(row[ , 3:(23 - j)]),rep(NA,j))
+      oddsvecdraw <- c(as.numeric(row[ , 24:(44 - j)]),rep(NA,j))
+      oddsvecaway <- c(as.numeric(row[ , 45:(65 - j)]),rep(NA,j))
+      minimat <- matrix(ncol=9,nrow=3)
+      minimat  <- data.frame(minimat)
+      colnames(minimat) <- colnames(gamemat)
+      minimat$id <- rep(id,3)
+      minimat$league <- rep(league,3)
+      minimat$daysout <- rep(j,3)
+      minimat$outcome <- rep(result,3)
+      minimat$odds_history <- list(oddsvechome,oddsvecdraw,oddsvecaway)
+      minimat$final_result <- c("1","2","X")
+      homepay <- ifelse(result=="1",homeodds-1,-1)
+      drawpay <- ifelse(result=="X",drawodds-1,-1)
+      awaypay <- ifelse(result=="2",awayodds-1,-1)
+      minimat$payoff <- c(homepay,drawpay,awaypay)
+      minimat$odds <- c(homeodds,drawodds,awayodds)
+      minimat$ndays <- c(sum(!is.na(oddsvechome)),sum(!is.na(oddsvecdraw)),sum(!is.na(oddsvecaway)))
+      gamemat <- rbind(gamemat,minimat)
+    }
+    allgames  <- rbind(allgames,gamemat)
+  }
+  allgames <- allgames[!is.na(allgames$id),]
+  if(return==TRUE){
+    return(allgames)
+  }
+  if(write==TRUE){
+    write.csv(allgames,"C:/Users/Auke/OneDrive/betting_model/data/dump/modeldata.csv")
+  }
+}
