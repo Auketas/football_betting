@@ -497,16 +497,16 @@ write_to_train_test <- function(){
 }
 
 convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
-  allgames <- matrix(ncol=9)
+  allgames <- matrix(ncol=10)
   allgames <- data.frame(allgames)
-  colnames(allgames) <- c("id","league","daysout","outcome","odds_history","final_result","payoff","odds","ndays")
+  colnames(allgames) <- c("id","league","daysout","outcome","odds_history","sd_history","final_result","payoff","odds","ndays")
   for(i in 1:nrow(rawdata)){
     row <- rawdata[i,]
     days <- 21-which(!is.na(row[3:23]))
     league <- row$league
     id  <- row$id
     result  <- row$result
-    gamemat <- matrix(ncol=9)
+    gamemat <- matrix(ncol=10)
     gamemat <- data.frame(gamemat)
     colnames(gamemat) <- colnames(allgames)
     for(j in days){
@@ -516,7 +516,10 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
       oddsvechome <- c(as.numeric(row[ , 3:(23 - j)]),rep(NA,j))
       oddsvecdraw <- c(as.numeric(row[ , 24:(44 - j)]),rep(NA,j))
       oddsvecaway <- c(as.numeric(row[ , 45:(65 - j)]),rep(NA,j))
-      minimat <- matrix(ncol=9,nrow=3)
+      sdvechome <- c(as.numeric(row[ , 67:(87 - j )]),rep(NA,j))
+      sdvecdraw <- c(as.numeric(row[ , 88:(108 - j)]),rep(NA,j))
+      sdvecaway <- c(as.numeric(row[ , 109:(129 - j)]),rep(NA,j))
+      minimat <- matrix(ncol=10,nrow=3)
       minimat  <- data.frame(minimat)
       colnames(minimat) <- colnames(gamemat)
       minimat$id <- rep(id,3)
@@ -524,6 +527,7 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
       minimat$daysout <- rep(j,3)
       minimat$outcome <- rep(result,3)
       minimat$odds_history <- list(oddsvechome,oddsvecdraw,oddsvecaway)
+      minimat$sd_history <- list(sdvechome,sdvecdraw,sdvecaway)
       minimat$final_result <- c("1","2","X")
       homepay <- ifelse(result=="1",homeodds-1,-1)
       drawpay <- ifelse(result=="X",drawodds-1,-1)
@@ -540,6 +544,7 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
     return(allgames)
   }
   if(write==TRUE){
-    write.csv(allgames,"C:/Users/Auke/OneDrive/betting_model/data/dump/modeldata.csv")
+    write.csv(allgames,"/data/dump/modeldata.csv")
   }
 }
+
