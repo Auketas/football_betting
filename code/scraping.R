@@ -177,9 +177,7 @@ extract_data <- function(league,timezone){
 
 extract_sd <- function(link) {
   # Start a new Chromote browser with safe flags
-  b <- Chromote$new(
-    args = c("--no-sandbox", "--disable-dev-shm-usage")
-  )
+  b <- Chromote$new()
   session <- ChromoteSession$new(target = b)
   
   on.exit({
@@ -561,6 +559,7 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
     write.csv(allgames,"/data/dump/modeldata.csv")
   }
 }
+
 
 
 
