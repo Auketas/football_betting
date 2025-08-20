@@ -98,29 +98,28 @@ extract_data <- function(league,timezone){
       matchmatuse <- t(as.matrix(matchmatuse))
     }
     for (i in seq_len(nrow(matchmatuse))) {
-      
-      success <- FALSE
-      attempts <- 0
-      
-      while (!success && attempts < 3) {  # Retry up to 3 times
-        attempts <- attempts + 1
-        tryCatch({
-          Sys.sleep(2)
-          matchmatuse[i, 4:6] <- extract_sd(matchmatuse[i, 3])
-          success <- TRUE
-        }, error = function(e) {
-          cat(paste0("⚠️ Error in game ", i, ": ", e$message, "\n"))
-          cat("⏳ Retrying this game in 10 seconds...\n")
-          Sys.sleep(10)
-        }, finally = {
-          gc()
-        })
-      }
-      
-      if (!success) {
-        cat(paste0("❌ Skipping game ", i, " after 3 failed attempts.\n"))
-      }
-    }
+  success <- FALSE
+  attempts <- 0
+  
+  while (!success && attempts < 3) {
+    attempts <- attempts + 1
+    tryCatch({
+      Sys.sleep(2)
+      matchmatuse[i, 4:6] <- extract_sd(matchmatuse[i, 3])
+      success <- TRUE
+    }, error = function(e) {
+      cat(paste0("⚠️ Error in game ", i, ": ", e$message, "\n"))
+      cat("⏳ Retrying this game in 10 seconds...\n")
+      # After failure, GC to force cleanup
+      gc()
+      Sys.sleep(10)
+    })
+  }
+  
+  if (!success) {
+    cat(paste0("❌ Skipping game ", i, " after 3 failed attempts.\n"))
+  }
+}
     
     datesuse <- dates[first_x_indices]
     day_month <- sub("(\\d{2}\\.\\d{2})\\..*", "\\1", datesuse)
@@ -175,27 +174,40 @@ extract_data <- function(league,timezone){
   }
 }
 
-extract_sd <- function(link){
-  b <- ChromoteSession$new()
-  b$Page$navigate(link)  # Replace with your actual URL
+extract_sd <- function(link) {
+  # Start a new Chromote session with safe flags
+  b <- ChromoteSession$new(
+    headless = TRUE,
+    args = c("--no-sandbox", "--disable-dev-shm-usage")
+  )
   
-  # Wait a few seconds for JS to run (basic workaround)
-  Sys.sleep(5)  # Adjust if needed
+  on.exit({
+    # Ensure Chrome always gets shut down
+    try(b$close(), silent = TRUE)
+  }, add = TRUE)
   
-  # Get full HTML of rendered page
-  html <- b$Runtime$evaluate("document.documentElement.outerHTML")$result$value
-  page <- read_html(html)
-  
-  odds_nodes <- html_nodes(page, "a.archiveOdds")
-  if(length(odds_nodes)==0){
-    return(c(NA,NA,NA))
-  }
-  text <- odds_nodes %>% html_text(trim=TRUE)
-  
-  home <- as.numeric(text[seq(1, length(text), by = 3)])
-  draw <- as.numeric(text[seq(2, length(text), by = 3)])
-  away <- as.numeric(text[seq(3, length(text), by = 3)])
-  return(c(sd(home),sd(draw),sd(away)))
+  # Add a timeout so we don't hang forever
+  withTimeout({
+    b$Page$navigate(link)
+    # Wait a few seconds for JS
+    Sys.sleep(5)
+    
+    html <- b$Runtime$evaluate("document.documentElement.outerHTML")$result$value
+    page <- read_html(html)
+    
+    odds_nodes <- html_nodes(page, "a.archiveOdds")
+    if (length(odds_nodes) == 0) {
+      return(c(NA, NA, NA))
+    }
+    
+    text <- odds_nodes %>% html_text(trim = TRUE)
+    
+    home <- as.numeric(text[seq(1, length(text), by = 3)])
+    draw <- as.numeric(text[seq(2, length(text), by = 3)])
+    away <- as.numeric(text[seq(3, length(text), by = 3)])
+    
+    return(c(sd(home), sd(draw), sd(away)))
+  }, timeout = 60, onTimeout = "error")
 }
 
 extract_leagues <- function(){
@@ -549,6 +561,7 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
     write.csv(allgames,"/data/dump/modeldata.csv")
   }
 }
+
 
 
 
