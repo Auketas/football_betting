@@ -6,6 +6,7 @@ library(httr)
 library(tictoc)
 library(dplyr)
 library(chromote)
+library(R.utils)
 #Add correct time zone for each league
 extract_data <- function(league,timezone){
   local_date <- as.Date(as.POSIXlt(Sys.time(), tz = timezone))
@@ -175,24 +176,24 @@ extract_data <- function(league,timezone){
 }
 
 extract_sd <- function(link) {
-  # Start a new Chromote session with safe flags
-  b <- ChromoteSession$new(
-    headless = TRUE,
+  # Start a new Chromote browser with safe flags
+  b <- Chromote$new(
     args = c("--no-sandbox", "--disable-dev-shm-usage")
   )
+  session <- ChromoteSession$new(target = b)
   
   on.exit({
-    # Ensure Chrome always gets shut down
+    # Close session and browser
+    try(session$close(), silent = TRUE)
     try(b$close(), silent = TRUE)
   }, add = TRUE)
   
   # Add a timeout so we don't hang forever
   withTimeout({
-    b$Page$navigate(link)
-    # Wait a few seconds for JS
-    Sys.sleep(5)
+    session$Page$navigate(link)
+    Sys.sleep(5)  # crude wait for JS
     
-    html <- b$Runtime$evaluate("document.documentElement.outerHTML")$result$value
+    html <- session$Runtime$evaluate("document.documentElement.outerHTML")$result$value
     page <- read_html(html)
     
     odds_nodes <- html_nodes(page, "a.archiveOdds")
@@ -209,7 +210,6 @@ extract_sd <- function(link) {
     return(c(sd(home), sd(draw), sd(away)))
   }, timeout = 60, onTimeout = "error")
 }
-
 extract_leagues <- function(){
   base_url <- "https://www.betexplorer.com/football/"
   page <- read_html(base_url)
@@ -561,6 +561,7 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
     write.csv(allgames,"/data/dump/modeldata.csv")
   }
 }
+
 
 
 
