@@ -176,38 +176,40 @@ extract_data <- function(league,timezone){
 }
 
 extract_sd <- function(link) {
-  # Start a new Chromote browser with safe flags
-  b <- Chromote$new()
-  session <- ChromoteSession$new(target = b)
+  # Start a new Chromote session
+  b <- ChromoteSession$new()
   
+  # Ensure the session is always closed, even on error
   on.exit({
-    # Close session and browser
-    try(session$close(), silent = TRUE)
     try(b$close(), silent = TRUE)
+    rm(b)
+    gc()
   }, add = TRUE)
+
+  # Navigate to page
+  b$Page$navigate(link)
   
-  # Add a timeout so we don't hang forever
-  withTimeout({
-    session$Page$navigate(link)
-    Sys.sleep(5)  # crude wait for JS
-    
-    html <- session$Runtime$evaluate("document.documentElement.outerHTML")$result$value
-    page <- read_html(html)
-    
-    odds_nodes <- html_nodes(page, "a.archiveOdds")
-    if (length(odds_nodes) == 0) {
-      return(c(NA, NA, NA))
-    }
-    
-    text <- odds_nodes %>% html_text(trim = TRUE)
-    
-    home <- as.numeric(text[seq(1, length(text), by = 3)])
-    draw <- as.numeric(text[seq(2, length(text), by = 3)])
-    away <- as.numeric(text[seq(3, length(text), by = 3)])
-    
-    return(c(sd(home), sd(draw), sd(away)))
-  }, timeout = 60, onTimeout = "error")
+  # Wait a few seconds for JS to run (you can replace with a proper event wait)
+  Sys.sleep(5)
+  
+  # Get full HTML of rendered page
+  html <- b$Runtime$evaluate("document.documentElement.outerHTML")$result$value
+  page <- read_html(html)
+  
+  odds_nodes <- html_nodes(page, "a.archiveOdds")
+  if (length(odds_nodes) == 0) {
+    return(c(NA, NA, NA))
+  }
+  
+  text <- odds_nodes %>% html_text(trim = TRUE)
+  
+  home <- as.numeric(text[seq(1, length(text), by = 3)])
+  draw <- as.numeric(text[seq(2, length(text), by = 3)])
+  away <- as.numeric(text[seq(3, length(text), by = 3)])
+  
+  return(c(sd(home), sd(draw), sd(away)))
 }
+
 extract_leagues <- function(){
   base_url <- "https://www.betexplorer.com/football/"
   page <- read_html(base_url)
@@ -559,6 +561,7 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
     write.csv(allgames,"/data/dump/modeldata.csv")
   }
 }
+
 
 
 
