@@ -105,13 +105,15 @@ extract_data <- function(league,timezone){
       while (!success && attempts < 3) {  # Retry up to 3 times
         attempts <- attempts + 1
         tryCatch({
-          Sys.sleep(2)  # small delay between requests
+          Sys.sleep(2)
           matchmatuse[i, 4:6] <- extract_sd(matchmatuse[i, 3])
           success <- TRUE
         }, error = function(e) {
           cat(paste0("⚠️ Error in game ", i, ": ", e$message, "\n"))
           cat("⏳ Retrying this game in 10 seconds...\n")
           Sys.sleep(10)
+        }, finally = {
+          gc()
         })
       }
       
@@ -547,5 +549,6 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
     write.csv(allgames,"/data/dump/modeldata.csv")
   }
 }
+
 
 
