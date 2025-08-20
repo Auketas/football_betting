@@ -31,13 +31,10 @@ jobs:
       - name: Check installed packages
         run: Rscript -e 'print(installed.packages()[, "Package"])'
 
-      - name: Install development chromote 
-        run: |
-          Rscript -e 'install.packages("remotes", repos="https://cloud.r-project.org")'
-          Rscript -e 'remotes::install_github("rstudio/chromote")'
-
       - name: Run daily scraper
-        run: Rscript code/daily_scraper.R
+        run: |
+          export CHROMOTE_CHROME_ARGS="--no-sandbox --disable-dev-shm-usage"
+          Rscript code/daily_scraper.R
 
       - name: Commit and push new data
         run: |
