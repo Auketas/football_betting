@@ -32,9 +32,7 @@ jobs:
         run: Rscript -e 'print(installed.packages()[, "Package"])'
 
       - name: Run daily scraper
-        run: |
-          export CHROMOTE_CHROME_ARGS="--no-sandbox --disable-dev-shm-usage"
-          Rscript code/daily_scraper.R
+        run: Rscript code/daily_scraper.R
 
       - name: Commit and push new data
         run: |
