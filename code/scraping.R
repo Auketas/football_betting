@@ -7,15 +7,14 @@ library(tictoc)
 library(dplyr)
 library(chromote)
 library(R.utils)
-#Add correct time zone for each league
-extract_data <- function(league,timezone){
+extract_data <- function(league,timezone,b){
   local_date <- as.Date(as.POSIXlt(Sys.time(), tz = timezone))
-  link <- paste0("https://www.betexplorer.com",league,"fixtures")
-  headers <- add_headers("User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/58.0.3029.110 Safari/537.3")
+  link <- paste0("https://www.betexplorer.com", league, "fixtures")
+  headers <- add_headers(
+    "User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/58.0.3029.110 Safari/537.3"
+  )
   
-  res <- httr::GET(link,headers)
-  stop_for_status(res)
-  page <- read_html(res)
+  page <- fetch_league_page(link, headers, b)
   
   odds_section <- html_nodes(page, ".table-main__odds")
   
@@ -99,28 +98,28 @@ extract_data <- function(league,timezone){
       matchmatuse <- t(as.matrix(matchmatuse))
     }
     for (i in seq_len(nrow(matchmatuse))) {
-  success <- FALSE
-  attempts <- 0
-  
-  while (!success && attempts < 3) {
-    attempts <- attempts + 1
-    tryCatch({
-      Sys.sleep(2)
-      matchmatuse[i, 4:6] <- extract_sd(matchmatuse[i, 3])
-      success <- TRUE
-    }, error = function(e) {
-      cat(paste0("⚠️ Error in game ", i, ": ", e$message, "\n"))
-      cat("⏳ Retrying this game in 10 seconds...\n")
-      # After failure, GC to force cleanup
-      gc()
-      Sys.sleep(10)
-    })
-  }
-  
-  if (!success) {
-    cat(paste0("❌ Skipping game ", i, " after 3 failed attempts.\n"))
-  }
-}
+      
+      success <- FALSE
+      attempts <- 0
+      
+      while (!success && attempts < 3) {  # Retry up to 3 times
+        attempts <- attempts + 1
+        tryCatch({
+          Sys.sleep(2)  # small delay between requests
+          print(paste0("Scraping game ",matchmatuse[i,1],"-",matchmatuse[i,2]))
+          matchmatuse[i, 4:6] <- extract_sd(matchmatuse[i, 3],b)
+          success <- TRUE
+        }, error = function(e) {
+          cat(paste0("⚠️ Error in game ", i, ": ", e$message, "\n"))
+          cat("⏳ Retrying this game in 10 seconds...\n")
+          Sys.sleep(10)
+        })
+      }
+      
+      if (!success) {
+        cat(paste0("❌ Skipping game ", i, " after 3 failed attempts.\n"))
+      }
+    }
     
     datesuse <- dates[first_x_indices]
     day_month <- sub("(\\d{2}\\.\\d{2})\\..*", "\\1", datesuse)
@@ -175,24 +174,10 @@ extract_data <- function(league,timezone){
   }
 }
 
-extract_sd <- function(link) {
-  # Start a new Chromote session
-  b <- ChromoteSession$new()
-  
-  # Ensure the session is always closed, even on error
-  on.exit({
-    try(b$close(), silent = TRUE)
-    rm(b)
-    gc()
-  }, add = TRUE)
-
-  # Navigate to page
+extract_sd <- function(link, b) {
   b$Page$navigate(link)
-  
-  # Wait a few seconds for JS to run (you can replace with a proper event wait)
   Sys.sleep(5)
   
-  # Get full HTML of rendered page
   html <- b$Runtime$evaluate("document.documentElement.outerHTML")$result$value
   page <- read_html(html)
   
@@ -202,7 +187,6 @@ extract_sd <- function(link) {
   }
   
   text <- odds_nodes %>% html_text(trim = TRUE)
-  
   home <- as.numeric(text[seq(1, length(text), by = 3)])
   draw <- as.numeric(text[seq(2, length(text), by = 3)])
   away <- as.numeric(text[seq(3, length(text), by = 3)])
@@ -256,8 +240,8 @@ extract_leagues <- function(){
   return(final_league_urls)
 }
 
-write_league <- function(league,timezone){
-  data <- extract_data(league,timezone)
+write_league <- function(league,timezone,b){
+  data <- extract_data(league,timezone,b)
   if(nrow(data)>0&&length(data)>0){
     trimmed <- sub("^/football/", "", league)
     trimmed <- sub("/$", "", trimmed)
@@ -332,12 +316,11 @@ write_league <- function(league,timezone){
   }
 }
 
-add_results <- function(league){
-  link <- paste0("https://www.betexplorer.com",league,"results")
-  headers <- add_headers("User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/58.0.3029.110 Safari/537.3")
-  res <- httr::GET(link,headers)
-  stop_for_status(res)
-  page <- read_html(res)
+add_results <- function(league,b){
+  link <- paste0("https://www.betexplorer.com", league, "results")
+  headers <- add_headers("User-Agent" = "...")
+  
+  page <- fetch_league_page(link, headers, b)
   result_section <- html_nodes(page, ".h-text-center")
   results <- html_text(result_section)
   results <- results[!(results %in%  c("1","2","X"))]
@@ -426,29 +409,59 @@ add_results <- function(league){
   }
 }
 
+fetch_league_page <- function(link, headers, b) {
+  # Try httr first
+  res <- try(httr::GET(link, headers), silent = TRUE)
+  
+  if (inherits(res, "try-error") || res$status_code == 429) {
+    cat("⚠️ GET failed or rate-limited, falling back to Chromote...\n")
+    
+    b$Page$navigate(link)
+    Sys.sleep(5)
+    
+    html <- b$Runtime$evaluate("document.documentElement.outerHTML")$result$value
+    return(read_html(html))
+  }
+  
+  stop_for_status(res)
+  return(read_html(res))
+}
+
 loop_over_leagues <- function(start = 1) {
-  newgames <- 
   leaguelist <- read.csv("data/hold/leaguelist.csv")
   leagues <- leaguelist[, 2]
   timezones <- leaguelist[, 3]
+  
+  # create ONE Chromote session for the whole run
+  b <- ChromoteSession$new()
+  on.exit(b$close(), add = TRUE)
   
   for (i in start:nrow(leaguelist)) {
     league <- leagues[i]
     timezone <- timezones[i]
     success <- FALSE
+    delay <- 15   # base retry delay
     
     while (!success) {
       cat(paste0("Processing league ", league, " (row ", i, ")\n"))
       
       tryCatch({
-        Sys.sleep(5)  # Regular pause
-        write_league(league, timezone)
-        add_results(league)
-        success <- TRUE  # If everything works
+        Sys.sleep(5)  # polite pause
+        write_league(league, timezone, b)  # pass Chromote session
+        add_results(league,b)
+        success <- TRUE
+        delay <- 15  # reset delay on success
       }, error = function(e) {
-        cat(paste0("⚠️ Error: ", e$message, "\n"))
-        cat("⏳ Waiting 15 seconds before retrying...\n")
-        Sys.sleep(15)
+        if (grepl("429", e$message)) {
+          cat("⚠️ Rate limit error: ", e$message, "\n")
+          cat("⏳ Waiting ", delay, "s before retrying...\n")
+          Sys.sleep(delay + runif(1, 0, 5))
+          delay <- min(delay * 2, 300)  # escalate
+        } else {
+          cat("⚠️ Error: ", e$message, "\n")
+          cat("⏳ Retrying in 30s...\n")
+          Sys.sleep(30)
+        }
       })
     }
   }
@@ -561,10 +574,3 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
     write.csv(allgames,"/data/dump/modeldata.csv")
   }
 }
-
-
-
-
-
-
-
