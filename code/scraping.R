@@ -467,7 +467,7 @@ loop_over_leagues <- function(start = 1) {
   }
 }
 
-write_to_train_test <- function(){
+write_to_train_test <- function(debug=FALSE){
   temptrain <- read.csv("data/new/hold.csv")
   temptrain$league <- 0
   temptrain <- temptrain[,c(1,ncol(temptrain),2:(ncol(temptrain)-1))]
@@ -478,6 +478,7 @@ write_to_train_test <- function(){
   timezones <- leaguelist[, 3]
   
   for (i in 1:nrow(leaguelist)) {
+    print(i)
     league <- leagues[i]
     trimmed <- sub("^/football/", "", league)
     trimmed <- sub("/$", "", trimmed)
@@ -491,6 +492,7 @@ write_to_train_test <- function(){
     # Join with underscore
     name <- paste(parts, collapse = "_")
     if(file.exists(paste0("data/new/",name,".csv"))){
+      print(paste0("looking at ",name))
       tempdata <- read.csv(paste0("data/new/",name,".csv"))
       tempdata$league <- name
       tempdata <- tempdata[,c(1,ncol(tempdata),2:(ncol(tempdata)-1))]
@@ -513,6 +515,7 @@ write_to_train_test <- function(){
   temptrain_formatted$saveid <- paste0(temptrain_formatted$id,"-",temptrain_formatted$daysout,"-",temptrain_formatted$outcome)
   train_file <- "data/model/train.rds"
   if (file.exists(train_file)) {
+    print("file exists")
     train <- readRDS(train_file)
     train <- rbind(temptrain_formatted, train)
     train <- train[!duplicated(train$saveid), ]
@@ -528,6 +531,7 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
   allgames <- data.frame(allgames)
   colnames(allgames) <- c("id","league","daysout","outcome","odds_history","sd_history","final_result","payoff","odds","ndays")
   for(i in 1:nrow(rawdata)){
+    print(paste0("conversion line ",i))
     row <- rawdata[i,]
     days <- 21-which(!is.na(row[3:23]))
     league <- row$league
@@ -537,6 +541,7 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
     gamemat <- data.frame(gamemat)
     colnames(gamemat) <- colnames(allgames)
     for(j in days){
+      print(paste0("day ",j))
       homeodds <- row[1,23-j]
       drawodds <- row[1,44-j]
       awayodds <- row[1,65-j]
@@ -574,3 +579,4 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
     write.csv(allgames,"/data/dump/modeldata.csv")
   }
 }
+
