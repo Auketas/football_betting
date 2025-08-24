@@ -570,7 +570,7 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
       minimat$ndays <- c(sum(!is.na(oddsvechome)),sum(!is.na(oddsvecdraw)),sum(!is.na(oddsvecaway)))
       gamemat <- rbind(gamemat,minimat)
     }
-    print(ncol(algames))
+    print(ncol(allgames))
     print(ncol(gamemat))
     allgames  <- rbind(allgames,gamemat)
   }
@@ -583,5 +583,6 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
     write.csv(allgames,"/data/dump/modeldata.csv")
   }
 }
+
 
 
