@@ -513,8 +513,10 @@ write_to_train_test <- function(debug=FALSE){
     group_by(id, outcome) %>%
     slice_min(order_by = daysout, n = 1, with_ties = FALSE) %>%
     ungroup()
+  print("1")
   temptrain_formatted$saveid <- paste0(temptrain_formatted$id,"-",temptrain_formatted$daysout,"-",temptrain_formatted$outcome)
   train_file <- "data/model/train.rds"
+  print("2")
   if (file.exists(train_file)) {
     print("file exists")
     train <- readRDS(train_file)
@@ -576,6 +578,8 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
   }
   print("loop done")
   allgames <- allgames[!is.na(allgames$id),]
+  print(paste0("nrow allgames ",nrow(allgames)))
+  print(paste0("ncol allgames ",ncol(allgames)))
   if(return==TRUE){
     return(allgames)
   }
@@ -583,6 +587,7 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
     write.csv(allgames,"/data/dump/modeldata.csv")
   }
 }
+
 
 
 
