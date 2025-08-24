@@ -504,6 +504,7 @@ write_to_train_test <- function(debug=FALSE){
       temptest <- rbind(temptest,ongoing)  
     }
   }
+  print("league loop done")
   temptrain <- temptrain[nchar(temptrain$id)>2,]
   temptest <- temptest[nchar(temptest$id)>2,]
   temptrain_formatted <- convert_data_to_model_format(temptrain,return=TRUE,write=FALSE)
@@ -534,6 +535,7 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
     print(paste0("conversion line ",i))
     row <- rawdata[i,]
     days <- 21-which(!is.na(row[3:23]))
+    print(days)
     league <- row$league
     id  <- row$id
     result  <- row$result
@@ -541,7 +543,6 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
     gamemat <- data.frame(gamemat)
     colnames(gamemat) <- colnames(allgames)
     for(j in days){
-      print(paste0("day ",j))
       homeodds <- row[1,23-j]
       drawodds <- row[1,44-j]
       awayodds <- row[1,65-j]
@@ -569,8 +570,11 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
       minimat$ndays <- c(sum(!is.na(oddsvechome)),sum(!is.na(oddsvecdraw)),sum(!is.na(oddsvecaway)))
       gamemat <- rbind(gamemat,minimat)
     }
+    print(ncol(algames))
+    print(ncol(gamemat))
     allgames  <- rbind(allgames,gamemat)
   }
+  print("loop done")
   allgames <- allgames[!is.na(allgames$id),]
   if(return==TRUE){
     return(allgames)
@@ -579,4 +583,5 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
     write.csv(allgames,"/data/dump/modeldata.csv")
   }
 }
+
 
