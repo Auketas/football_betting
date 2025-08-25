@@ -467,7 +467,7 @@ loop_over_leagues <- function(start = 1) {
   }
 }
 
-write_to_train_test <- function(debug=FALSE){
+write_to_train_test <- function(){
   temptrain <- read.csv("data/new/hold.csv")
   temptrain$league <- 0
   temptrain <- temptrain[,c(1,ncol(temptrain),2:(ncol(temptrain)-1))]
@@ -478,7 +478,6 @@ write_to_train_test <- function(debug=FALSE){
   timezones <- leaguelist[, 3]
   
   for (i in 1:nrow(leaguelist)) {
-    print(i)
     league <- leagues[i]
     trimmed <- sub("^/football/", "", league)
     trimmed <- sub("/$", "", trimmed)
@@ -492,7 +491,6 @@ write_to_train_test <- function(debug=FALSE){
     # Join with underscore
     name <- paste(parts, collapse = "_")
     if(file.exists(paste0("data/new/",name,".csv"))){
-      print(paste0("looking at ",name))
       tempdata <- read.csv(paste0("data/new/",name,".csv"))
       tempdata$league <- name
       tempdata <- tempdata[,c(1,ncol(tempdata),2:(ncol(tempdata)-1))]
@@ -504,7 +502,6 @@ write_to_train_test <- function(debug=FALSE){
       temptest <- rbind(temptest,ongoing)  
     }
   }
-  print("league loop done")
   temptrain <- temptrain[nchar(temptrain$id)>2,]
   temptest <- temptest[nchar(temptest$id)>2,]
   temptrain_formatted <- convert_data_to_model_format(temptrain,return=TRUE,write=FALSE)
@@ -513,15 +510,12 @@ write_to_train_test <- function(debug=FALSE){
     group_by(id, outcome) %>%
     slice_min(order_by = daysout, n = 1, with_ties = FALSE) %>%
     ungroup()
-  print("1")
-  colnames(temptrain_formatted)
-  nrow(temptrain_formatted)
-  ncol(temptrain_formatted)
+  print("getting to here")
+  print(temptrain_formatted[1:10,])
+  print(colnames(temptrain_formatted))
   temptrain_formatted$saveid <- paste0(temptrain_formatted$id,"-",temptrain_formatted$daysout,"-",temptrain_formatted$outcome)
   train_file <- "data/model/train.rds"
-  print("2")
   if (file.exists(train_file)) {
-    print("file exists")
     train <- readRDS(train_file)
     train <- rbind(temptrain_formatted, train)
     train <- train[!duplicated(train$saveid), ]
@@ -537,10 +531,8 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
   allgames <- data.frame(allgames)
   colnames(allgames) <- c("id","league","daysout","outcome","odds_history","sd_history","final_result","payoff","odds","ndays")
   for(i in 1:nrow(rawdata)){
-    print(paste0("conversion line ",i))
     row <- rawdata[i,]
     days <- 21-which(!is.na(row[3:23]))
-    print(days)
     league <- row$league
     id  <- row$id
     result  <- row$result
@@ -575,19 +567,14 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
       minimat$ndays <- c(sum(!is.na(oddsvechome)),sum(!is.na(oddsvecdraw)),sum(!is.na(oddsvecaway)))
       gamemat <- rbind(gamemat,minimat)
     }
-    print(ncol(allgames))
-    print(ncol(gamemat))
     allgames  <- rbind(allgames,gamemat)
   }
-  print("loop done")
   allgames <- allgames[!is.na(allgames$id),]
-  print(paste0("nrow allgames ",nrow(allgames)))
-  print(paste0("ncol allgames ",ncol(allgames)))
   if(return==TRUE){
     return(allgames)
   }
   if(write==TRUE){
-    write.csv(allgames,"/data/dump/modeldata.csv")
+    write.csv(allgames,"data/dump/modeldata.csv")
   }
 }
 
