@@ -510,9 +510,6 @@ write_to_train_test <- function(){
     group_by(id, outcome) %>%
     slice_min(order_by = daysout, n = 1, with_ties = FALSE) %>%
     ungroup()
-  print("getting to here")
-  print(temptrain_formatted[1:10,])
-  print(colnames(temptrain_formatted))
   temptrain_formatted$saveid <- paste0(temptrain_formatted$id,"-",temptrain_formatted$daysout,"-",temptrain_formatted$outcome)
   train_file <- "data/model/train.rds"
   if (file.exists(train_file)) {
@@ -577,6 +574,7 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
     write.csv(allgames,"data/dump/modeldata.csv")
   }
 }
+
 
 
 
