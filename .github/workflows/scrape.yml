@@ -19,8 +19,11 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libcurl4-openssl-dev libxml2-dev libssl-dev
-
+          sudo apt-get install -y \
+          libcurl4-openssl-dev \
+          libxml2-dev \
+          libssl-dev \
+          chromium-browser
 
       - name: Install base dependencies
         run: Rscript -e 'install.packages(c("dplyr","tidyverse", "httr", "jsonlite", "assertthat", "fs", "lubridate", "xml2", "stringr", "readr", "rvest", "tictoc", "chromote","R.utils"), repos = "https://cloud.r-project.org")'
