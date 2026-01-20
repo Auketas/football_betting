@@ -35,7 +35,7 @@ jobs:
         run: Rscript -e 'print(installed.packages()[, "Package"])'
 
       - name: Run daily scraper
-        run: Rscript code/daily_scraper.R
+        run: Rscript code/scrape/daily_scraper.R
 
       - name: Commit and push new data
         run: |
