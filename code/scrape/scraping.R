@@ -7,6 +7,7 @@ library(tictoc)
 library(dplyr)
 library(chromote)
 library(R.utils)
+options(chromote.timeout = 30)
 extract_data <- function(league,timezone,b){
   local_date <- as.Date(as.POSIXlt(Sys.time(), tz = timezone))
   link <- paste0("https://www.betexplorer.com", league, "fixtures")
