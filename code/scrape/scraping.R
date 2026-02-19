@@ -64,7 +64,7 @@ extract_data <- function(league,timezone,b){
     match_links <- html_nodes(page, 'a.in-match') %>% html_text(trim=TRUE)
     
     a_node <- html_node(matches_section, "a.in-match")
-    team_names_mat <- matrix(nrow=length(dates),ncol=6)
+    team_names_mat <- matrix(nrow=length(dates),ncol=15)
     j <- 1
     for(i in 1:length(a_node)){
       if(length(a_node[[i]])>0){
@@ -108,7 +108,20 @@ extract_data <- function(league,timezone,b){
         tryCatch({
           Sys.sleep(2)  # small delay between requests
           print(paste0("Scraping game ",matchmatuse[i,1],"-",matchmatuse[i,2]))
-          matchmatuse[i, 4:6] <- extract_sd(matchmatuse[i, 3],b)
+          #matchmatuse[i, 4:6] <- extract_match_info(matchmatuse[i, 3],b)
+          matchdata <- extract_match_info(matchmatuse[i,3],b)
+          if(!is.vector(matchdata)){
+            odds <- matchdata$odds
+            sd <- matchdata$sd
+            nleaders <- matchdata$nleaders
+            leaders <- matchdata$leaders
+            matchmatuse[i,4:6] <- odds
+            matchmatuse[i,7:9] <- sd
+            matchmatuse[i,10:12] <- nleaders
+            matchmatuse[i,13:15] <- leaders
+          }else{
+            
+          }
           success <- TRUE
         }, error = function(e) {
           cat(paste0("⚠️ Error in game ", i, ": ", e$message, "\n"))
@@ -121,61 +134,64 @@ extract_data <- function(league,timezone,b){
         cat(paste0("❌ Skipping game ", i, " after 3 failed attempts.\n"))
       }
     }
-    
-    datesuse <- dates[first_x_indices]
-    day_month <- sub("(\\d{2}\\.\\d{2})\\..*", "\\1", datesuse)
-    # Explanation:
-    # (\\d{2}\\.\\d{2}) captures "dd.mm"
-    # \\..* matches from the dot after month until end (including time), and replaces it with just the day-month
-    
-    # Step 2: Get today's date and extract current year, month
-    today <- Sys.Date()
-    current_year <- format(today, "%Y")
-    current_month <- as.numeric(format(today, "%m"))
-    
-    # Step 3: Parse extracted day and month into date object (no year yet)
-    dates_parsed <- as.Date(paste0(day_month, ".", current_year), format = "%d.%m.%Y")
-    
-    # Step 4: Adjust year for Jan/Feb matches when today is Nov/Dec
-    # Define a function to adjust year accordingly
-    adjust_year <- function(date_vec, today) {
-      yr <- as.numeric(format(today, "%Y"))
-      mo_today <- as.numeric(format(today, "%m"))
+    matchmatuse <- matchmatuse[!is.na(matchmatuse[,4]),]
+    if(nrow(matchmatuse)>0){
+      datesuse <- dates[first_x_indices]
+      day_month <- sub("(\\d{2}\\.\\d{2})\\..*", "\\1", datesuse)
+      # Explanation:
+      # (\\d{2}\\.\\d{2}) captures "dd.mm"
+      # \\..* matches from the dot after month until end (including time), and replaces it with just the day-month
       
-      # Extract month of each date
-      mo_date <- as.numeric(format(date_vec, "%m"))
+      # Step 2: Get today's date and extract current year, month
+      today <- Sys.Date()
+      current_year <- format(today, "%Y")
+      current_month <- as.numeric(format(today, "%m"))
       
-      # Logical vector for dates needing year increment
-      add_year <- mo_today %in% c(11,12) & mo_date %in% c(1,2)
+      # Step 3: Parse extracted day and month into date object (no year yet)
+      dates_parsed <- as.Date(paste0(day_month, ".", current_year), format = "%d.%m.%Y")
       
-      # Convert to POSIXlt for easier manipulation
-      date_lt <- as.POSIXlt(date_vec)
+      # Step 4: Adjust year for Jan/Feb matches when today is Nov/Dec
+      # Define a function to adjust year accordingly
+      adjust_year <- function(date_vec, today) {
+        yr <- as.numeric(format(today, "%Y"))
+        mo_today <- as.numeric(format(today, "%m"))
+        
+        # Extract month of each date
+        mo_date <- as.numeric(format(date_vec, "%m"))
+        
+        # Logical vector for dates needing year increment
+        add_year <- mo_today %in% c(11,12) & mo_date %in% c(1,2)
+        
+        # Convert to POSIXlt for easier manipulation
+        date_lt <- as.POSIXlt(date_vec)
+        
+        # Add 1 to the year component for those dates
+        date_lt$year[add_year] <- date_lt$year[add_year] + 1
+        
+        # Convert back to Date
+        adjusted_dates <- as.Date(date_lt)
+        
+        return(adjusted_dates)
+      }
       
-      # Add 1 to the year component for those dates
-      date_lt$year[add_year] <- date_lt$year[add_year] + 1
+      # Step 5: Apply adjustment
+      final_dates <- adjust_year(dates_parsed, today)
       
-      # Convert back to Date
-      adjusted_dates <- as.Date(date_lt)
+      dif <- final_dates-local_date
       
-      return(adjusted_dates)
+      matchmatuse_mat <- matrix(matchmatuse, ncol =15)
+      
+      matuse <- data.frame(Date = final_dates, dif = dif, matchmatuse = matchmatuse_mat, stringsAsFactors = FALSE)
+      matuse$id <- paste0(matuse$Date,"_",matuse$matchmatuse.1,"_",matuse$matchmatuse.2)
+      matuse <- matuse[matuse$dif<21,]
+      return(matuse)
     }
-    
-    # Step 5: Apply adjustment
-    final_dates <- adjust_year(dates_parsed, today)
-    
-    dif <- final_dates-local_date
-    
-    matchmatuse_mat <- matrix(matchmatuse, ncol = 6)
-    
-    matuse <- data.frame(Date = final_dates, dif = dif, matchmatuse = matchmatuse_mat, oddsmatuse = oddsmatuse, stringsAsFactors = FALSE)
-    matuse$id <- paste0(matuse$Date,"_",matuse$matchmatuse.1,"_",matuse$matchmatuse.2)
-    matuse <- matuse[matuse$dif<21,]
-    return(matuse)
+    return(matchmatuse)
     }
   }
 }
 
-extract_sd <- function(link, b) {
+extract_match_info <- function(link, b) {
   b$Page$navigate(link)
   Sys.sleep(5)
   
@@ -183,6 +199,9 @@ extract_sd <- function(link, b) {
   page <- read_html(html)
   
   odds_nodes <- html_nodes(page, "a.archiveOdds")
+  bookie_names <- html_nodes(page, "a.in-bookmaker-logo-link")
+  bookie_names <- html_text(bookie_names,trim=TRUE)
+  
   if (length(odds_nodes) == 0) {
     return(c(NA, NA, NA))
   }
@@ -191,8 +210,18 @@ extract_sd <- function(link, b) {
   home <- as.numeric(text[seq(1, length(text), by = 3)])
   draw <- as.numeric(text[seq(2, length(text), by = 3)])
   away <- as.numeric(text[seq(3, length(text), by = 3)])
+  homebest <- max(home)
+  drawbest <- max(draw)
+  awaybest <- max(away)
+  homen <- length(home[home==max(home)])/2
+  drawn <- length(draw[draw==max(draw)])/2
+  awayn <- length(away[away==max(away)])/2
   
-  return(c(sd(home), sd(draw), sd(away)))
+  homeleader <- ifelse(homen==1,bookie_names[which(home==max(home))],NA)
+  drawleader <- ifelse(drawn==1,bookie_names[which(draw==max(draw))],NA)
+  awayleader <- ifelse(awayn==1,bookie_names[which(away==max(away))],NA)
+  return(list(odds=c(max(home),max(draw),max(away)),sd=c(sd(home),sd(draw),sd(away)),nleaders=c(homen,drawn,awayn),leaders=c(homeleader,drawleader,awayleader)))
+  #return(c(sd(home), sd(draw), sd(away)))
 }
 
 extract_leagues <- function(){
@@ -241,7 +270,7 @@ extract_leagues <- function(){
   return(final_league_urls)
 }
 
-write_league <- function(league,timezone,b){
+write_league <- function(league,timezone,b,version){
   data <- extract_data(league,timezone,b)
   if(nrow(data)>0&&length(data)>0){
     trimmed <- sub("^/football/", "", league)
@@ -255,8 +284,8 @@ write_league <- function(league,timezone,b){
     
     # Join with underscore
     name <- paste(parts, collapse = "_")
-    if(file_exists(paste0("data/new/",name,".csv"))){
-      fulldata <- read.csv(paste0("data/new/",name,".csv"))
+    if(file_exists(paste0("data/new/",version,"/",name,".csv"))){
+      fulldata <- read.csv(paste0("data/new/",version,"/",name,".csv"))
       numcol <- ncol(fulldata)
       for(i in 1:nrow(data)){
         row <- data[i,]
@@ -264,60 +293,108 @@ write_league <- function(league,timezone,b){
           colname1 <- paste0("home_odds_l",row$dif)
           colname2 <- paste0("draw_odds_l",row$dif)
           colname3 <- paste0("away_odds_l",row$dif)
-          fulldata[[colname1]][which(fulldata$id==row$id)] <- row$oddsmatuse.1
-          fulldata[[colname2]][which(fulldata$id==row$id)] <- row$oddsmatuse.2
-          fulldata[[colname3]][which(fulldata$id==row$id)] <- row$oddsmatuse.3
-          
+          colname4 <- paste0("home_sd_l",row$dif)
+          colname5 <- paste0("draw_sd_l",row$dif)
+          colname6 <- paste0("away_sd_l",row$dif)
+          colname7 <- paste0("home_nleaders_l",row$dif)
+          colname8 <- paste0("draw_n_leaders_l",row$dif)
+          colname9 <- paste0("away_n_leaders_l",row$dif)
+          colname10 <- paste0("home_leader_l",row$dif)
+          colname11 <- paste0("draw_leader_l",row$dif)
+          colname12 <- paste0("away_leader_l",row$dif)
+          newcols <- setdiff(c(colname1,colname2,colname3,colname4,colname5,colname6,colname7,colname8,colname9,colname10,colname11,colname12),colnames(fulldata))
+          for(col in newcols){
+            fulldata[[col]] <- NA
+          }
+          fulldata[[colname1]][which(fulldata$id==row$id)] <- row$matchmatuse.4
+          fulldata[[colname2]][which(fulldata$id==row$id)] <- row$matchmatuse.5
+          fulldata[[colname3]][which(fulldata$id==row$id)] <- row$matchmatuse.6
+          fulldata[[colname4]][which(fulldata$id==row$id)] <- row$matchmatuse.7
+          fulldata[[colname5]][which(fulldata$id==row$id)] <- row$matchmatuse.8
+          fulldata[[colname6]][which(fulldata$id==row$id)] <- row$matchmatuse.9
+          fulldata[[colname7]][which(fulldata$id==row$id)] <- row$matchmatuse.10
+          fulldata[[colname8]][which(fulldata$id==row$id)] <- row$matchmatuse.11
+          fulldata[[colname9]][which(fulldata$id==row$id)] <- row$matchmatuse.12
+          fulldata[[colname10]][which(fulldata$id==row$id)] <- row$matchmatuse.13
+          fulldata[[colname11]][which(fulldata$id==row$id)] <- row$matchmatuse.14
+          fulldata[[colname12]][which(fulldata$id==row$id)] <- row$matchmatuse.15
         }else{
           new_data <- as.data.frame(lapply(fulldata, function(x) rep(NA,nrow(data))))
           new_data$id <- data$id
-          for(i in 1:nrow(data)){
-            id <- data$id[i]
-            colname1 <- paste0("home_odds_l",data$dif[i])
-            colname2 <- paste0("draw_odds_l",data$dif[i])
-            colname3 <- paste0("away_odds_l",data$dif[i])
-            colname4 <- paste0("home_sd_l",data$dif[i])
-            colname5 <- paste0("draw_sd_l",data$dif[i])
-            colname6 <- paste0("away_sd_l",data$dif[i])
-            new_data[[colname1]][i] <- data$oddsmatuse.1[i]
-            new_data[[colname2]][i] <- data$oddsmatuse.2[i]
-            new_data[[colname3]][i] <- data$oddsmatuse.3[i]
-            new_data[[colname4]][i] <- data$matchmatuse.4[i]
-            new_data[[colname5]][i] <- data$matchmatuse.5[i]
-            new_data[[colname6]][i] <- data$matchmatuse.6[i]
+          id <- data$id[i]
+          colname1 <- paste0("home_odds_l",row$dif)
+          colname2 <- paste0("draw_odds_l",row$dif)
+          colname3 <- paste0("away_odds_l",row$dif)
+          colname4 <- paste0("home_sd_l",row$dif)
+          colname5 <- paste0("draw_sd_l",row$dif)
+          colname6 <- paste0("away_sd_l",row$dif)
+          colname7 <- paste0("home_nleaders_l",row$dif)
+          colname8 <- paste0("draw_n_leaders_l",row$dif)
+          colname9 <- paste0("away_n_leaders_l",row$dif)
+          colname10 <- paste0("home_leader_l",row$dif)
+          colname11 <- paste0("draw_leader_l",row$dif)
+          colname12 <- paste0("away_leader_l",row$dif)
+          newcols <- setdiff(c(colname1,colname2,colname3,colname4,colname5,colname6,colname7,colname8,colname9,colname10,colname11,colname12),colnames(fulldata))
+          for(col in newcols){
+            fulldata[[col]] <- NA
+            new_data[[col]] <- NA
           }
+          new_data[[colname1]][which(new_data$id==row$id)] <- row$matchmatuse.4
+          new_data[[colname2]][which(new_data$id==row$id)] <- row$matchmatuse.5
+          new_data[[colname3]][which(new_data$id==row$id)] <- row$matchmatuse.6
+          new_data[[colname4]][which(new_data$id==row$id)] <- row$matchmatuse.7
+          new_data[[colname5]][which(new_data$id==row$id)] <- row$matchmatuse.8
+          new_data[[colname6]][which(new_data$id==row$id)] <- row$matchmatuse.9
+          new_data[[colname7]][which(new_data$id==row$id)] <- row$matchmatuse.10
+          new_data[[colname8]][which(new_data$id==row$id)] <- row$matchmatuse.11
+          new_data[[colname9]][which(new_data$id==row$id)] <- row$matchmatuse.12
+          new_data[[colname10]][which(new_data$id==row$id)] <- row$matchmatuse.13
+          new_data[[colname11]][which(new_data$id==row$id)] <- row$matchmatuse.14
+          new_data[[colname12]][which(new_data$id==row$id)] <- row$matchmatuse.15
           fulldata <- rbind(fulldata,new_data)
         }
       }
-      assert_that(ncol(fulldata)==numcol,msg=paste0("Adding data has changed the number of columns for league ",league))
-      write.csv(fulldata,paste0("data/new/",name,".csv"),row.names=FALSE)
+      #assert_that(ncol(fulldata)==numcol,msg=paste0("Adding data has changed the number of columns for league ",league))
+      write.csv(fulldata,paste0("data/new/",version,"/",name,".csv"),row.names=FALSE)
     }else{
-      exampledata <- read.csv(paste0("data/new/hold.csv"))
+      exampledata <- read.csv(paste0("data/new/",version,"/hold.csv"))
       numcol <- ncol(exampledata)
       new_data <- as.data.frame(lapply(exampledata, function(x) rep(NA, nrow(data))))
       new_data$id <- data$id
       for(i in 1:nrow(data)){
         id <- data$id[i]
-        colname1 <- paste0("home_odds_l",data$dif[i])
-        colname2 <- paste0("draw_odds_l",data$dif[i])
-        colname3 <- paste0("away_odds_l",data$dif[i])
-        colname4 <- paste0("home_sd_l",data$dif[i])
-        colname5 <- paste0("draw_sd_l",data$dif[i])
-        colname6 <- paste0("away_sd_l",data$dif[i])
-        new_data[[colname1]][i] <- data$oddsmatuse.1[i]
-        new_data[[colname2]][i] <- data$oddsmatuse.2[i]
-        new_data[[colname3]][i] <- data$oddsmatuse.3[i]
-        new_data[[colname4]][i] <- data$matchmatuse.4[i]
-        new_data[[colname5]][i] <- data$matchmatuse.5[i]
-        new_data[[colname6]][i] <- data$matchmatuse.6[i]
+        colname1 <- paste0("home_odds_l",row$dif)
+        colname2 <- paste0("draw_odds_l",row$dif)
+        colname3 <- paste0("away_odds_l",row$dif)
+        colname4 <- paste0("home_sd_l",row$dif)
+        colname5 <- paste0("draw_sd_l",row$dif)
+        colname6 <- paste0("away_sd_l",row$dif)
+        colname7 <- paste0("home_nleaders_l",row$dif)
+        colname8 <- paste0("draw_n_leaders_l",row$dif)
+        colname9 <- paste0("away_n_leaders_l",row$dif)
+        colname10 <- paste0("home_leader_l",row$dif)
+        colname11 <- paste0("draw_leader_l",row$dif)
+        colname12 <- paste0("away_leader_l",row$dif)
+        new_data[[colname1]][i] <- row$matchmatuse.4
+        new_data[[colname2]][i] <- row$matchmatuse.5
+        new_data[[colname3]][i] <- row$matchmatuse.6
+        new_data[[colname4]][i] <- row$matchmatuse.7
+        new_data[[colname5]][i] <- row$matchmatuse.8
+        new_data[[colname6]][i] <- row$matchmatuse.9
+        new_data[[colname7]][i] <- row$matchmatuse.10
+        new_data[[colname8]][i] <- row$matchmatuse.11
+        new_data[[colname9]][i] <- row$matchmatuse.12
+        new_data[[colname10]][i] <- row$matchmatuse.13
+        new_data[[colname11]][i] <- row$matchmatuse.14
+        new_data[[colname12]][i] <- row$matchmatuse.15
       }
-      assert_that(ncol(new_data)==numcol,msg=paste0("Adding data has changed the number of columns for league ",league))
-      write.csv(new_data,paste0("data/new/",name,".csv"),row.names=FALSE)
+      #assert_that(ncol(new_data)==numcol,msg=paste0("Adding data has changed the number of columns for league ",league))
+      write.csv(new_data,paste0("data/new/",version,"/",name,".csv"),row.names=FALSE)
     }
   }
 }
 
-add_results <- function(league,b){
+add_results <- function(league,b,version){
   link <- paste0("https://www.betexplorer.com", league, "results")
   headers <- add_headers("User-Agent" = "...")
   
@@ -384,6 +461,7 @@ add_results <- function(league,b){
       )
     ))
     
+    resultmat <- resultmat[!is.na(resultmat$score_result),]
     
     trimmed <- sub("^/football/", "", league)
     trimmed <- sub("/$", "", trimmed)
@@ -396,8 +474,8 @@ add_results <- function(league,b){
     
     # Join with underscore
     name <- paste(parts, collapse = "_")
-    if(file_exists(paste0("data/new/",name,".csv"))){
-      fulldata <- read.csv(paste0("data/new/",name,".csv"))
+    if(file_exists(paste0("data/new/",version,"/",name,".csv"))){
+      fulldata <- read.csv(paste0("data/new/",version,"/",name,".csv"))
       numcol <- ncol(fulldata)
       idsnoresults <- fulldata$id[is.na(fulldata$result)]
       update <- intersect(idsnoresults,resultmat$id)
@@ -405,7 +483,7 @@ add_results <- function(league,b){
         fulldata$result[fulldata$id==useid] <- resultmat$score_result[resultmat$id==useid]
       }
       assert_that(ncol(fulldata)==numcol,msg=paste0("Adding results has changed the number of columns for league ",league))
-      write.csv(fulldata,paste0("data/new/",name,".csv"),row.names=FALSE)
+      write.csv(fulldata,paste0("data/new/",version,"/",name,".csv"),row.names=FALSE)
     }
   }
 }
@@ -428,7 +506,7 @@ fetch_league_page <- function(link, headers, b) {
   return(read_html(res))
 }
 
-loop_over_leagues <- function(start = 1) {
+loop_over_leagues <- function(v,start = 1) {
   leaguelist <- read.csv("data/hold/leaguelist.csv")
   leagues <- leaguelist[, 2]
   timezones <- leaguelist[, 3]
@@ -436,6 +514,12 @@ loop_over_leagues <- function(start = 1) {
   # create ONE Chromote session for the whole run
   b <- ChromoteSession$new()
   on.exit(b$close(), add = TRUE)
+  
+  if (!dir.exists(paste0("data/new/",v))) {
+    dir.create(paste0("data/new/",v), recursive = TRUE)
+    hold <- read.csv("data/new/hold.csv")
+    write.csv(hold,paste0("data/new/",v,"/hold.csv"))
+  }
   
   for (i in start:nrow(leaguelist)) {
     league <- leagues[i]
@@ -448,8 +532,8 @@ loop_over_leagues <- function(start = 1) {
       
       tryCatch({
         Sys.sleep(5)  # polite pause
-        write_league(league, timezone, b)  # pass Chromote session
-        add_results(league,b)
+        write_league(league, timezone, b,v)  # pass Chromote session
+        add_results(league,b,v)
         success <- TRUE
         delay <- 15  # reset delay on success
       }, error = function(e) {
@@ -513,13 +597,9 @@ write_to_train_test <- function(){
     ungroup()
   temptrain_formatted$saveid <- paste0(temptrain_formatted$id,"-",temptrain_formatted$daysout,"-",temptrain_formatted$outcome)
   train_file <- "data/model/train.rds"
-  if (file.exists(train_file)) {
-    train <- readRDS(train_file)
-    train <- rbind(temptrain_formatted, train)
-    train <- train[!duplicated(train$saveid), ]
-  } else {
-    train <- temptrain_formatted
-  }
+  
+  train <- temptrain_formatted
+  
   saveRDS(train, file = "data/model/train.rds")
   saveRDS(temptest_formatted,file = "data/model/test.rds")
 }
@@ -576,7 +656,17 @@ convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
   }
 }
 
-
+add_new_columns <- function(colnames){
+  files <- list.files("data/new", full.names = TRUE)
+  for (f in files) {
+    df <- read.csv(f)
+    
+    df <- df %>%
+      mutate(across(all_of(new_cols), ~ NA))
+    
+    write.csv(df, f, row.names = FALSE)
+  }
+}
 
 
 

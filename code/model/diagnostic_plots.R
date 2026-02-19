@@ -23,48 +23,67 @@ plot_performance_vs_odds <- function(betmat){
   dev.off()
 }
 
-table_win_vs_loose <- function(betmat){
-  actual_bin <- as.factor(ifelse(betmat$payoff>0,"Win","Loss"))
-  pred_bin <- as.factor(ifelse(betmat$predicted_payoff>0,"Predicted win","Predicted loss"))
+table_win_vs_loose <- function(testgames){
+  library(gridExtra)
+  actual_bin <- as.factor(ifelse(testgames$payoff>0,"Win","Loss"))
+  pred_bin <- as.factor(ifelse(testgames$predicted_payoff>0,"Predicted win","Predicted loss"))
   png(file="results/plots/win_vs_loss_table.png")
-  table(actual_bin,pred_bin)
+  grid.table(table(actual_bin, pred_bin))
   dev.off()
 }
 
-plot_pred_vs_actual_prob <- function(betmat){
-  pcts <- betmat$predicted_pcts
-  win <- ifelse(betmat$payoff>0,1,0)
-  df <- betmat %>%
-    mutate(
-      bin = ntile(pcts, 50)  # deciles
-    )
-  calibration <- df %>%
-    group_by(bin) %>%
-    summarise(
-      mean_pred = mean(pcts),
-      obs_win   = mean(win),
-      n         = n(),
-      .groups = "drop"
-    )
-  png(file="results/plots/actual_vs_pred_pct.png")
-  plot(
-    calibration$mean_pred,
-    calibration$obs_win,
-    xlim = c(0, 1),
-    ylim = c(0, 1),
-    xlab = "Predicted probability",
-    ylab = "Observed probability",
-    pch = 19
-  )
+plot_pred_vs_actual_prob <- function(testgames){
+  bucketsto <- c(1:20)*0.05
+  bucketsfrom <- c(0:19)*0.05
+  pcts <- c()
+  for(i in 1:20){
+    from <- bucketsfrom[i]
+    to <- bucketsto[i]
+    bets <- testgames[testgames$predicted_pct>from&testgames$predicted_pct<to,]
+    winpct <- sum(bets$payoff>0)/nrow(bets)
+    pcts <- c(pcts,winpct)
+  }
   
-  abline(0, 1, col = "red", lty = 2)
+  png(file="results/plots/pred_vs_actual_prob.png")
+  print(plot(bucketsto,pcts,xlab="predicted probability",ylab="observed probability"))
+  abline(a = 0, b = 1, col = "red", lwd = 2)
+  dev.off()
+}
+
+plot_prediction_vs_result_per_outcome <- function(betmat){
+  actual <- betmat$payoff
+  pred <- betmat$predicted_payoff
+  png(file="results/plots/pred_vs_result_overall.png")
+  print(plot(actual,pred,xlab="Payoff",ylab="Predicted payoff"))
+  dev.off()
+  
+  home <- betmat[betmat$outcome=="1",]
+  actual <- home$payoff
+  pred <- home$predicted_payoff
+  png(file="results/plots/pred_vs_result_home.png")
+  print(plot(actual,pred,xlab="Payoff",ylab="Predicted payoff"))
+  dev.off()
+  
+  draw <- betmat[betmat$outcome=="X",]
+  actual <- draw$payoff
+  pred <- draw$predicted_payoff
+  png(file="results/plots/pred_vs_result_draw.png")
+  print(plot(actual,pred,xlab="Payoff",ylab="Predicted payoff"))
+  dev.off()
+  
+  away <- betmat[betmat$outcome=="2",]
+  actual <- away$payoff
+  pred <- away$predicted_payoff
+  png(file="results/plots/pred_vs_result_away.png")
+  print(plot(actual,pred,xlab="Payoff",ylab="Predicted payoff"))
   dev.off()
   
 }
 
-diagnostic_plots <- function(betmat){
+diagnostic_plots <- function(betmat,testgames){
   plot_performance_vs_ndays(betmat)
   plot_performance_vs_odds(betmat)
-  table_win_vs_loose(betmat)
+  table_win_vs_loose(testgames)
   plot_pred_vs_actual_prob(betmat)
+  plot_prediction_vs_result_per_outcome(betmat)
 }
