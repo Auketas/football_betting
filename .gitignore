@@ -1,0 +1,19 @@
+cat > .gitignore <<'EOF'
+# ---- R ----
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+
+# ---- OS ----
+.DS_Store
+Thumbs.db
+
+# ---- Temporary / cache ----
+*.log
+*.tmp
+~$*
+
+# ---- Optional: R package build ----
+.Rbuildignore
+EOF
