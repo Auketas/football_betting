@@ -41,7 +41,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/new/*.csv
+          git add data/new/V2/*.csv
           git add data/model/*.rds
           git commit -m "Update scraped data [$(date +'%Y-%m-%d')]"
           git push
