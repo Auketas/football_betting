@@ -7,8 +7,9 @@ library(tictoc)
 library(dplyr)
 library(chromote)
 library(R.utils)
+library(openxlsx)
 options(chromote.timeout = 30)
-extract_data <- function(league,timezone,b){
+extract_data <- function(league,timezone,b,runstats){
   local_date <- as.Date(as.POSIXlt(Sys.time(), tz = timezone))
   link <- paste0("https://www.betexplorer.com", league, "fixtures")
   headers <- add_headers(
@@ -79,6 +80,7 @@ extract_data <- function(league,timezone,b){
     }
     oddsmatuse <- matrix(odds,nrow=length(odds)/3,ncol=3,byrow=TRUE)
     
+    waittimes <- c(2,4,8)
     
     base_year <- format(Sys.Date(), "%Y")
     parsed_dates <- as.POSIXct(
@@ -106,22 +108,30 @@ extract_data <- function(league,timezone,b){
       while (!success && attempts < 3) {  # Retry up to 3 times
         attempts <- attempts + 1
         tryCatch({
-          Sys.sleep(2)  # small delay between requests
+          Sys.sleep(abs(waittimes[attempts]+rnorm(1,sd=0.5)))  # small delay between requests
           print(paste0("Scraping game ",matchmatuse[i,1],"-",matchmatuse[i,2]))
           #matchmatuse[i, 4:6] <- extract_match_info(matchmatuse[i, 3],b)
+      
           matchdata <- extract_match_info(matchmatuse[i,3],b)
-          if(!is.vector(matchdata)){
-            odds <- matchdata$odds
-            sd <- matchdata$sd
-            nleaders <- matchdata$nleaders
-            leaders <- matchdata$leaders
-            matchmatuse[i,4:6] <- odds
-            matchmatuse[i,7:9] <- sd
-            matchmatuse[i,10:12] <- nleaders
-            matchmatuse[i,13:15] <- leaders
-          }else{
-            
+          
+          if(matchdata$status=="finished"){
+            print("Game has finished")
+            success <- TRUE
           }
+          if(matchdata$status=="oddsincomplete"){
+            print("Some odds are missing")
+            success <- TRUE
+          }
+          
+          matchdata <- matchdata$return
+          odds <- matchdata$odds
+          sd <- matchdata$sd
+          nleaders <- matchdata$nleaders
+          leaders <- matchdata$leaders
+          matchmatuse[i,4:6] <- odds
+          matchmatuse[i,7:9] <- sd
+          matchmatuse[i,10:12] <- nleaders
+          matchmatuse[i,13:15] <- leaders
           success <- TRUE
         }, error = function(e) {
           cat(paste0("⚠️ Error in game ", i, ": ", e$message, "\n"))
@@ -131,11 +141,14 @@ extract_data <- function(league,timezone,b){
       }
       
       if (!success) {
-        cat(paste0("❌ Skipping game ", i, " after 3 failed attempts.\n"))
+        runstats$games_timed_out <- runstats$games_timed_out + 1
+        cat(paste0("❌ Skipping game ", i, " after 5 failed attempts.\n"))
       }
     }
-    matchmatuse <- matchmatuse[!is.na(matchmatuse[,4]),]
-    if(nrow(matchmatuse)>0){
+    
+    ids <- which(!is.na(matchmatuse[,4]))
+    matchmatuse <- matchmatuse[ids,]
+    if(NROW(matchmatuse)>0){
       datesuse <- dates[first_x_indices]
       day_month <- sub("(\\d{2}\\.\\d{2})\\..*", "\\1", datesuse)
       # Explanation:
@@ -178,6 +191,8 @@ extract_data <- function(league,timezone,b){
       final_dates <- adjust_year(dates_parsed, today)
       
       dif <- final_dates-local_date
+      final_dates <- final_dates[ids]
+      dif <- dif[ids]
       
       matchmatuse_mat <- matrix(matchmatuse, ncol =15)
       
@@ -201,10 +216,24 @@ extract_match_info <- function(link, b) {
   odds_nodes <- html_nodes(page, "a.archiveOdds")
   bookie_names <- html_nodes(page, "a.in-bookmaker-logo-link")
   bookie_names <- html_text(bookie_names,trim=TRUE)
+  status <- page %>%
+    html_element("#js-eventstage") %>%
+    html_text()
+  status <- ifelse(is.na(status),"not finished",status)
   
-  if (length(odds_nodes) == 0) {
-    return(c(NA, NA, NA))
+  if(status=="Finished"){
+    stop("Game has finished")
+    return(list(status="finished",return=NA))
   }
+  
+  if(length(odds_nodes)==0){
+    stop("No odds returned")
+  }
+  
+  if(length(odds_nodes)%%3!=0){
+    return(list(status="oddsincomplete",return=NA))
+  }
+
   
   text <- odds_nodes %>% html_text(trim = TRUE)
   home <- as.numeric(text[seq(1, length(text), by = 3)])
@@ -220,7 +249,7 @@ extract_match_info <- function(link, b) {
   homeleader <- ifelse(homen==1,bookie_names[which(home==max(home))],NA)
   drawleader <- ifelse(drawn==1,bookie_names[which(draw==max(draw))],NA)
   awayleader <- ifelse(awayn==1,bookie_names[which(away==max(away))],NA)
-  return(list(odds=c(max(home),max(draw),max(away)),sd=c(sd(home),sd(draw),sd(away)),nleaders=c(homen,drawn,awayn),leaders=c(homeleader,drawleader,awayleader)))
+  return(list(status="succeeded",return=list(odds=c(max(home),max(draw),max(away)),sd=c(sd(home),sd(draw),sd(away)),nleaders=c(homen,drawn,awayn),leaders=c(homeleader,drawleader,awayleader))))
   #return(c(sd(home), sd(draw), sd(away)))
 }
 
@@ -270,9 +299,11 @@ extract_leagues <- function(){
   return(final_league_urls)
 }
 
-write_league <- function(league,timezone,b,version){
-  data <- extract_data(league,timezone,b)
+write_league <- function(league,timezone,b,version,runstats){
+  data <- extract_data(league,timezone,b,runstats)
   if(nrow(data)>0&&length(data)>0){
+    runstats$leagues_scraped <- runstats$leagues_scraped+1
+    runstats$games_scraped_total <- runstats$games_scraped_total+nrow(data)
     trimmed <- sub("^/football/", "", league)
     trimmed <- sub("/$", "", trimmed)
     
@@ -286,10 +317,12 @@ write_league <- function(league,timezone,b,version){
     name <- paste(parts, collapse = "_")
     if(file_exists(paste0("data/new/",version,"/",name,".csv"))){
       fulldata <- read.csv(paste0("data/new/",version,"/",name,".csv"))
+      numrow <- nrow(fulldata)
       numcol <- ncol(fulldata)
       for(i in 1:nrow(data)){
         row <- data[i,]
         if(row$id %in% fulldata$id){
+          runstats$games_updated_existing <- runstats$games_updated_existing+1
           colname1 <- paste0("home_odds_l",row$dif)
           colname2 <- paste0("draw_odds_l",row$dif)
           colname3 <- paste0("away_odds_l",row$dif)
@@ -297,8 +330,8 @@ write_league <- function(league,timezone,b,version){
           colname5 <- paste0("draw_sd_l",row$dif)
           colname6 <- paste0("away_sd_l",row$dif)
           colname7 <- paste0("home_nleaders_l",row$dif)
-          colname8 <- paste0("draw_n_leaders_l",row$dif)
-          colname9 <- paste0("away_n_leaders_l",row$dif)
+          colname8 <- paste0("draw_nleaders_l",row$dif)
+          colname9 <- paste0("away_nleaders_l",row$dif)
           colname10 <- paste0("home_leader_l",row$dif)
           colname11 <- paste0("draw_leader_l",row$dif)
           colname12 <- paste0("away_leader_l",row$dif)
@@ -319,8 +352,9 @@ write_league <- function(league,timezone,b,version){
           fulldata[[colname11]][which(fulldata$id==row$id)] <- row$matchmatuse.14
           fulldata[[colname12]][which(fulldata$id==row$id)] <- row$matchmatuse.15
         }else{
-          new_data <- as.data.frame(lapply(fulldata, function(x) rep(NA,nrow(data))))
-          new_data$id <- data$id
+          runstats$games_new_added <- runstats$games_new_added+1
+          new_data <- as.data.frame(lapply(fulldata, function(x) rep(NA,1)))
+          new_data$id <- row$id
           id <- data$id[i]
           colname1 <- paste0("home_odds_l",row$dif)
           colname2 <- paste0("draw_odds_l",row$dif)
@@ -329,8 +363,8 @@ write_league <- function(league,timezone,b,version){
           colname5 <- paste0("draw_sd_l",row$dif)
           colname6 <- paste0("away_sd_l",row$dif)
           colname7 <- paste0("home_nleaders_l",row$dif)
-          colname8 <- paste0("draw_n_leaders_l",row$dif)
-          colname9 <- paste0("away_n_leaders_l",row$dif)
+          colname8 <- paste0("draw_nleaders_l",row$dif)
+          colname9 <- paste0("away_nleaders_l",row$dif)
           colname10 <- paste0("home_leader_l",row$dif)
           colname11 <- paste0("draw_leader_l",row$dif)
           colname12 <- paste0("away_leader_l",row$dif)
@@ -354,15 +388,32 @@ write_league <- function(league,timezone,b,version){
           fulldata <- rbind(fulldata,new_data)
         }
       }
-      #assert_that(ncol(fulldata)==numcol,msg=paste0("Adding data has changed the number of columns for league ",league))
-      write.csv(fulldata,paste0("data/new/",version,"/",name,".csv"),row.names=FALSE)
+      errortext <- run_fatal_checks(fulldata)
+      if(length(errortext)>1){
+        runstats$fatal_fails <- runstats$fatal_fails+1
+        runstats$error_log <- c(runstats$error_log,errortext)
+      }
+      numrow2 <- nrow(fulldata)
+      if(numrow>numrow2){
+        errortext <- paste0("Number of rows has declined for league ",name)
+        runstats$fatal_fails <- runstats$fatal_fails+1
+        runstats$error_log <- c(runstats$error_log,errortext)
+      }
+      if(length(errortext)==1){
+        write.csv(fulldata,paste0("data/new/",version,"/",name,".csv"),row.names=FALSE)
+        runstats$filename <- paste0("data/new/",version,"/",name,".csv")
+      }
+      runstats$total_rows <- runstats$total_rows+nrow(fulldata)
     }else{
+      runstats$leagues_added <- runstats$leagues_added+1
       exampledata <- read.csv(paste0("data/new/",version,"/hold.csv"))
       numcol <- ncol(exampledata)
       new_data <- as.data.frame(lapply(exampledata, function(x) rep(NA, nrow(data))))
       new_data$id <- data$id
       for(i in 1:nrow(data)){
+        runstats$games_new_added <- runstats$games_new_added+1
         id <- data$id[i]
+        row <- data[i,]
         colname1 <- paste0("home_odds_l",row$dif)
         colname2 <- paste0("draw_odds_l",row$dif)
         colname3 <- paste0("away_odds_l",row$dif)
@@ -370,8 +421,8 @@ write_league <- function(league,timezone,b,version){
         colname5 <- paste0("draw_sd_l",row$dif)
         colname6 <- paste0("away_sd_l",row$dif)
         colname7 <- paste0("home_nleaders_l",row$dif)
-        colname8 <- paste0("draw_n_leaders_l",row$dif)
-        colname9 <- paste0("away_n_leaders_l",row$dif)
+        colname8 <- paste0("draw_nleaders_l",row$dif)
+        colname9 <- paste0("away_nleaders_l",row$dif)
         colname10 <- paste0("home_leader_l",row$dif)
         colname11 <- paste0("draw_leader_l",row$dif)
         colname12 <- paste0("away_leader_l",row$dif)
@@ -388,13 +439,22 @@ write_league <- function(league,timezone,b,version){
         new_data[[colname11]][i] <- row$matchmatuse.14
         new_data[[colname12]][i] <- row$matchmatuse.15
       }
-      #assert_that(ncol(new_data)==numcol,msg=paste0("Adding data has changed the number of columns for league ",league))
-      write.csv(new_data,paste0("data/new/",version,"/",name,".csv"),row.names=FALSE)
+      errortext <- run_fatal_checks(new_data)
+      if(length(errortext)>1){
+        runstats$fatal_fails <- runstats$fatal_fails+1
+        runstats$error_log <- c(runstats$error_log,errortext)
+      }
+      if(length(errortext)==1){
+        write.csv(new_data,paste0("data/new/",version,"/",name,".csv"),row.names=FALSE)
+        runstats$filename <- paste0("data/new/",version,"/",name,".csv")
+      }
+      runstats$total_rows <- runstats$total_rows+nrow(new_data)
     }
   }
+  return(runstats)
 }
 
-add_results <- function(league,b,version){
+add_results <- function(league,b,version,runstats){
   link <- paste0("https://www.betexplorer.com", league, "results")
   headers <- add_headers("User-Agent" = "...")
   
@@ -450,6 +510,19 @@ add_results <- function(league,b,version){
     resultmat <- data.frame(Date = dates_standardized,  team_names = team_names_mat,  score=results)
     resultmat$id <- paste0(resultmat$Date,"_",resultmat$team_names.1,"_",resultmat$team_names.2)
     
+    for(rown in 1:nrow(resultmat)){
+      if(substr(resultmat$score[rown], nchar(resultmat$score[rown]) - 2, nchar(resultmat$score[rown])) == "AfP"){
+        team1 <- resultmat$team_names.1[rown]
+        team2 <- resultmat$team_names.2[rown]
+        prevgame <- resultmat[which(resultmat$team_names.1==team2&resultmat$team_names.2==team1),]
+        if(nrow(prevgame)>0){
+          resultmat$score[rown] <- prevgame$score
+        }else{
+          resultmat$score[rown] <- "X"
+        }
+      }
+    }
+    
     resultmat$score_result <- with(resultmat, ifelse(
       is.na(score), NA,
       ifelse(
@@ -480,12 +553,18 @@ add_results <- function(league,b,version){
       idsnoresults <- fulldata$id[is.na(fulldata$result)]
       update <- intersect(idsnoresults,resultmat$id)
       for(useid in update){
+        runstats$games_score_added <- runstats$games_score_added+1 
         fulldata$result[fulldata$id==useid] <- resultmat$score_result[resultmat$id==useid]
+        if(runif(1)<0.05){
+          runstats$game_checks[runstats$game_check_count,] <- c(useid,resultmat$score_result[resultmat$id==useid])
+          runstats$game_check_count <- runstats$game_check_count+1
+        }
       }
       assert_that(ncol(fulldata)==numcol,msg=paste0("Adding results has changed the number of columns for league ",league))
       write.csv(fulldata,paste0("data/new/",version,"/",name,".csv"),row.names=FALSE)
     }
   }
+  return(runstats)
 }
 
 fetch_league_page <- function(link, headers, b) {
@@ -506,7 +585,9 @@ fetch_league_page <- function(link, headers, b) {
   return(read_html(res))
 }
 
-loop_over_leagues <- function(v,start = 1) {
+loop_over_leagues <- function(v,start = 1){
+  start_time <- Sys.time()
+  runstats <- list("leagues_scraped"=0,"leagues_added"=0,"games_scraped_total"=0,"games_new_added"=0,"games_updated_existing"=0,"games_score_added"=0,"total_rows"=0,"game_checks"=matrix(nrow=0,ncol=2),"game_check_count"=1,"games_timed_out"=0,"filename"="","fatal_fails"=0,"error_log"=c())
   leaguelist <- read.csv("data/hold/leaguelist.csv")
   leagues <- leaguelist[, 2]
   timezones <- leaguelist[, 3]
@@ -514,6 +595,9 @@ loop_over_leagues <- function(v,start = 1) {
   # create ONE Chromote session for the whole run
   b <- ChromoteSession$new()
   on.exit(b$close(), add = TRUE)
+  
+  commit_sha <- Sys.getenv("GITHUB_SHA")
+  date <- Sys.Date()
   
   if (!dir.exists(paste0("data/new/",v))) {
     dir.create(paste0("data/new/",v), recursive = TRUE)
@@ -525,15 +609,15 @@ loop_over_leagues <- function(v,start = 1) {
     league <- leagues[i]
     timezone <- timezones[i]
     success <- FALSE
-    delay <- 15   # base retry delay
+    delay <- 15+rnorm(1,sd=0.5)   # base retry delay
     
     while (!success) {
       cat(paste0("Processing league ", league, " (row ", i, ")\n"))
       
       tryCatch({
-        Sys.sleep(5)  # polite pause
-        write_league(league, timezone, b,v)  # pass Chromote session
-        add_results(league,b,v)
+        Sys.sleep(5)+rnorm(1,sd=0.5)  # polite pause
+        runstats <- write_league(league, timezone, b,v,runstats)  # pass Chromote session
+        runstats <- add_results(league,b,v,runstats)
         success <- TRUE
         delay <- 15  # reset delay on success
       }, error = function(e) {
@@ -549,7 +633,36 @@ loop_over_leagues <- function(v,start = 1) {
         }
       })
     }
+    #check_file_structure(runstats$filename,v)
   }
+  end_time <- Sys.time()
+  time_elapsed <- as.numeric(difftime(end_time, start_time, units = "mins"))
+  wb <- loadWorkbook("data/log/scraper_log.xlsx")
+  logdata <- read.xlsx("data/log/scraper_log.xlsx", sheet = "Summary")
+  newrow <- data.frame(
+    date = date,
+    github_SHA = commit_sha,
+    script_version = v,
+    time_elapsed = time_elapsed,
+    leagues_scraped = runstats$leagues_scraped,
+    leagues_added = runstats$leagues_added,
+    games_scraped_total = runstats$games_scraped_total,
+    games_new_added = runstats$games_new_added,
+    games_updated_existing = runstats$games_updated_existing,
+    games_score_added = runstats$games_score_added,
+    total_rows = runstats$total_rows,
+    fatal_fails = runstats$fatal_fails,
+    stringsAsFactors = FALSE
+  )
+  logdata <- rbind(logdata,newrow)
+  writeData(wb, sheet = "Summary", logdata, withFilter = FALSE)
+  
+  gamechecks <- read.xlsx("data/log/scraper_log.xlsx", sheet="Manual_check")
+  newdata <- runstats$game_checks
+  gamechecks <- rbind(gamechecks,newdata)
+  writeData(wb,sheet="Manual_check", gamechecks, withFilter=FALSE)
+  
+  saveWorkbook(wb, "data/log/scraper_log.xlsx", overwrite = TRUE)
 }
 
 write_to_train_test <- function(){
@@ -668,6 +781,95 @@ add_new_columns <- function(colnames){
   }
 }
 
+#Write second level checks for after write and make sure some scores are randomly emailed for manual checking
+run_fatal_checks <- function(fulldata){
+  test1  <- compare_n_days(fulldata)
+  test2 <- leader_and_nleaders_only_on_same_days(fulldata)
+  test3 <- check_sum_probs(fulldata)
+  test4 <- check_unique_ids(fulldata)
+  text <- paste0(test1,"\n",test2,"\n",test3,"\n",test4)
+  if(length(text)>1){
+    return(paste0("Fatal error found in the data, see details below \n",text))
+  }else{
+    return("")
+  }
+}
 
+compare_n_days <- function(fulldata){
+  failedgames <-  c()
+  oddscolumns <- fulldata[,grep("odds", names(fulldata))]
+  sdcolumns <- fulldata[,grep("odds", names(fulldata))]
+  nleadercolumns <- fulldata[,grep("nleaders", names(fulldata))]
+  for(i in 1:nrow(fulldata)){
+    nodds <- sum(!(is.na(oddscolumns[i,])))
+    nsd <- sum(!(is.na(sdcolumns[i,])))
+    nnleaders <- sum(!is.na(nleadercolumns[i,]))
+    if(!(nodds==nsd & nodds==nnleaders)){
+      failedgames <- c(failedgames,fulldata$id[i])
+    }
+  }
+  if(length(failedgames)>0){
+    return(paste0("Check for same number of values per column failed for game(s):",failedgames))
+  }else{
+    return(NULL)
+  }
+}
 
+leader_and_nleaders_only_on_same_days <- function(fulldata){
+  nleadercolumns <- fulldata[,grep("nleaders", names(fulldata))]
+  leadercolumns <- fulldata[,grep("leader_", names(fulldata))]
+  failedgames <- c()
+  for(i in 1:nrow(fulldata)){
+    ids <- which(!is.na(leadercolumns[i,]))
+    nleaders <- as.numeric(nleadercolumns[i,ids])
+    if(sum(nleaders!=1)>0){
+      failedgames <- c(failedgames,fulldata$id[i])
+    }
+  }
+  if(length(failedgames)>0){
+    return(paste0("Check that leading bookie should only be present on days with only one leading bookie failed for game(s):",failedgames))
+  }else{
+    return(NULL)
+  }
+}
+
+check_sum_probs <- function(fulldata){
+  failedgames <-  c()
+  oddscolumns <- fulldata[,grep("odds", names(fulldata))]
+  for(i in 1:nrow(fulldata)){
+    odds <- oddscolumns[i,]
+    odds <- odds[!is.na(odds)]
+    ndays <- length(odds)/3
+    for(j  in 1:ndays){
+      dayodds <- odds[c(j,(ndays+j),(2*ndays+j))]
+      probs <- 1/as.numeric(dayodds)
+      if(!(sum(probs)>0.9 & sum(probs)<1.1)){
+        failedgames <- c(failedgames,fulldata$id[i])
+      }
+    }
+  }
+  failedgames <- unique(failedgames)
+  if(length(failedgames)>0){
+    return(paste0("Check for sum of probabilities each day failed for game(s):",failedgames))
+  }else{
+    return(NULL)
+  }
+}
+
+check_unique_ids <- function(fulldata){
+  ids <- fulldata$id
+  if(length(unique(fulldata$id[duplicated(fulldata$id)]))>0){
+    return(paste0("Check for only unique ids failed, following game(s) have duplicates:",unique(fulldata$id[duplicated(fulldata$id)])))
+  }else{
+    return(NULL)
+  }
+}
+
+check_file_structure <- function(league,v){
+  data <- read.csv(league)
+  example <- read.csv(paste0("data/new/",v,"/hold.csv"))
+  if(length(setdiff(colnames(data),colnames(example)))>0){
+    stop(paste0("A fatal change in the file structure has been detected in league ",league))
+  }
+}
 
