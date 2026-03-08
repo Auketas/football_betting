@@ -80,7 +80,7 @@ extract_data <- function(league,timezone,b,runstats){
     }
     oddsmatuse <- matrix(odds,nrow=length(odds)/3,ncol=3,byrow=TRUE)
     
-    waittimes <- c(2,4,8)
+    waittimes <- c(4,8,12)
     
     base_year <- format(Sys.Date(), "%Y")
     parsed_dates <- as.POSIXct(
@@ -208,7 +208,7 @@ extract_data <- function(league,timezone,b,runstats){
 
 extract_match_info <- function(link, b) {
   b$Page$navigate(link)
-  Sys.sleep(5)
+  Sys.sleep(10)
   
   html <- b$Runtime$evaluate("document.documentElement.outerHTML")$result$value
   page <- read_html(html)
@@ -222,7 +222,6 @@ extract_match_info <- function(link, b) {
   status <- ifelse(is.na(status),"not finished",status)
   
   if(status=="Finished"){
-    stop("Game has finished")
     return(list(status="finished",return=NA))
   }
   
