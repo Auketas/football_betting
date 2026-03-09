@@ -595,6 +595,10 @@ loop_over_leagues <- function(v,start = 1){
   b <- ChromoteSession$new()
   on.exit(b$close(), add = TRUE)
   
+  b$Network$setUserAgentOverride(
+    userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36"
+  )
+  
   commit_sha <- Sys.getenv("GITHUB_SHA")
   date <- Sys.Date()
   
