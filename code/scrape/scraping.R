@@ -595,9 +595,31 @@ loop_over_leagues <- function(v,start = 1){
   b <- ChromoteSession$new()
   on.exit(b$close(), add = TRUE)
   
+  b$Network$enable()
+  
   b$Network$setUserAgentOverride(
     userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36"
   )
+  b$Emulation$setDeviceMetricsOverride(
+    width = 1366,
+    height = 768,
+    deviceScaleFactor = 1,
+    mobile = FALSE
+  )
+  b$Page$addScriptToEvaluateOnNewDocument("
+Object.defineProperty(navigator, 'webdriver', {
+  get: () => undefined
+});
+")
+  b$Network$setExtraHTTPHeaders(list(
+    "Accept-Language" = "en-US,en;q=0.9"
+  ))
+  b$Runtime$evaluate("
+let btn = document.querySelector('#onetrust-accept-btn-handler');
+if (btn) btn.click();
+")
+  b$Runtime$evaluate("window.scrollTo(0, document.body.scrollHeight)")
+  
   
   commit_sha <- Sys.getenv("GITHUB_SHA")
   date <- Sys.Date()
