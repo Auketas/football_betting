@@ -865,11 +865,13 @@ check_sum_probs <- function(fulldata){
     odds <- oddscolumns[i,]
     odds <- odds[!is.na(odds)]
     ndays <- length(odds)/3
-    for(j  in 1:ndays){
-      dayodds <- odds[c(j,(ndays+j),(2*ndays+j))]
-      probs <- 1/as.numeric(dayodds)
-      if(!(sum(probs)>0.9 & sum(probs)<1.1)){
-        failedgames <- c(failedgames,fulldata$id[i])
+    if(ndays>0){
+      for(j  in 1:ndays){
+        dayodds <- odds[c(j,(ndays+j),(2*ndays+j))]
+        probs <- 1/as.numeric(dayodds)
+        if(!(sum(probs)>0.9 & sum(probs)<1.1)){
+          failedgames <- c(failedgames,fulldata$id[i])
+        }
       }
     }
   }
