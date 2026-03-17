@@ -912,8 +912,36 @@ extract_match_info_debug <- function(link, b, i = NA, attempt = NA) {
   start_time <- Sys.time()
   
   b$Page$navigate(link)
-  Sys.sleep(8)  # keep this fixed for now
   
+  # ✅ Wait for odds to load instead of fixed sleep
+  wait_for_odds <- function(timeout = 15) {
+    start <- Sys.time()
+    
+    while (as.numeric(Sys.time() - start, units = "secs") < timeout) {
+      
+      res <- b$Runtime$evaluate(
+        "document.querySelectorAll('a.archiveOdds').length"
+      )$result$value
+      
+      if (!is.null(res) && res > 0) {
+        return(TRUE)
+      }
+      
+      Sys.sleep(1)
+    }
+    
+    return(FALSE)
+  }
+  
+  odds_loaded <- wait_for_odds(timeout = 15)
+  
+  if (!odds_loaded) {
+    cat("⚠️ Odds did NOT load within timeout\n")
+  } else {
+    cat("✅ Odds detected in DOM\n")
+  }
+  
+  # Now extract HTML AFTER waiting
   html <- b$Runtime$evaluate("document.documentElement.outerHTML")$result$value
   
   load_time <- Sys.time() - start_time
@@ -945,12 +973,11 @@ extract_match_info_debug <- function(link, b, i = NA, attempt = NA) {
     cat("Game status:", status, "\n")
   }
   
-  # Stop early — we only care about diagnostics
   return(list(
     html_size = nchar(html),
     odds_nodes = length(odds_nodes),
     has_eventstage = length(eventstage_nodes),
-    status = status
+    status = status,
+    odds_loaded = odds_loaded
   ))
 }
-
