@@ -9,7 +9,7 @@ library(chromote)
 library(R.utils)
 library(openxlsx)
 options(chromote.timeout = 30)
-extract_data <- function(league,timezone,b,runstats){
+extract_data <- function(league,timezone,b,runstats,debug=FALSE){
   local_date <- as.Date(as.POSIXlt(Sys.time(), tz = timezone))
   link <- paste0("https://www.betexplorer.com", league, "fixtures")
   headers <- add_headers(
@@ -111,8 +111,11 @@ extract_data <- function(league,timezone,b,runstats){
           Sys.sleep(abs(waittimes[attempts]+rnorm(1,sd=0.5)))  # small delay between requests
           print(paste0("Scraping game ",matchmatuse[i,1],"-",matchmatuse[i,2]))
           #matchmatuse[i, 4:6] <- extract_match_info(matchmatuse[i, 3],b)
-      
-          matchdata <- extract_match_info(matchmatuse[i,3],b)
+          if(debug==FALSE){
+            matchdata <- extract_match_info(matchmatuse[i,3],b)
+          }else{
+            matchdata <-  extract_match_info_debug(matchmatuse[i,3],b)
+          }
           
           if(matchdata$status=="finished"){
             print("Game has finished")
@@ -298,8 +301,8 @@ extract_leagues <- function(){
   return(final_league_urls)
 }
 
-write_league <- function(league,timezone,b,version,runstats){
-  data <- extract_data(league,timezone,b,runstats)
+write_league <- function(league,timezone,b,version,runstats,debug=FALSE){
+  data <- extract_data(league,timezone,b,runstats,debug)
   if(nrow(data)>0&&length(data)>0){
     runstats$leagues_scraped <- runstats$leagues_scraped+1
     runstats$games_scraped_total <- runstats$games_scraped_total+nrow(data)
@@ -584,7 +587,7 @@ fetch_league_page <- function(link, headers, b) {
   return(read_html(res))
 }
 
-loop_over_leagues <- function(v,start = 1){
+loop_over_leagues <- function(v,debug=FALSE,start = 1){
   start_time <- Sys.time()
   runstats <- list("leagues_scraped"=0,"leagues_added"=0,"games_scraped_total"=0,"games_new_added"=0,"games_updated_existing"=0,"games_score_added"=0,"total_rows"=0,"game_checks"=matrix(nrow=0,ncol=2),"game_check_count"=1,"games_timed_out"=0,"filename"="","fatal_fails"=0,"error_log"=c())
   leaguelist <- read.csv("data/hold/leaguelist.csv")
@@ -641,7 +644,7 @@ if (btn) btn.click();
       
       tryCatch({
         Sys.sleep(5)+rnorm(1,sd=0.5)  # polite pause
-        runstats <- write_league(league, timezone, b,v,runstats)  # pass Chromote session
+        runstats <- write_league(league, timezone, b,v,runstats,debug)  # pass Chromote session
         runstats <- add_results(league,b,v,runstats)
         success <- TRUE
         delay <- 15  # reset delay on success
@@ -898,5 +901,56 @@ check_file_structure <- function(league,v){
   if(length(setdiff(colnames(data),colnames(example)))>0){
     stop(paste0("A fatal change in the file structure has been detected in league ",league))
   }
+}
+
+extract_match_info_debug <- function(link, b, i = NA, attempt = NA) {
+  
+  cat("\n============================\n")
+  cat("URL:", link, "\n")
+  cat("Attempt:", attempt, "\n")
+  
+  start_time <- Sys.time()
+  
+  b$Page$navigate(link)
+  Sys.sleep(8)  # keep this fixed for now
+  
+  html <- b$Runtime$evaluate("document.documentElement.outerHTML")$result$value
+  
+  load_time <- Sys.time() - start_time
+  cat("Load time:", load_time, "\n")
+  cat("HTML size:", nchar(html), "\n")
+  
+  # Save HTML for inspection
+  fname <- paste0("debug_page_", i, "_attempt_", attempt, ".html")
+  writeLines(html, fname)
+  cat("Saved HTML to:", fname, "\n")
+  
+  # Detect blocking / Cloudflare
+  cat("Contains 'cf-':", grepl("cf-", html), "\n")
+  cat("Contains 'cloudflare':", grepl("cloudflare", html, ignore.case = TRUE), "\n")
+  cat("Contains 'attention':", grepl("attention", html, ignore.case = TRUE), "\n")
+  
+  page <- read_html(html)
+  
+  odds_nodes <- html_nodes(page, "a.archiveOdds")
+  cat("Odds nodes found:", length(odds_nodes), "\n")
+  
+  eventstage_nodes <- html_nodes(page, "#js-eventstage")
+  cat("Has js-eventstage:", length(eventstage_nodes), "\n")
+  
+  # Print status if available
+  status <- NA
+  if (length(eventstage_nodes) > 0) {
+    status <- html_text(eventstage_nodes)
+    cat("Game status:", status, "\n")
+  }
+  
+  # Stop early — we only care about diagnostics
+  return(list(
+    html_size = nchar(html),
+    odds_nodes = length(odds_nodes),
+    has_eventstage = length(eventstage_nodes),
+    status = status
+  ))
 }
 
