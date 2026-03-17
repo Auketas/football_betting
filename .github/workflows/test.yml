@@ -29,7 +29,7 @@ jobs:
         run: Rscript -e 'print(installed.packages()[, "Package"])'
         
       - name: Run test script
-        run: Rscript code/testscript.R
+        run: Rscript code/scrape/testscript.R
 
       - name: Upload debug HTML
         uses: actions/upload-artifact@v4
