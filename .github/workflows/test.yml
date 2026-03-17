@@ -1,7 +1,7 @@
 name: Test
 
 on:
-  workflow_dispatch:   # Only run manually from GitHub UI
+  workflow_dispatch:
 
 jobs:
   run-r-script:
@@ -30,3 +30,9 @@ jobs:
         
       - name: Run test script
         run: Rscript code/testscript.R
+
+      - name: Upload debug HTML
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-html
+          path: debug_page_*.html
