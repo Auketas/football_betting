@@ -1,2 +1,2 @@
 source("code/scrape/scraping.R")
-write_to_train_test()
+loop_over_leagues("test",debug=TRUE)
