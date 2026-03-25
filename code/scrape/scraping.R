@@ -110,7 +110,22 @@ extract_data <- function(league,timezone,b,runstats,debug=FALSE){
         tryCatch({
           Sys.sleep(abs(waittimes[attempts]+rnorm(1,sd=0.5)))  # small delay between requests
           print(paste0("Scraping game ",matchmatuse[i,1],"-",matchmatuse[i,2]))
-          #matchmatuse[i, 4:6] <- extract_match_info(matchmatuse[i, 3],b)
+          runstats$scrapecount <- runstats$scrapecount+1
+          if (runstats$consecutive_hits > 10) {
+            cat("Cooling down after success streak\n")
+            Sys.sleep(runif(1, 10, 20))
+            runstats$consecutive_hits <- 0
+          }
+          if(runstats$scrapecount%%20==0||runstats$consecutive_fails>=5){
+            cat("🔄 Resetting browser session\n")
+            b$close()
+            Sys.sleep(runif(1, 5, 10))
+            b <- ChromoteSession$new()
+            
+            b$Network$setUserAgentOverride(
+              userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36"
+            )
+          }
           if(debug==FALSE){
             matchdata <- extract_match_info(matchmatuse[i,3],b)
           }else{
@@ -146,6 +161,16 @@ extract_data <- function(league,timezone,b,runstats,debug=FALSE){
       if (!success) {
         runstats$games_timed_out <- runstats$games_timed_out + 1
         cat(paste0("❌ Skipping game ", i, " after 5 failed attempts.\n"))
+        runstats$consecutive_fails <- runstats$consecutive_fails+1
+        runstats$consecutive_hits <- 0
+      }
+      if(success){
+        runstats$consecutive_fails <- 0
+        runstats$consecutive_hits <- runstats_consecutive_hits+1
+      }
+      if (runif(1) < 0.1) {
+        b$Page$navigate("https://www.betexplorer.com/")
+        Sys.sleep(runif(1, 3, 6))
       }
     }
     
@@ -202,9 +227,9 @@ extract_data <- function(league,timezone,b,runstats,debug=FALSE){
       matuse <- data.frame(Date = final_dates, dif = dif, matchmatuse = matchmatuse_mat, stringsAsFactors = FALSE)
       matuse$id <- paste0(matuse$Date,"_",matuse$matchmatuse.1,"_",matuse$matchmatuse.2)
       matuse <- matuse[matuse$dif<21,]
-      return(matuse)
+      return(list(result=matuse,browser=b),runstats=runstats)
     }
-    return(matchmatuse)
+    return(list(result=matchmatuse,browser=b,runstats=runstats))
     }
   }
 }
@@ -302,7 +327,10 @@ extract_leagues <- function(){
 }
 
 write_league <- function(league,timezone,b,version,runstats,debug=FALSE){
-  data <- extract_data(league,timezone,b,runstats,debug)
+  result <- extract_data(league,timezone,b,runstats,debug)
+  data <- result$result
+  b <- result$browser
+  runstats <- result$runstats
   if(nrow(data)>0&&length(data)>0){
     runstats$leagues_scraped <- runstats$leagues_scraped+1
     runstats$games_scraped_total <- runstats$games_scraped_total+nrow(data)
@@ -453,7 +481,7 @@ write_league <- function(league,timezone,b,version,runstats,debug=FALSE){
       runstats$total_rows <- runstats$total_rows+nrow(new_data)
     }
   }
-  return(runstats)
+  return(list(runstats=runstats,browser=b))
 }
 
 add_results <- function(league,b,version,runstats){
@@ -589,7 +617,7 @@ fetch_league_page <- function(link, headers, b) {
 
 loop_over_leagues <- function(v,debug=FALSE,start = 1){
   start_time <- Sys.time()
-  runstats <- list("leagues_scraped"=0,"leagues_added"=0,"games_scraped_total"=0,"games_new_added"=0,"games_updated_existing"=0,"games_score_added"=0,"total_rows"=0,"game_checks"=matrix(nrow=0,ncol=2),"game_check_count"=1,"games_timed_out"=0,"filename"="","fatal_fails"=0,"error_log"=c())
+  runstats <- list("leagues_scraped"=0,"leagues_added"=0,"games_scraped_total"=0,"games_new_added"=0,"games_updated_existing"=0,"games_score_added"=0,"total_rows"=0,"game_checks"=matrix(nrow=0,ncol=2),"game_check_count"=1,"games_timed_out"=0,"filename"="","fatal_fails"=0,"error_log"=c(),"consecutive_hits"=0,"consecutive_fails"=0,"scrapecount"=0)
   leaguelist <- read.csv("data/hold/leaguelist.csv")
   leagues <- leaguelist[, 2]
   timezones <- leaguelist[, 3]
@@ -644,7 +672,9 @@ if (btn) btn.click();
       
       tryCatch({
         Sys.sleep(5)+rnorm(1,sd=0.5)  # polite pause
-        runstats <- write_league(league, timezone, b,v,runstats,debug)  # pass Chromote session
+        result <- write_league(league, timezone, b,v,runstats,debug)  # pass Chromote session
+        runstats <- result$runstats
+        b <- runstats$browser
         runstats <- add_results(league,b,v,runstats)
         success <- TRUE
         delay <- 15  # reset delay on success
