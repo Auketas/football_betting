@@ -329,9 +329,9 @@ extract_leagues <- function(){
 write_league <- function(league,timezone,b,version,runstats,debug=FALSE){
   result <- extract_data(league,timezone,b,runstats,debug)
   data <- result$result
-  b <- result$browser
-  runstats <- result$runstats
   if(nrow(data)>0&&length(data)>0){
+    b <- result$browser
+    runstats <- result$runstats
     runstats$leagues_scraped <- runstats$leagues_scraped+1
     runstats$games_scraped_total <- runstats$games_scraped_total+nrow(data)
     trimmed <- sub("^/football/", "", league)
@@ -662,6 +662,7 @@ if (btn) btn.click();
   }
   
   for (i in start:nrow(leaguelist)) {
+    print(length(b))
     league <- leagues[i]
     timezone <- timezones[i]
     success <- FALSE
