@@ -166,7 +166,7 @@ extract_data <- function(league,timezone,b,runstats,debug=FALSE){
       }
       if(success){
         runstats$consecutive_fails <- 0
-        runstats$consecutive_hits <- runstats_consecutive_hits+1
+        runstats$consecutive_hits <- runstats$consecutive_hits+1
       }
       if (runif(1) < 0.1) {
         b$Page$navigate("https://www.betexplorer.com/")
@@ -227,7 +227,7 @@ extract_data <- function(league,timezone,b,runstats,debug=FALSE){
       matuse <- data.frame(Date = final_dates, dif = dif, matchmatuse = matchmatuse_mat, stringsAsFactors = FALSE)
       matuse$id <- paste0(matuse$Date,"_",matuse$matchmatuse.1,"_",matuse$matchmatuse.2)
       matuse <- matuse[matuse$dif<21,]
-      return(list(result=matuse,browser=b),runstats=runstats)
+      return(list(result=matuse,browser=b,runstats=runstats))
     }
     return(list(result=matchmatuse,browser=b,runstats=runstats))
     }
@@ -674,7 +674,7 @@ if (btn) btn.click();
         Sys.sleep(5)+rnorm(1,sd=0.5)  # polite pause
         result <- write_league(league, timezone, b,v,runstats,debug)  # pass Chromote session
         runstats <- result$runstats
-        b <- runstats$browser
+        b <- result$browser
         runstats <- add_results(league,b,v,runstats)
         success <- TRUE
         delay <- 15  # reset delay on success
