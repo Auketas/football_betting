@@ -662,7 +662,6 @@ if (btn) btn.click();
   }
   
   for (i in start:nrow(leaguelist)) {
-    print(length(b))
     league <- leagues[i]
     timezone <- timezones[i]
     success <- FALSE
