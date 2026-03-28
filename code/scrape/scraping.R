@@ -169,6 +169,7 @@ extract_data <- function(league,timezone,b,runstats,debug=FALSE){
         runstats$consecutive_hits <- runstats$consecutive_hits+1
       }
       if (runif(1) < 0.1) {
+        print("Redirecting to main page")
         b$Page$navigate("https://www.betexplorer.com/")
         Sys.sleep(runif(1, 3, 6))
       }
@@ -623,35 +624,8 @@ loop_over_leagues <- function(v,debug=FALSE,start = 1){
   timezones <- leaguelist[, 3]
   
   # create ONE Chromote session for the whole run
-  b <- ChromoteSession$new()
-  on.exit(b$close(), add = TRUE)
-  
-  b$Network$enable()
-  
-  b$Network$setUserAgentOverride(
-    userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36"
-  )
-  b$Emulation$setDeviceMetricsOverride(
-    width = 1366,
-    height = 768,
-    deviceScaleFactor = 1,
-    mobile = FALSE
-  )
-  b$Page$addScriptToEvaluateOnNewDocument("
-Object.defineProperty(navigator, 'webdriver', {
-  get: () => undefined
-});
-")
-  b$Network$setExtraHTTPHeaders(list(
-    "Accept-Language" = "en-US,en;q=0.9"
-  ))
-  b$Runtime$evaluate("
-let btn = document.querySelector('#onetrust-accept-btn-handler');
-if (btn) btn.click();
-")
-  b$Runtime$evaluate("window.scrollTo(0, document.body.scrollHeight)")
-  
-  
+  b <- init_browser()
+  b <- warmup_session(b)
   commit_sha <- Sys.getenv("GITHUB_SHA")
   date <- Sys.Date()
   
@@ -931,6 +905,87 @@ check_file_structure <- function(league,v){
   if(length(setdiff(colnames(data),colnames(example)))>0){
     stop(paste0("A fatal change in the file structure has been detected in league ",league))
   }
+}
+
+init_browser <- function() {
+  b <- ChromoteSession$new()
+  
+  b$Network$enable()
+  b$Page$enable()
+  b$Runtime$enable()
+  
+  # --- Realistic User Agent ---
+  b$Network$setUserAgentOverride(
+    userAgent = paste(
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+      "AppleWebKit/537.36 (KHTML, like Gecko)",
+      "Chrome/120.0.0.0 Safari/537.36"
+    )
+  )
+  
+  # --- Screen / device ---
+  b$Emulation$setDeviceMetricsOverride(
+    width = sample(c(1366, 1920), 1),
+    height = sample(c(768, 1080), 1),
+    deviceScaleFactor = 1,
+    mobile = FALSE
+  )
+  
+  # --- Timezone (important!) ---
+  b$Emulation$setTimezoneOverride("Europe/Amsterdam")
+  
+  # --- Extra headers ---
+  b$Network$setExtraHTTPHeaders(list(
+    "Accept-Language" = "en-US,en;q=0.9"
+  ))
+  
+  # --- Stealth script ---
+  b$Page$addScriptToEvaluateOnNewDocument("
+    Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+
+    window.chrome = { runtime: {} };
+
+    Object.defineProperty(navigator, 'languages', {
+      get: () => ['en-US', 'en']
+    });
+
+    Object.defineProperty(navigator, 'plugins', {
+      get: () => [1, 2, 3, 4, 5]
+    });
+
+    Object.defineProperty(navigator, 'hardwareConcurrency', {
+      get: () => 4
+    });
+
+    Object.defineProperty(navigator, 'deviceMemory', {
+      get: () => 8
+    });
+  ")
+  
+  return(b)
+}
+
+warmup_session <- function(b) {
+  b$Page$navigate("https://www.betexplorer.com/")
+  b$Page$loadEventFired(wait_ = TRUE)
+  
+  Sys.sleep(runif(1, 3, 6))
+  
+  # Accept cookies if present
+  b$Runtime$evaluate("
+    let btn = document.querySelector('#onetrust-accept-btn-handler');
+    if (btn) btn.click();
+  ")
+  
+  Sys.sleep(runif(1, 1, 3))
+  
+  # Random scroll
+  b$Runtime$evaluate(sprintf("
+    window.scrollTo(0, %d);
+  ", sample(200:1000, 1)))
+  
+  Sys.sleep(runif(1, 2, 4))
+  return(b)
 }
 
 extract_match_info_debug <- function(link, b, i = NA, attempt = NA) {
