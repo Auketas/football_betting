@@ -13,7 +13,7 @@ extract_data <- function(league,timezone,b,runstats,debug=FALSE){
   local_date <- as.Date(as.POSIXlt(Sys.time(), tz = timezone))
   link <- paste0("https://www.betexplorer.com", league, "fixtures")
   headers <- add_headers(
-    "User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/58.0.3029.110 Safari/537.3"
+    "User-Agent" = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
   )
   
   page <- fetch_league_page(link, headers, b)
@@ -120,11 +120,9 @@ extract_data <- function(league,timezone,b,runstats,debug=FALSE){
             cat("🔄 Resetting browser session\n")
             b$close()
             Sys.sleep(runif(1, 5, 10))
-            b <- ChromoteSession$new()
-            
-            b$Network$setUserAgentOverride(
-              userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36"
-            )
+            b <- init_browser()
+            b <- warmup_session(b)
+            runstats$consecutive_fails <- 0
           }
           if(debug==FALSE){
             matchdata <- extract_match_info(matchmatuse[i,3],b)
@@ -237,8 +235,24 @@ extract_data <- function(league,timezone,b,runstats,debug=FALSE){
 
 extract_match_info <- function(link, b) {
   b$Page$navigate(link)
-  Sys.sleep(10)
-  
+
+  # Wait for odds to load instead of fixed sleep
+  wait_for_odds <- function(timeout = 15) {
+    start <- Sys.time()
+    while (as.numeric(Sys.time() - start, units = "secs") < timeout) {
+      res <- b$Runtime$evaluate(
+        "document.querySelectorAll('a.archiveOdds').length"
+      )$result$value
+      if (!is.null(res) && res > 0) {
+        return(TRUE)
+      }
+      Sys.sleep(1)
+    }
+    return(FALSE)
+  }
+
+  odds_loaded <- wait_for_odds(timeout = 15)
+
   html <- b$Runtime$evaluate("document.documentElement.outerHTML")$result$value
   page <- read_html(html)
   
@@ -919,7 +933,7 @@ init_browser <- function() {
     userAgent = paste(
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
       "AppleWebKit/537.36 (KHTML, like Gecko)",
-      "Chrome/120.0.0.0 Safari/537.36"
+      "Chrome/124.0.0.0 Safari/537.36"
     )
   )
   
