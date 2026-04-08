@@ -1,0 +1,1858 @@
+Processing league /football/algeria/ligue-1/ (row 1)
+Processing league /football/argentina/primera-nacional/ (row 2)
+[1] "Matches to scrape"
+[1] "Scraping game Atletico Atlanta-Nueva Chicago"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Atletico Atlanta-Nueva Chicago"
+[1] "Scraping game Midland-Acassuso"
+[1] "Scraping game Almagro-Patronato"
+[1] "Scraping game San Miguel-Deportivo Moron"
+[1] "Scraping game San Telmo-Godoy Cruz"
+[1] "Scraping game Colon Santa Fe-Racing Cordoba"
+[1] "Scraping game Acassuso-Los Andes"
+[1] "Scraping game Chacarita Juniors-Gimnasia y Tiro"
+[1] "Scraping game Def. de Belgrano-Ciudad Bolivar"
+[1] "Scraping game Ferro-CA Estudiantes"
+[1] "Scraping game Temperley-Quilmes"
+[1] "Scraping game Agropecuario-Gimnasia Jujuy"
+Cooling down after success streak
+[1] "Redirecting to main page"
+[1] "Scraping game Deportivo Madryn-Almirante Brown"
+[1] "Scraping game Central Norte-CA Mitre"
+[1] "Scraping game Chaco For Ever-All Boys"
+[1] "Scraping game Club A. Guemes-San Martin T."
+[1] "Scraping game Deportivo Maipu-Colegiales"
+[1] "Scraping game Tristan Suarez-Atl. Rafaela"
+[1] "Scraping game Nueva Chicago-Midland"
+🔄 Resetting browser session
+[1] "Scraping game San Martin S.J.-Atletico Atlanta"
+[1] "Redirecting to main page"
+Processing league /football/armenia/premier-league/ (row 3)
+Processing league /football/asia/asian-cup-women/ (row 4)
+Processing league /football/australia/npl-act/ (row 5)
+Processing league /football/australia/npl-northern-nsw/ (row 6)
+Processing league /football/australia-oceania/ofc-champions-league/ (row 7)
+Processing league /football/australia-oceania/ofc-championship-u16/ (row 8)
+Processing league /football/austria/bundesliga/ (row 9)
+⚠️ GET failed or rate-limited, falling back to Chromote...
+Processing league /football/austria/2-liga/ (row 10)
+⚠️ GET failed or rate-limited, falling back to Chromote...
+[1] "Matches to scrape"
+[1] "Scraping game A. Klagenfurt-Kapfenberg"
+[1] "Scraping game Amstetten-Bregenz"
+[1] "Scraping game SK Rapid II-Hertha Wels"
+Cooling down after success streak
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game SK Rapid II-Hertha Wels"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game SK Rapid II-Hertha Wels"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 3 after 5 failed attempts.
+[1] "Scraping game A. Lustenau-St. Polten"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game A. Lustenau-St. Polten"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game A. Lustenau-St. Polten"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 4 after 5 failed attempts.
+[1] "Scraping game A. Salzburg-Admira"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game A. Salzburg-Admira"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game A. Salzburg-Admira"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 5 after 5 failed attempts.
+[1] "Scraping game Liefering-Floridsdorfer AC"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Liefering-Floridsdorfer AC"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Liefering-Floridsdorfer AC"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 6 after 5 failed attempts.
+[1] "Scraping game First Vienna-Sturm Graz II"
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game First Vienna-Sturm Graz II"
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game First Vienna-Sturm Graz II"
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 7 after 5 failed attempts.
+[1] "Redirecting to main page"
+⚠️ GET failed or rate-limited, falling back to Chromote...
+Processing league /football/belarus/vysshaya-liga/ (row 11)
+⚠️ GET failed or rate-limited, falling back to Chromote...
+[1] "Matches to scrape"
+[1] "Scraping game Isloch-Dynamo Brest"
+🔄 Resetting browser session
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Isloch-Dynamo Brest"
+🔄 Resetting browser session
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Isloch-Dynamo Brest"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 1 after 5 failed attempts.
+[1] "Scraping game Naftan-FC Gomel"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Naftan-FC Gomel"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Naftan-FC Gomel"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 2 after 5 failed attempts.
+[1] "Scraping game Belshina-Dnepr Mogilev"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Belshina-Dnepr Mogilev"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Belshina-Dnepr Mogilev"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 3 after 5 failed attempts.
+[1] "Scraping game FC Minsk-Neman"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game FC Minsk-Neman"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game FC Minsk-Neman"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 4 after 5 failed attempts.
+[1] "Scraping game Baranovici-ML Vitebsk"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Baranovici-ML Vitebsk"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Baranovici-ML Vitebsk"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 5 after 5 failed attempts.
+[1] "Scraping game Vitebsk-BATE"
+🔄 Resetting browser session
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Vitebsk-BATE"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Vitebsk-BATE"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 6 after 5 failed attempts.
+[1] "Scraping game Slavia Mozyr-Arsenal Dzerzhinsk"
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Slavia Mozyr-Arsenal Dzerzhinsk"
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Slavia Mozyr-Arsenal Dzerzhinsk"
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 7 after 5 failed attempts.
+[1] "Scraping game Zhodino-Din. Minsk"
+🔄 Resetting browser session
+⚠️ Error in game 8: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Zhodino-Din. Minsk"
+⚠️ Error in game 8: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Zhodino-Din. Minsk"
+⚠️ Error in game 8: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 8 after 5 failed attempts.
+[1] "Redirecting to main page"
+⚠️ GET failed or rate-limited, falling back to Chromote...
+⚠️ Error:  Session and underlying target have been closed. 
+⏳ Retrying in 30s...
+Processing league /football/belarus/vysshaya-liga/ (row 11)
+Processing league /football/belarus/pershaya-liga/ (row 12)
+Processing league /football/belgium/jupiler-pro-league/ (row 13)
+[1] "Matches to scrape"
+[1] "Scraping game St. Truiden-Club Brugge KV"
+🔄 Resetting browser session
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game St. Truiden-Club Brugge KV"
+🔄 Resetting browser session
+[1] "Scraping game KV Mechelen-Royale Union SG"
+[1] "Scraping game Anderlecht-Gent"
+Processing league /football/belgium/challenger-pro-league/ (row 14)
+[1] "Matches to scrape"
+[1] "Scraping game Eupen-Beerschot VA"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Eupen-Beerschot VA"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Eupen-Beerschot VA"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 1 after 5 failed attempts.
+[1] "Scraping game Sporting Lokeren-Seraing"
+Processing league /football/bhutan/premier-league/ (row 15)
+Processing league /football/bolivia/division-profesional/ (row 16)
+Processing league /football/bolivia/copa-pacena/ (row 17)
+Processing league /football/bosnia-and-herzegovina/prva-liga-fbih/ (row 18)
+[1] "Matches to scrape"
+[1] "Scraping game Hadzici-Banovici"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Hadzici-Banovici"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Hadzici-Banovici"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 1 after 5 failed attempts.
+[1] "Scraping game NK Vitez-Jedinstvo Bihac"
+Processing league /football/brazil/serie-a-betano/ (row 19)
+[1] "Matches to scrape"
+[1] "Scraping game Remo-Vasco"
+[1] "Redirecting to main page"
+[1] "Scraping game Vitoria-Sao Paulo"
+[1] "Scraping game Fluminense-Flamengo RJ"
+[1] "Scraping game Mirassol-Bahia"
+[1] "Scraping game Santos-Atletico-MG"
+[1] "Scraping game Internacional-Gremio"
+[1] "Scraping game Athletico-PR-Chapecoense-SC"
+[1] "Scraping game Botafogo RJ-Coritiba"
+[1] "Scraping game Corinthians-Palmeiras"
+[1] "Redirecting to main page"
+[1] "Scraping game Cruzeiro-Bragantino"
+🔄 Resetting browser session
+[1] "Redirecting to main page"
+[1] "Scraping game Chapecoense-SC-Botafogo RJ"
+Cooling down after success streak
+[1] "Scraping game Vasco-Sao Paulo"
+[1] "Scraping game Vitoria-Corinthians"
+[1] "Scraping game Cruzeiro-Gremio"
+[1] "Scraping game Internacional-Mirassol"
+[1] "Scraping game Coritiba-Atletico-MG"
+[1] "Scraping game Santos-Fluminense"
+[1] "Scraping game Bragantino-Remo"
+[1] "Scraping game Palmeiras-Athletico-PR"
+[1] "Scraping game Flamengo RJ-Bahia"
+Processing league /football/brazil/serie-b-superbet/ (row 20)
+[1] "Matches to scrape"
+[1] "Scraping game Criciuma-Botafogo SP"
+[1] "Scraping game Juventude-Goias"
+Cooling down after success streak
+[1] "Scraping game Ponte Preta-Vila Nova FC"
+[1] "Scraping game Sport Recife-Avai"
+[1] "Scraping game Ceara-Nautico"
+[1] "Scraping game America MG-Novorizontino"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game America MG-Novorizontino"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game America MG-Novorizontino"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 6 after 5 failed attempts.
+[1] "Scraping game Operario-PR-Cuiaba"
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Operario-PR-Cuiaba"
+🔄 Resetting browser session
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Operario-PR-Cuiaba"
+[1] "Scraping game Sao Bernardo-Fortaleza"
+[1] "Scraping game CRB-Athletic Club"
+[1] "Scraping game Atletico GO-Londrina"
+Processing league /football/bulgaria/parva-liga/ (row 21)
+Processing league /football/bulgaria/vtora-liga/ (row 22)
+Processing league /football/cameroon/elite-one/ (row 23)
+Processing league /football/canada/canadian-premier-league/ (row 24)
+Processing league /football/chile/liga-de-primera/ (row 25)
+⚠️ GET failed or rate-limited, falling back to Chromote...
+⚠️ GET failed or rate-limited, falling back to Chromote...
+Processing league /football/chile/liga-de-ascenso/ (row 26)
+Processing league /football/china/super-league/ (row 27)
+[1] "Matches to scrape"
+[1] "Scraping game Dalian Yingbo-Zhejiang Professional"
+[1] "Scraping game Chongqing Tonglianglong-Wuhan Three Towns"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Chongqing Tonglianglong-Wuhan Three Towns"
+[1] "Scraping game Qingdao West Coast-Liaoning Tieren"
+[1] "Scraping game Henan Songshan Longmen-Shandong Taishan"
+[1] "Scraping game Shanghai Shenhua-Shanghai Port"
+[1] "Scraping game Tianjin Jinmen Tiger-Qingdao Hainiu"
+[1] "Scraping game Beijing Guoan-Chengdu Rongcheng"
+[1] "Scraping game Shenzhen Xinpengcheng-Yunnan Yukun"
+Cooling down after success streak
+Processing league /football/china/jia-league/ (row 28)
+Processing league /football/colombia/primera-a/ (row 29)
+[1] "Matches to scrape"
+[1] "Scraping game Aguilas-Bucaramanga"
+[1] "Scraping game Pereira-Once Caldas"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Pereira-Once Caldas"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Pereira-Once Caldas"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 2 after 5 failed attempts.
+[1] "Scraping game Dep. Pasto-Deportes Tolima"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Dep. Pasto-Deportes Tolima"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Dep. Pasto-Deportes Tolima"
+🔄 Resetting browser session
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 3 after 5 failed attempts.
+[1] "Scraping game Aguilas-Junior"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Aguilas-Junior"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Aguilas-Junior"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 4 after 5 failed attempts.
+[1] "Scraping game Ind. Medellin-Atl. Nacional"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Ind. Medellin-Atl. Nacional"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Ind. Medellin-Atl. Nacional"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 5 after 5 failed attempts.
+[1] "Scraping game Millonarios-Santa Fe"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Millonarios-Santa Fe"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Millonarios-Santa Fe"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 6 after 5 failed attempts.
+[1] "Scraping game Dep. Cali-Llaneros"
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Dep. Cali-Llaneros"
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Dep. Cali-Llaneros"
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 7 after 5 failed attempts.
+[1] "Scraping game Bucaramanga-Chico"
+🔄 Resetting browser session
+⚠️ Error in game 8: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Bucaramanga-Chico"
+⚠️ Error in game 8: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Bucaramanga-Chico"
+⚠️ Error in game 8: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 8 after 5 failed attempts.
+[1] "Scraping game Inter Bogotá-Alianza"
+⚠️ Error in game 9: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Inter Bogotá-Alianza"
+⚠️ Error in game 9: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Inter Bogotá-Alianza"
+⚠️ Error in game 9: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 9 after 5 failed attempts.
+Processing league /football/colombia/primera-b/ (row 30)
+[1] "Matches to scrape"
+[1] "Scraping game Boca Juniors-Ind. Yumbo"
+[1] "Scraping game Barranquilla-Real Santander"
+🔄 Resetting browser session
+Processing league /football/costa-rica/liga-de-ascenso/ (row 31)
+Processing league /football/croatia/hnl/ (row 32)
+[1] "Matches to scrape"
+[1] "Scraping game Istra 1961-Hajduk Split"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Istra 1961-Hajduk Split"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Istra 1961-Hajduk Split"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 1 after 5 failed attempts.
+[1] "Scraping game Lok. Zagreb-Istra 1961"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Lok. Zagreb-Istra 1961"
+[1] "Scraping game Rijeka-Osijek"
+[1] "Scraping game Varazdin-Slaven Belupo"
+[1] "Scraping game Hajduk Split-Gorica"
+[1] "Scraping game Vukovar 1991-Din. Zagreb"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Vukovar 1991-Din. Zagreb"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Vukovar 1991-Din. Zagreb"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 6 after 5 failed attempts.
+Processing league /football/denmark/superliga/ (row 33)
+⚠️ GET failed or rate-limited, falling back to Chromote...
+[1] "Matches to scrape"
+[1] "Scraping game Nordsjaelland-Brondby"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Nordsjaelland-Brondby"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Nordsjaelland-Brondby"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 1 after 5 failed attempts.
+[1] "Scraping game Aarhus-Nordsjaelland"
+[1] "Redirecting to main page"
+[1] "Scraping game Sonderjyske-Viborg"
+[1] "Scraping game Brondby-Midtjylland"
+Processing league /football/denmark/1st-division/ (row 34)
+[1] "Matches to scrape"
+[1] "Scraping game Esbjerg-Hvidovre IF"
+[1] "Scraping game Hillerod-Horsens"
+[1] "Scraping game Lyngby-Kolding IF"
+🔄 Resetting browser session
+Processing league /football/ecuador/liga-pro/ (row 35)
+[1] "Matches to scrape"
+[1] "Scraping game U. Catolica-Emelec"
+[1] "Scraping game Barcelona SC-Leones del Norte"
+[1] "Scraping game Delfin-LDU Quito"
+[1] "Scraping game Mushuc Runa-Manta"
+[1] "Scraping game Orense-Libertad"
+[1] "Scraping game Tecnico U.-U. Catolica"
+Cooling down after success streak
+[1] "Scraping game Dep. Cuenca-Ind. del Valle"
+[1] "Scraping game Guayaquil City-Macara"
+[1] "Scraping game Aucas-Emelec"
+[1] "Redirecting to main page"
+Processing league /football/ecuador/serie-b/ (row 36)
+Processing league /football/egypt/premier-league/ (row 37)
+[1] "Matches to scrape"
+[1] "Scraping game Ceramica Cleopatra-Al Ahly"
+[1] "Scraping game Pyramids-Al Masry"
+Processing league /football/el-salvador/primera-division/ (row 38)
+Processing league /football/england/premier-league/ (row 39)
+[1] "Matches to scrape"
+[1] "Scraping game West Ham-Wolves"
+[1] "Scraping game Arsenal-Bournemouth"
+[1] "Redirecting to main page"
+[1] "Scraping game Brentford-Everton"
+[1] "Redirecting to main page"
+[1] "Scraping game Burnley-Brighton"
+[1] "Scraping game Liverpool-Fulham"
+[1] "Scraping game Crystal Palace-Newcastle"
+Cooling down after success streak
+[1] "Redirecting to main page"
+[1] "Scraping game Nottingham-Aston Villa"
+[1] "Scraping game Sunderland-Tottenham"
+[1] "Scraping game Chelsea-Manchester City"
+🔄 Resetting browser session
+[1] "Scraping game Manchester Utd-Leeds"
+[1] "Scraping game Brentford-Fulham"
+[1] "Scraping game Leeds-Wolves"
+⚠️ Error in game 12: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Leeds-Wolves"
+[1] "Scraping game Newcastle-Bournemouth"
+[1] "Scraping game Tottenham-Brighton"
+[1] "Scraping game Chelsea-Manchester Utd"
+[1] "Scraping game Aston Villa-Sunderland"
+⚠️ Error in game 16: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Aston Villa-Sunderland"
+⚠️ Error in game 16: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Aston Villa-Sunderland"
+⚠️ Error in game 16: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 16 after 5 failed attempts.
+[1] "Scraping game Everton-Liverpool"
+⚠️ Error in game 17: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Everton-Liverpool"
+[1] "Scraping game Nottingham-Burnley"
+[1] "Redirecting to main page"
+[1] "Scraping game Manchester City-Arsenal"
+[1] "Scraping game Crystal Palace-West Ham"
+Processing league /football/england/championship/ (row 40)
+[1] "Matches to scrape"
+[1] "Scraping game Wrexham-Southampton"
+[1] "Scraping game West Brom-Millwall"
+[1] "Scraping game Coventry-Sheffield Wed"
+[1] "Redirecting to main page"
+[1] "Scraping game Norwich-Ipswich"
+[1] "Scraping game QPR-Bristol City"
+🔄 Resetting browser session
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game QPR-Bristol City"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game QPR-Bristol City"
+[1] "Scraping game Charlton-Preston"
+[1] "Scraping game Leicester-Swansea"
+[1] "Scraping game Middlesbrough-Portsmouth"
+Cooling down after success streak
+[1] "Redirecting to main page"
+[1] "Scraping game Oxford Utd-Watford"
+[1] "Redirecting to main page"
+[1] "Scraping game Sheffield Utd-Hull"
+[1] "Scraping game Southampton-Derby"
+[1] "Scraping game Stoke-Blackburn"
+[1] "Scraping game Birmingham-Wrexham"
+Processing league /football/estonia/meistriliiga/ (row 41)
+[1] "Matches to scrape"
+[1] "Scraping game Flora-Kuressaare"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Flora-Kuressaare"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Flora-Kuressaare"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 1 after 5 failed attempts.
+[1] "Scraping game Narva-Tammeka"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Narva-Tammeka"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Narva-Tammeka"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 2 after 5 failed attempts.
+[1] "Scraping game Harju JK Laagri-Kalju"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Harju JK Laagri-Kalju"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Harju JK Laagri-Kalju"
+[1] "Redirecting to main page"
+[1] "Scraping game Levadia-Parnu JK Vaprus"
+🔄 Resetting browser session
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Levadia-Parnu JK Vaprus"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Levadia-Parnu JK Vaprus"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 4 after 5 failed attempts.
+[1] "Scraping game Paide-Nomme Utd"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Paide-Nomme Utd"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Paide-Nomme Utd"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 5 after 5 failed attempts.
+[1] "Scraping game Kuressaare-Harju JK Laagri"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Kuressaare-Harju JK Laagri"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Kuressaare-Harju JK Laagri"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 6 after 5 failed attempts.
+[1] "Scraping game Nomme Utd-Narva"
+Processing league /football/estonia/esiliiga/ (row 42)
+Processing league /football/ethiopia/premier-league/ (row 43)
+Processing league /football/faroe-islands/premier-league/ (row 44)
+Processing league /football/fiji/premier-league/ (row 45)
+Processing league /football/finland/veikkausliiga/ (row 46)
+[1] "Matches to scrape"
+[1] "Scraping game TPS-Lahti"
+[1] "Scraping game SJK-Mariehamn"
+[1] "Scraping game VPS-Jaro"
+[1] "Scraping game KuPS-Gnistan"
+[1] "Scraping game HJK-AC Oulu"
+[1] "Scraping game Inter Turku-Ilves"
+Processing league /football/finland/ykkosliiga/ (row 47)
+Processing league /football/france/ligue-1/ (row 48)
+[1] "Matches to scrape"
+[1] "Scraping game Paris FC-Monaco"
+[1] "Scraping game Marseille-Metz"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Marseille-Metz"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Marseille-Metz"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 2 after 5 failed attempts.
+[1] "Scraping game Auxerre-Nantes"
+🔄 Resetting browser session
+[1] "Scraping game Rennes-Angers"
+[1] "Scraping game Nice-Le Havre"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Nice-Le Havre"
+[1] "Scraping game Toulouse-Lille"
+[1] "Scraping game Lyon-Lorient"
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Lyon-Lorient"
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Lyon-Lorient"
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 7 after 5 failed attempts.
+[1] "Scraping game Lens-Toulouse"
+⚠️ Error in game 8: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Lens-Toulouse"
+⚠️ Error in game 8: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Lens-Toulouse"
+[1] "Scraping game Lorient-Marseille"
+[1] "Scraping game Angers-Le Havre"
+[1] "Redirecting to main page"
+[1] "Scraping game Lille-Nice"
+[1] "Scraping game Monaco-Auxerre"
+[1] "Redirecting to main page"
+[1] "Scraping game Metz-Paris FC"
+[1] "Scraping game Nantes-Brest"
+[1] "Scraping game Strasbourg-Rennes"
+[1] "Scraping game PSG-Lyon"
+Processing league /football/france/ligue-2/ (row 49)
+[1] "Matches to scrape"
+[1] "Scraping game Amiens-Pau FC"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Amiens-Pau FC"
+🔄 Resetting browser session
+[1] "Scraping game Annecy-Montpellier"
+[1] "Scraping game Clermont-Nancy"
+Cooling down after success streak
+[1] "Redirecting to main page"
+[1] "Scraping game Guingamp-Grenoble"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Guingamp-Grenoble"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Guingamp-Grenoble"
+[1] "Scraping game Laval-Reims"
+[1] "Scraping game Boulogne-Le Mans"
+[1] "Scraping game Red Star-Bastia"
+[1] "Scraping game St Etienne-Dunkerque"
+[1] "Scraping game Rodez-Troyes"
+[1] "Redirecting to main page"
+Processing league /football/gabon/championnat-d1/ (row 50)
+Processing league /football/georgia/crystalbet-erovnuli-liga/ (row 51)
+[1] "Matches to scrape"
+[1] "Scraping game Dila Gori-Gagra"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Dila Gori-Gagra"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Dila Gori-Gagra"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 1 after 5 failed attempts.
+[1] "Scraping game Torpedo Kutaisi-Dinamo Tbilisi"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Torpedo Kutaisi-Dinamo Tbilisi"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Torpedo Kutaisi-Dinamo Tbilisi"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 2 after 5 failed attempts.
+Processing league /football/germany/bundesliga/ (row 52)
+[1] "Matches to scrape"
+[1] "Scraping game Augsburg-Hoffenheim"
+[1] "Scraping game Dortmund-Bayer Leverkusen"
+[1] "Scraping game Heidenheim-Union Berlin"
+[1] "Scraping game RB Leipzig-B. Monchengladbach"
+[1] "Scraping game Wolfsburg-Eintracht Frankfurt"
+Cooling down after success streak
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Wolfsburg-Eintracht Frankfurt"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Wolfsburg-Eintracht Frankfurt"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 5 after 5 failed attempts.
+[1] "Redirecting to main page"
+[1] "Scraping game St. Pauli-Bayern Munich"
+[1] "Scraping game FC Koln-Werder Bremen"
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game FC Koln-Werder Bremen"
+🔄 Resetting browser session
+[1] "Scraping game Stuttgart-Hamburger SV"
+[1] "Scraping game Mainz-Freiburg"
+[1] "Scraping game St. Pauli-FC Koln"
+[1] "Redirecting to main page"
+[1] "Scraping game Bayer Leverkusen-Augsburg"
+[1] "Scraping game Hoffenheim-Dortmund"
+[1] "Scraping game Union Berlin-Wolfsburg"
+[1] "Scraping game Werder Bremen-Hamburger SV"
+[1] "Scraping game Eintracht Frankfurt-RB Leipzig"
+[1] "Scraping game Freiburg-Heidenheim"
+[1] "Scraping game Bayern Munich-Stuttgart"
+Cooling down after success streak
+⚠️ Error in game 17: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Bayern Munich-Stuttgart"
+[1] "Redirecting to main page"
+[1] "Scraping game B. Monchengladbach-Mainz"
+Processing league /football/germany/2-bundesliga/ (row 53)
+[1] "Matches to scrape"
+[1] "Scraping game Dusseldorf-Holstein Kiel"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Dusseldorf-Holstein Kiel"
+[1] "Scraping game Karlsruher SC-Arminia Bielefeld"
+[1] "Scraping game Hertha Berlin-Kaiserslautern"
+[1] "Scraping game Nurnberg-SG Dynamo Dresden"
+[1] "Scraping game Preussen Munster-Greuther Furth"
+[1] "Scraping game Darmstadt-Hannover"
+[1] "Redirecting to main page"
+[1] "Scraping game Bochum-Braunschweig"
+🔄 Resetting browser session
+[1] "Scraping game Elversberg-Schalke"
+[1] "Scraping game Paderborn-Magdeburg"
+Processing league /football/greece/super-league/ (row 54)
+[1] "Matches to scrape"
+[1] "Scraping game AEK Athens-PAOK"
+Cooling down after success streak
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game AEK Athens-PAOK"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game AEK Athens-PAOK"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 1 after 5 failed attempts.
+[1] "Scraping game Panathinaikos-Olympiacos Piraeus"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Panathinaikos-Olympiacos Piraeus"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Panathinaikos-Olympiacos Piraeus"
+⚠️ GET failed or rate-limited, falling back to Chromote...
+Processing league /football/guatemala/liga-nacional/ (row 55)
+[1] "Matches to scrape"
+[1] "Scraping game Deportivo Mixco-Marquense"
+Processing league /football/honduras/liga-nacional/ (row 56)
+Processing league /football/iceland/besta-deild-karla/ (row 57)
+⚠️ GET failed or rate-limited, falling back to Chromote...
+⚠️ GET failed or rate-limited, falling back to Chromote...
+Processing league /football/iceland/division-1/ (row 58)
+Processing league /football/indonesia/liga-1/ (row 59)
+Processing league /football/iraq/stars-league/ (row 60)
+⚠️ GET failed or rate-limited, falling back to Chromote...
+[1] "Matches to scrape"
+[1] "Scraping game Al Talaba-Al Najaf"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Al Talaba-Al Najaf"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Al Talaba-Al Najaf"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 1 after 5 failed attempts.
+[1] "Scraping game Newroz-Al Karkh"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Newroz-Al Karkh"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Newroz-Al Karkh"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 2 after 5 failed attempts.
+[1] "Redirecting to main page"
+[1] "Scraping game Zakho-Al Zawraa"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Zakho-Al Zawraa"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Zakho-Al Zawraa"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 3 after 5 failed attempts.
+[1] "Scraping game Al-Karma-Duhok"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Al-Karma-Duhok"
+🔄 Resetting browser session
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Al-Karma-Duhok"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 4 after 5 failed attempts.
+⚠️ GET failed or rate-limited, falling back to Chromote...
+⚠️ Error:  Session and underlying target have been closed. 
+⏳ Retrying in 30s...
+Processing league /football/iraq/stars-league/ (row 60)
+⚠️ GET failed or rate-limited, falling back to Chromote...
+⚠️ Error:  Session and underlying target have been closed. 
+⏳ Retrying in 30s...
+Processing league /football/iraq/stars-league/ (row 60)
+⚠️ GET failed or rate-limited, falling back to Chromote...
+⚠️ Error:  Session and underlying target have been closed. 
+⏳ Retrying in 30s...
+Processing league /football/iraq/stars-league/ (row 60)
+[1] "Matches to scrape"
+[1] "Scraping game Al Talaba-Al Najaf"
+⚠️ Error in game 1: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Al Talaba-Al Najaf"
+⚠️ Error in game 1: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Al Talaba-Al Najaf"
+⚠️ Error in game 1: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 1 after 5 failed attempts.
+[1] "Scraping game Newroz-Al Karkh"
+⚠️ Error in game 2: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Newroz-Al Karkh"
+⚠️ Error in game 2: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Newroz-Al Karkh"
+⚠️ Error in game 2: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 2 after 5 failed attempts.
+[1] "Scraping game Zakho-Al Zawraa"
+⚠️ Error in game 3: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Zakho-Al Zawraa"
+⚠️ Error in game 3: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Zakho-Al Zawraa"
+⚠️ Error in game 3: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 3 after 5 failed attempts.
+[1] "Scraping game Al-Karma-Duhok"
+⚠️ Error in game 4: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Al-Karma-Duhok"
+🔄 Resetting browser session
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Al-Karma-Duhok"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 4 after 5 failed attempts.
+[1] "Scraping game Al Shorta-Baghdad"
+[1] "Scraping game Al Kahraba-Al Minaa"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Al Kahraba-Al Minaa"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Al Kahraba-Al Minaa"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 6 after 5 failed attempts.
+Processing league /football/ireland/premier-division/ (row 61)
+[1] "Matches to scrape"
+[1] "Scraping game Bohemians-Sligo Rovers"
+[1] "Redirecting to main page"
+[1] "Scraping game Dundalk-Derry City"
+[1] "Scraping game Galway-Shelbourne"
+[1] "Scraping game Waterford-Drogheda"
+[1] "Scraping game St. Patricks-Shamrock Rovers"
+Processing league /football/ireland/division-1/ (row 62)
+[1] "Matches to scrape"
+[1] "Scraping game Finn Harps-Cobh Ramblers"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Finn Harps-Cobh Ramblers"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Finn Harps-Cobh Ramblers"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 1 after 5 failed attempts.
+[1] "Scraping game Kerry-UC Dublin"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Kerry-UC Dublin"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Kerry-UC Dublin"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 2 after 5 failed attempts.
+[1] "Scraping game Treaty United-Cork City"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Treaty United-Cork City"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Treaty United-Cork City"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 3 after 5 failed attempts.
+[1] "Scraping game Wexford-Athlone"
+🔄 Resetting browser session
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Wexford-Athlone"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Wexford-Athlone"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 4 after 5 failed attempts.
+[1] "Scraping game Longford-Bray"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Longford-Bray"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Longford-Bray"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 5 after 5 failed attempts.
+[1] "Redirecting to main page"
+Processing league /football/italy/serie-a/ (row 63)
+[1] "Matches to scrape"
+[1] "Scraping game AS Roma-Pisa"
+⚠️ Error in game 1: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game AS Roma-Pisa"
+⚠️ Error in game 1: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game AS Roma-Pisa"
+⚠️ Error in game 1: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 1 after 5 failed attempts.
+[1] "Scraping game Cagliari-Cremonese"
+⚠️ Error in game 2: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Cagliari-Cremonese"
+⚠️ Error in game 2: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Cagliari-Cremonese"
+⚠️ Error in game 2: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 2 after 5 failed attempts.
+[1] "Redirecting to main page"
+⚠️ Error:  Session and underlying target have been closed. 
+⏳ Retrying in 30s...
+Processing league /football/italy/serie-a/ (row 63)
+[1] "Matches to scrape"
+[1] "Scraping game AS Roma-Pisa"
+⚠️ Error in game 1: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game AS Roma-Pisa"
+⚠️ Error in game 1: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game AS Roma-Pisa"
+⚠️ Error in game 1: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 1 after 5 failed attempts.
+[1] "Scraping game Cagliari-Cremonese"
+⚠️ Error in game 2: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Cagliari-Cremonese"
+⚠️ Error in game 2: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Cagliari-Cremonese"
+⚠️ Error in game 2: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 2 after 5 failed attempts.
+[1] "Scraping game Torino-Verona"
+⚠️ Error in game 3: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Torino-Verona"
+⚠️ Error in game 3: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Torino-Verona"
+⚠️ Error in game 3: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 3 after 5 failed attempts.
+[1] "Scraping game AC Milan-Udinese"
+🔄 Resetting browser session
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game AC Milan-Udinese"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game AC Milan-Udinese"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 4 after 5 failed attempts.
+[1] "Scraping game Atalanta-Juventus"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Atalanta-Juventus"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Atalanta-Juventus"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 5 after 5 failed attempts.
+[1] "Scraping game Genoa-Sassuolo"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Genoa-Sassuolo"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Genoa-Sassuolo"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 6 after 5 failed attempts.
+[1] "Scraping game Parma-Napoli"
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Parma-Napoli"
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Parma-Napoli"
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 7 after 5 failed attempts.
+[1] "Scraping game Bologna-Lecce"
+⚠️ Error in game 8: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Bologna-Lecce"
+⚠️ Error in game 8: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Bologna-Lecce"
+⚠️ Error in game 8: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 8 after 5 failed attempts.
+[1] "Scraping game Como-Inter"
+🔄 Resetting browser session
+[1] "Redirecting to main page"
+[1] "Scraping game Fiorentina-Lazio"
+[1] "Scraping game Sassuolo-Como"
+[1] "Scraping game Inter-Cagliari"
+[1] "Scraping game Udinese-Parma"
+[1] "Scraping game Napoli-Lazio"
+🔄 Resetting browser session
+⚠️ Error in game 14: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Napoli-Lazio"
+⚠️ Error in game 14: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Napoli-Lazio"
+⚠️ Error in game 14: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 14 after 5 failed attempts.
+[1] "Scraping game AS Roma-Atalanta"
+⚠️ Error in game 15: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game AS Roma-Atalanta"
+⚠️ Error in game 15: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game AS Roma-Atalanta"
+⚠️ Error in game 15: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 15 after 5 failed attempts.
+[1] "Scraping game Cremonese-Torino"
+⚠️ Error in game 16: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Cremonese-Torino"
+⚠️ Error in game 16: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Cremonese-Torino"
+⚠️ Error in game 16: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 16 after 5 failed attempts.
+[1] "Scraping game Verona-AC Milan"
+⚠️ Error in game 17: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Verona-AC Milan"
+⚠️ Error in game 17: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Verona-AC Milan"
+⚠️ Error in game 17: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 17 after 5 failed attempts.
+[1] "Scraping game Pisa-Genoa"
+⚠️ Error in game 18: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Pisa-Genoa"
+[1] "Scraping game Juventus-Bologna"
+[1] "Scraping game Lecce-Fiorentina"
+Processing league /football/japan/j1-league/ (row 64)
+[1] "Matches to scrape"
+[1] "Scraping game Chiba-Mito"
+[1] "Scraping game Machida-Kashiwa Reysol"
+[1] "Scraping game Avispa Fukuoka-V-Varen Nagasaki"
+[1] "Redirecting to main page"
+[1] "Scraping game Sanfrecce Hiroshima-Shimizu S-Pulse"
+[1] "Scraping game Yokohama F. Marinos-FC Tokyo"
+🔄 Resetting browser session
+[1] "Scraping game Vissel Kobe-Nagoya Grampus"
+[1] "Scraping game Gamba Osaka-Cerezo Osaka"
+[1] "Scraping game Kyoto-Okayama"
+[1] "Scraping game Urawa Reds-Verdy"
+Cooling down after success streak
+[1] "Scraping game Kawasaki Frontale-Kashima Antlers"
+Processing league /football/japan/j2-league/ (row 65)
+Processing league /football/kazakhstan/premier-league/ (row 66)
+Processing league /football/latvia/virsliga/ (row 67)
+[1] "Matches to scrape"
+[1] "Scraping game FK Liepaja-Auda"
+[1] "Scraping game Jelgava-RFS"
+[1] "Scraping game Grobina-Super Nova"
+[1] "Scraping game Riga FC-Tukums 2000"
+Processing league /football/latvia/nakotnes-liga/ (row 68)
+Processing league /football/lithuania/a-lyga/ (row 69)
+Processing league /football/lithuania/i-lyga/ (row 70)
+Processing league /football/luxembourg/bgl-ligue/ (row 71)
+Processing league /football/malawi/super-league/ (row 72)
+Processing league /football/mexico/liga-mx/ (row 73)
+[1] "Matches to scrape"
+[1] "Scraping game Queretaro-Juarez"
+[1] "Scraping game Puebla-Club Leon"
+[1] "Scraping game Juarez-Club Tijuana"
+[1] "Scraping game Queretaro-Necaxa"
+[1] "Scraping game Tigres UANL-Guadalajara Chivas"
+[1] "Redirecting to main page"
+[1] "Scraping game Atlas-Monterrey"
+Cooling down after success streak
+[1] "Scraping game Pachuca-Santos Laguna"
+[1] "Redirecting to main page"
+[1] "Scraping game Club America-Cruz Azul"
+[1] "Scraping game UNAM Pumas-Mazatlan FC"
+[1] "Redirecting to main page"
+[1] "Scraping game Toluca-Atl. San Luis"
+Processing league /football/mexico/liga-de-expansion-mx/ (row 74)
+[1] "Matches to scrape"
+[1] "Scraping game Tapatio-Tlaxcala"
+🔄 Resetting browser session
+Processing league /football/moldova/super-liga/ (row 75)
+Processing league /football/netherlands/eredivisie/ (row 76)
+[1] "Matches to scrape"
+[1] "Scraping game Twente-FC Volendam"
+[1] "Redirecting to main page"
+[1] "Scraping game Utrecht-Telstar"
+[1] "Scraping game Sparta Rotterdam-PSV"
+[1] "Scraping game Groningen-G.A. Eagles"
+[1] "Scraping game Heracles-Ajax"
+[1] "Scraping game Sittard-NAC Breda"
+Cooling down after success streak
+[1] "Scraping game Nijmegen-Feyenoord"
+[1] "Redirecting to main page"
+[1] "Scraping game Zwolle-Excelsior"
+⚠️ Error in game 8: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Zwolle-Excelsior"
+⚠️ Error in game 8: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Zwolle-Excelsior"
+⚠️ Error in game 8: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 8 after 5 failed attempts.
+[1] "Scraping game AZ Alkmaar-Heerenveen"
+[1] "Scraping game Telstar-Sparta Rotterdam"
+⚠️ Error in game 10: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Telstar-Sparta Rotterdam"
+⚠️ Error in game 10: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Telstar-Sparta Rotterdam"
+⚠️ Error in game 10: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 10 after 5 failed attempts.
+[1] "Scraping game G.A. Eagles-AZ Alkmaar"
+[1] "Scraping game PSV-Zwolle"
+⚠️ Error in game 12: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game PSV-Zwolle"
+⚠️ Error in game 12: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game PSV-Zwolle"
+[1] "Scraping game Feyenoord-Groningen"
+[1] "Scraping game Heerenveen-Sittard"
+🔄 Resetting browser session
+[1] "Scraping game NAC Breda-Ajax"
+[1] "Scraping game Twente-Nijmegen"
+[1] "Scraping game Excelsior-Utrecht"
+[1] "Scraping game Heracles-FC Volendam"
+[1] "Redirecting to main page"
+Processing league /football/netherlands/eerste-divisie/ (row 77)
+[1] "Matches to scrape"
+[1] "Scraping game Den Bosch-Cambuur"
+[1] "Scraping game Eindhoven FC-Roda"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Eindhoven FC-Roda"
+[1] "Scraping game Maastricht-Helmond"
+[1] "Scraping game Waalwijk-FC Emmen"
+Cooling down after success streak
+[1] "Scraping game Venlo-De Graafschap"
+[1] "Scraping game Dordrecht-Den Haag"
+[1] "Scraping game Willem II-Almere City"
+[1] "Scraping game Jong Ajax-Oss"
+[1] "Redirecting to main page"
+[1] "Scraping game Jong AZ-Jong PSV"
+[1] "Scraping game Jong Utrecht-Vitesse"
+⚠️ Error in game 10: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Jong Utrecht-Vitesse"
+⚠️ Error in game 10: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Jong Utrecht-Vitesse"
+⚠️ Error in game 10: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 10 after 5 failed attempts.
+[1] "Scraping game Almere City-Dordrecht"
+⚠️ Error in game 11: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Almere City-Dordrecht"
+⚠️ Error in game 11: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Almere City-Dordrecht"
+🔄 Resetting browser session
+⚠️ Error in game 11: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 11 after 5 failed attempts.
+⚠️ GET failed or rate-limited, falling back to Chromote...
+Processing league /football/northern-ireland/nifl-premiership/ (row 78)
+⚠️ GET failed or rate-limited, falling back to Chromote...
+⚠️ GET failed or rate-limited, falling back to Chromote...
+Processing league /football/norway/eliteserien/ (row 79)
+⚠️ GET failed or rate-limited, falling back to Chromote...
+[1] "Matches to scrape"
+[1] "Scraping game Lillestrom-Start"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Lillestrom-Start"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Lillestrom-Start"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 1 after 5 failed attempts.
+[1] "Scraping game Tromso-Kristiansund"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Tromso-Kristiansund"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Tromso-Kristiansund"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 2 after 5 failed attempts.
+[1] "Scraping game Viking-Bodo/Glimt"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Viking-Bodo/Glimt"
+[1] "Redirecting to main page"
+[1] "Scraping game Rosenborg-Sarpsborg 08"
+[1] "Scraping game Aalesund-KFUM Oslo"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Aalesund-KFUM Oslo"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Aalesund-KFUM Oslo"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 5 after 5 failed attempts.
+[1] "Scraping game Fredrikstad-Valerenga"
+⚠️ Error:  subscript out of bounds 
+⏳ Retrying in 30s...
+Processing league /football/norway/eliteserien/ (row 79)
+[1] "Matches to scrape"
+[1] "Scraping game Lillestrom-Start"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Lillestrom-Start"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Lillestrom-Start"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 1 after 5 failed attempts.
+[1] "Scraping game Tromso-Kristiansund"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Tromso-Kristiansund"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Tromso-Kristiansund"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 2 after 5 failed attempts.
+[1] "Scraping game Viking-Bodo/Glimt"
+🔄 Resetting browser session
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Viking-Bodo/Glimt"
+[1] "Scraping game Rosenborg-Sarpsborg 08"
+[1] "Scraping game Aalesund-KFUM Oslo"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Aalesund-KFUM Oslo"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Aalesund-KFUM Oslo"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 5 after 5 failed attempts.
+[1] "Redirecting to main page"
+[1] "Scraping game Fredrikstad-Valerenga"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Fredrikstad-Valerenga"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Fredrikstad-Valerenga"
+Processing league /football/norway/obos-ligaen/ (row 80)
+Processing league /football/panama/lpf/ (row 81)
+Processing league /football/paraguay/copa-de-primera/ (row 82)
+Processing league /football/paraguay/division-intermedia/ (row 83)
+Processing league /football/peru/liga-1/ (row 84)
+Processing league /football/peru/liga-2/ (row 85)
+Processing league /football/poland/ekstraklasa/ (row 86)
+[1] "Matches to scrape"
+[1] "Scraping game Wisla Plock-Lechia Gdansk"
+[1] "Scraping game Korona Kielce-Jagiellonia"
+[1] "Scraping game Widzew Lodz-Termalica B-B."
+[1] "Redirecting to main page"
+[1] "Scraping game Zaglebie-Radomiak Radom"
+[1] "Scraping game Legia-Gornik Zabrze"
+[1] "Scraping game Cracovia-Arka Gdynia"
+[1] "Scraping game Motor Lublin-Rakow"
+[1] "Scraping game Lech Poznan-GKS Katowice"
+[1] "Scraping game Piast Gliwice-Pogon Szczecin"
+Processing league /football/poland/division-1/ (row 87)
+[1] "Matches to scrape"
+[1] "Scraping game Polonia Warszawa-Slask Wroclaw"
+[1] "Scraping game Odra Opole-Puszcza"
+Cooling down after success streak
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Odra Opole-Puszcza"
+🔄 Resetting browser session
+[1] "Scraping game Leczna-Chrobry Glogow"
+[1] "Scraping game Ruch Chorzow-Wieczysta Krakow"
+[1] "Scraping game Stal Mielec-S. Rzeszow"
+[1] "Scraping game Pogon Siedlce-Tychy"
+Processing league /football/portugal/liga-portugal/ (row 88)
+[1] "Matches to scrape"
+[1] "Scraping game Famalicao-Moreirense"
+[1] "Scraping game AFS-Vitoria Guimaraes"
+[1] "Scraping game Santa Clara-Rio Ave"
+[1] "Scraping game Estrela-Sporting CP"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Estrela-Sporting CP"
+[1] "Scraping game Alverca-Casa Pia"
+[1] "Scraping game Benfica-Nacional"
+[1] "Scraping game Braga-Arouca"
+Cooling down after success streak
+[1] "Redirecting to main page"
+[1] "Scraping game Estoril-FC Porto"
+[1] "Scraping game Tondela-Gil Vicente"
+Processing league /football/portugal/liga-portugal-2/ (row 89)
+[1] "Matches to scrape"
+[1] "Scraping game Felgueiras-Pacos Ferreira"
+[1] "Scraping game Penafiel-Academico Viseu"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Penafiel-Academico Viseu"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Penafiel-Academico Viseu"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 2 after 5 failed attempts.
+[1] "Scraping game SC Farense-Sporting CP B"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game SC Farense-Sporting CP B"
+🔄 Resetting browser session
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game SC Farense-Sporting CP B"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 3 after 5 failed attempts.
+[1] "Scraping game Benfica B-Leiria"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Benfica B-Leiria"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Benfica B-Leiria"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 4 after 5 failed attempts.
+[1] "Scraping game Chaves-Torreense"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Chaves-Torreense"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Chaves-Torreense"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 5 after 5 failed attempts.
+[1] "Scraping game Feirense-Vizela"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Feirense-Vizela"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Feirense-Vizela"
+[1] "Scraping game Maritimo-Portimonense"
+Processing league /football/romania/superliga/ (row 90)
+Processing league /football/romania/liga-2/ (row 91)
+Processing league /football/scotland/premiership/ (row 92)
+Processing league /football/sierra-leone/premier-league/ (row 93)
+Processing league /football/slovakia/nike-liga/ (row 94)
+[1] "Matches to scrape"
+[1] "Scraping game Podbrezova-Zilina"
+[1] "Scraping game Slovan Bratislava-Trnava"
+[1] "Scraping game Dun. Streda-Michalovce"
+Processing league /football/slovenia/prva-liga/ (row 95)
+[1] "Matches to scrape"
+[1] "Scraping game Primorje-Koper"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Primorje-Koper"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Primorje-Koper"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 1 after 5 failed attempts.
+[1] "Scraping game O. Ljubljana-Aluminij"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game O. Ljubljana-Aluminij"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game O. Ljubljana-Aluminij"
+🔄 Resetting browser session
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 2 after 5 failed attempts.
+[1] "Scraping game Mura-Bravo"
+[1] "Scraping game Radomlje-Celje"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Radomlje-Celje"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Radomlje-Celje"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 4 after 5 failed attempts.
+⚠️ GET failed or rate-limited, falling back to Chromote...
+Processing league /football/somalia/national-league/ (row 96)
+⚠️ GET failed or rate-limited, falling back to Chromote...
+⚠️ GET failed or rate-limited, falling back to Chromote...
+Processing league /football/south-america/copa-libertadores/ (row 97)
+⚠️ GET failed or rate-limited, falling back to Chromote...
+⚠️ GET failed or rate-limited, falling back to Chromote...
+Processing league /football/south-america/copa-sudamericana/ (row 98)
+⚠️ GET failed or rate-limited, falling back to Chromote...
+⚠️ GET failed or rate-limited, falling back to Chromote...
+Processing league /football/south-korea/k-league-1/ (row 99)
+[1] "Matches to scrape"
+[1] "Scraping game Pohang-Jeju SK"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Pohang-Jeju SK"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Pohang-Jeju SK"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 1 after 5 failed attempts.
+[1] "Scraping game Seoul-Jeonbuk"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Seoul-Jeonbuk"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Seoul-Jeonbuk"
+[1] "Scraping game Gwangju FC-Bucheon FC 1995"
+[1] "Scraping game Incheon-Ulsan HD"
+[1] "Scraping game Daejeon-Gangwon"
+[1] "Scraping game Gimcheon Sangmu-Anyang"
+Processing league /football/south-korea/k-league-2/ (row 100)
+[1] "Matches to scrape"
+[1] "Scraping game Busan-Yongin"
+[1] "Scraping game Suwon FC-Daegu"
+[1] "Redirecting to main page"
+[1] "Scraping game Hwaseong-Jeonnam"
+[1] "Scraping game Paju Frontier-Seoul E-Land"
+[1] "Scraping game Cheonan City-Cheongju"
+[1] "Scraping game Suwon Bluewings-Gimpo FC"
+🔄 Resetting browser session
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Suwon Bluewings-Gimpo FC"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Suwon Bluewings-Gimpo FC"
+[1] "Scraping game Asan-Gimhae"
+Cooling down after success streak
+[1] "Redirecting to main page"
+[1] "Scraping game Seongnam-Ansan Greeners"
+Processing league /football/spain/laliga/ (row 101)
+[1] "Matches to scrape"
+[1] "Scraping game Real Madrid-Girona"
+[1] "Scraping game Real Sociedad-Alaves"
+[1] "Scraping game Elche-Valencia"
+[1] "Scraping game Barcelona-Espanyol"
+[1] "Scraping game Sevilla-Atl. Madrid"
+[1] "Scraping game Osasuna-Betis"
+[1] "Scraping game Mallorca-Rayo Vallecano"
+[1] "Scraping game Celta Vigo-Oviedo"
+[1] "Scraping game Ath Bilbao-Villarreal"
+[1] "Redirecting to main page"
+[1] "Scraping game Levante-Getafe"
+Cooling down after success streak
+[1] "Scraping game Ath Bilbao-Osasuna"
+[1] "Scraping game Mallorca-Valencia"
+[1] "Scraping game Girona-Betis"
+[1] "Scraping game Real Madrid-Alaves"
+[1] "Scraping game Elche-Atl. Madrid"
+[1] "Scraping game Real Sociedad-Getafe"
+🔄 Resetting browser session
+[1] "Scraping game Barcelona-Celta Vigo"
+[1] "Redirecting to main page"
+[1] "Scraping game Levante-Sevilla"
+[1] "Scraping game Rayo Vallecano-Espanyol"
+⚠️ Error in game 19: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Rayo Vallecano-Espanyol"
+⚠️ Error in game 19: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Rayo Vallecano-Espanyol"
+⚠️ Error in game 19: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 19 after 5 failed attempts.
+[1] "Scraping game Oviedo-Villarreal"
+⚠️ Error in game 20: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Oviedo-Villarreal"
+⚠️ Error in game 20: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Oviedo-Villarreal"
+Processing league /football/sweden/allsvenskan/ (row 102)
+[1] "Matches to scrape"
+[1] "Scraping game Goteborg-Hacken"
+[1] "Scraping game Mjallby-Orgryte"
+[1] "Redirecting to main page"
+[1] "Scraping game Vasteras SK-Elfsborg"
+[1] "Redirecting to main page"
+[1] "Scraping game Djurgarden-Kalmar"
+[1] "Scraping game Halmstad-Degerfors"
+[1] "Redirecting to main page"
+[1] "Scraping game Malmo FF-GAIS"
+[1] "Scraping game Brommapojkarna-AIK"
+[1] "Scraping game Sirius-Hammarby"
+Processing league /football/sweden/superettan/ (row 103)
+[1] "Matches to scrape"
+[1] "Scraping game Ljungskile-Norrkoping"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Ljungskile-Norrkoping"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Ljungskile-Norrkoping"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 1 after 5 failed attempts.
+[1] "Scraping game Oster-Orebro"
+🔄 Resetting browser session
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Oster-Orebro"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Oster-Orebro"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 2 after 5 failed attempts.
+[1] "Scraping game Nordic United-Helsingborg"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Nordic United-Helsingborg"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Nordic United-Helsingborg"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 3 after 5 failed attempts.
+Processing league /football/switzerland/super-league/ (row 104)
+Processing league /football/turkey/super-lig/ (row 105)
+[1] "Matches to scrape"
+[1] "Scraping game Goztepe-Galatasaray"
+⚠️ Error in game 1: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Goztepe-Galatasaray"
+⚠️ Error in game 1: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Goztepe-Galatasaray"
+⚠️ Error in game 1: Session and underlying target have been closed.
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 1 after 5 failed attempts.
+[1] "Scraping game Rizespor-Samsunspor"
+🔄 Resetting browser session
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Rizespor-Samsunspor"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Rizespor-Samsunspor"
+[1] "Scraping game Besiktas-Antalyaspor"
+[1] "Scraping game Basaksehir-Genclerbirligi"
+[1] "Scraping game Alanyaspor-Trabzonspor"
+[1] "Scraping game Kayserispor-Fenerbahce"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Kayserispor-Fenerbahce"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Kayserispor-Fenerbahce"
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 6 after 5 failed attempts.
+[1] "Scraping game Konyaspor-Karagumruk"
+[1] "Scraping game Goztepe-Kasimpasa"
+⚠️ Error in game 8: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Goztepe-Kasimpasa"
+⚠️ Error in game 8: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Goztepe-Kasimpasa"
+⚠️ Error in game 8: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 8 after 5 failed attempts.
+[1] "Scraping game Galatasaray-Kocaelispor"
+⚠️ Error in game 9: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Galatasaray-Kocaelispor"
+[1] "Scraping game Eyupspor-Samsunspor"
+[1] "Redirecting to main page"
+[1] "Scraping game Rizespor-Gaziantep"
+Processing league /football/turkey/1-lig/ (row 106)
+[1] "Matches to scrape"
+[1] "Scraping game Serik Spor-Vanspor FK"
+[1] "Scraping game Igdir FK-Keciorengucu"
+[1] "Scraping game Umraniyespor-Sakaryaspor"
+[1] "Scraping game Boluspor-Sivasspor"
+🔄 Resetting browser session
+[1] "Scraping game Erokspor-Amedspor"
+[1] "Scraping game Istanbulspor AS-Erzurumspor"
+[1] "Scraping game Sariyer-Hatayspor"
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Sariyer-Hatayspor"
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Sariyer-Hatayspor"
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 7 after 5 failed attempts.
+[1] "Scraping game Pendikspor-Corum"
+⚠️ Error in game 8: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Pendikspor-Corum"
+⚠️ Error in game 8: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Pendikspor-Corum"
+⚠️ Error in game 8: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 8 after 5 failed attempts.
+⚠️ GET failed or rate-limited, falling back to Chromote...
+Processing league /football/ukraine/premier-league/ (row 107)
+⚠️ GET failed or rate-limited, falling back to Chromote...
+⚠️ GET failed or rate-limited, falling back to Chromote...
+Processing league /football/uruguay/liga-auf-uruguaya/ (row 108)
+[1] "Matches to scrape"
+[1] "Scraping game Cerro Largo-CA Cerro"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Cerro Largo-CA Cerro"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Cerro Largo-CA Cerro"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 1 after 5 failed attempts.
+[1] "Scraping game Montevideo City-Albion"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Montevideo City-Albion"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Montevideo City-Albion"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 2 after 5 failed attempts.
+[1] "Scraping game Defensor Sp.-Boston River"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Defensor Sp.-Boston River"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Defensor Sp.-Boston River"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 3 after 5 failed attempts.
+[1] "Redirecting to main page"
+[1] "Scraping game Maldonado-Nacional"
+🔄 Resetting browser session
+[1] "Scraping game Central Esp.-Danubio"
+[1] "Scraping game Juventud-Progreso"
+🔄 Resetting browser session
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Juventud-Progreso"
+[1] "Redirecting to main page"
+[1] "Scraping game Wanderers-Racing Montevideo"
+[1] "Scraping game Penarol-Liverpool M."
+Processing league /football/uruguay/segunda-division/ (row 109)
+Processing league /football/usa/mls/ (row 110)
+[1] "Matches to scrape"
+[1] "Scraping game Toronto FC-FC Cincinnati"
+[1] "Redirecting to main page"
+[1] "Scraping game Austin FC-Los Angeles Galaxy"
+[1] "Redirecting to main page"
+[1] "Scraping game CF Montreal-Philadelphia Union"
+[1] "Scraping game Portland Timbers-Los Angeles FC"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Portland Timbers-Los Angeles FC"
+[1] "Scraping game Charlotte-Nashville SC"
+[1] "Scraping game Inter Miami-New York Red Bulls"
+[1] "Scraping game New England Revolution-DC United"
+Cooling down after success streak
+[1] "Scraping game Vancouver Whitecaps-New York City"
+[1] "Scraping game Chicago Fire-Atlanta Utd"
+[1] "Scraping game FC Dallas-St. Louis City"
+[1] "Scraping game Sporting Kansas City-San Jose Earthquakes"
+[1] "Redirecting to main page"
+[1] "Scraping game Colorado Rapids-Houston Dynamo"
+[1] "Scraping game San Diego FC-Minnesota United"
+[1] "Scraping game Columbus Crew-Orlando City"
+[1] "Scraping game Vancouver Whitecaps-Sporting Kansas City"
+[1] "Scraping game Toronto FC-Austin FC"
+🔄 Resetting browser session
+[1] "Scraping game CF Montreal-New York Red Bulls"
+[1] "Scraping game Colorado Rapids-Inter Miami"
+Cooling down after success streak
+[1] "Scraping game Atlanta Utd-Nashville SC"
+[1] "Scraping game FC Cincinnati-Chicago Fire"
+[1] "Redirecting to main page"
+[1] "Scraping game New England Revolution-Columbus Crew"
+[1] "Scraping game New York City-Charlotte"
+[1] "Scraping game Orlando City-Houston Dynamo"
+⚠️ Error in game 23: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Orlando City-Houston Dynamo"
+⚠️ Error in game 23: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Orlando City-Houston Dynamo"
+⚠️ Error in game 23: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 23 after 5 failed attempts.
+[1] "Scraping game Philadelphia Union-DC United"
+⚠️ Error in game 24: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Philadelphia Union-DC United"
+[1] "Scraping game FC Dallas-Los Angeles Galaxy"
+⚠️ Error in game 25: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game FC Dallas-Los Angeles Galaxy"
+⚠️ Error in game 25: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game FC Dallas-Los Angeles Galaxy"
+[1] "Scraping game Minnesota United-Portland Timbers"
+[1] "Scraping game Real Salt Lake-San Diego FC"
+[1] "Scraping game Seattle Sounders-St. Louis City"
+[1] "Scraping game Los Angeles FC-San Jose Earthquakes"
+[1] "Scraping game Atlanta Utd-New England Revolution"
+⚠️ Error in game 30: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Atlanta Utd-New England Revolution"
+🔄 Resetting browser session
+⚠️ Error in game 30: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Atlanta Utd-New England Revolution"
+⚠️ Error in game 30: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 30 after 5 failed attempts.
+Processing league /football/usa/usl-championship/ (row 111)
+[1] "Matches to scrape"
+[1] "Scraping game Orange County SC-San Antonio"
+Processing league /football/uzbekistan/super-league/ (row 112)
+[1] "Matches to scrape"
+[1] "Scraping game Kokand 1912-Nasaf Qarshi"
+[1] "Scraping game OKMK-Termez Surkhon"
+[1] "Redirecting to main page"
+[1] "Scraping game Buxoro-Qizilqum"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Buxoro-Qizilqum"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Buxoro-Qizilqum"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 3 after 5 failed attempts.
+Processing league /football/venezuela/liga-futve/ (row 113)
+Processing league /football/venezuela/liga-futve-2/ (row 114)
