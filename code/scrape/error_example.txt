@@ -1,0 +1,92 @@
+Processing league /football/belarus/vysshaya-liga/ (row 11)
+[1] "Matches to scrape"
+[1] "Scraping game Isloch-Dynamo Brest"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Isloch-Dynamo Brest"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Isloch-Dynamo Brest"
+⚠️ Error in game 1: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 1 after 5 failed attempts.
+[1] "Scraping game Naftan-FC Gomel"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Naftan-FC Gomel"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Naftan-FC Gomel"
+⚠️ Error in game 2: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 2 after 5 failed attempts.
+[1] "Scraping game Belshina-Dnepr Mogilev"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Belshina-Dnepr Mogilev"
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Belshina-Dnepr Mogilev"
+🔄 Resetting browser session
+⚠️ Error in game 3: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 3 after 5 failed attempts.
+[1] "Scraping game FC Minsk-Neman"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game FC Minsk-Neman"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game FC Minsk-Neman"
+⚠️ Error in game 4: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 4 after 5 failed attempts.
+[1] "Scraping game Baranovici-ML Vitebsk"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Baranovici-ML Vitebsk"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Baranovici-ML Vitebsk"
+⚠️ Error in game 5: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 5 after 5 failed attempts.
+[1] "Scraping game Vitebsk-BATE"
+🔄 Resetting browser session
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Vitebsk-BATE"
+🔄 Resetting browser session
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Vitebsk-BATE"
+🔄 Resetting browser session
+⚠️ Error in game 6: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 6 after 5 failed attempts.
+[1] "Scraping game Slavia Mozyr-Arsenal Dzerzhinsk"
+🔄 Resetting browser session
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Slavia Mozyr-Arsenal Dzerzhinsk"
+🔄 Resetting browser session
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Slavia Mozyr-Arsenal Dzerzhinsk"
+🔄 Resetting browser session
+⚠️ Error in game 7: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 7 after 5 failed attempts.
+[1] "Scraping game Zhodino-Din. Minsk"
+🔄 Resetting browser session
+⚠️ Error in game 8: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Zhodino-Din. Minsk"
+🔄 Resetting browser session
+⚠️ Error in game 8: No odds returned
+⏳ Retrying this game in 10 seconds...
+[1] "Scraping game Zhodino-Din. Minsk"
+🔄 Resetting browser session
+⚠️ Error in game 8: No odds returned
+⏳ Retrying this game in 10 seconds...
+❌ Skipping game 8 after 5 failed attempts.
