@@ -676,6 +676,9 @@ loop_over_leagues <- function(v,debug=FALSE,start = 1){
           cat("⚠️ Error: ", e$message, "\n")
           cat("⏳ Retrying in 30s...\n")
           Sys.sleep(30)
+          tryCatch({ b$close() }, error = function(e2) NULL)
+          b <<- init_browser()
+          b <<- warmup_session(b)
         }
       })
     }
