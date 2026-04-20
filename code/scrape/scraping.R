@@ -1,6 +1,6 @@
 library(rvest)
 library(lubridate)
-library(fs)
+#library(fs)
 library(assertthat)
 library(httr)
 library(tictoc)
@@ -360,7 +360,7 @@ write_league <- function(league,timezone,b,version,runstats,debug=FALSE){
     
     # Join with underscore
     name <- paste(parts, collapse = "_")
-    if(file_exists(paste0("data/new/",version,"/",name,".csv"))){
+    if(file.exists(paste0("data/new/",version,"/",name,".csv"))){
       fulldata <- read.csv(paste0("data/new/",version,"/",name,".csv"))
       numrow <- nrow(fulldata)
       numcol <- ncol(fulldata)
@@ -592,7 +592,7 @@ add_results <- function(league,b,version,runstats){
     
     # Join with underscore
     name <- paste(parts, collapse = "_")
-    if(file_exists(paste0("data/new/",version,"/",name,".csv"))){
+    if(file.exists(paste0("data/new/",version,"/",name,".csv"))){
       fulldata <- read.csv(paste0("data/new/",version,"/",name,".csv"))
       numcol <- ncol(fulldata)
       idsnoresults <- fulldata$id[is.na(fulldata$result)]
