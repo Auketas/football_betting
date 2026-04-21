@@ -693,7 +693,7 @@ loop_over_leagues <- function(v,debug=FALSE,start = 1){
   end_time <- Sys.time()
   time_elapsed <- as.numeric(difftime(end_time, start_time, units = "mins"))
   wb <- loadWorkbook("data/log/scraper_log.xlsx")
-  logdata <- read.xlsx("data/log/scraper_log.xlsx", sheet = "Summary")
+  logdata <- read.xlsx("data/log/scraper_log.xlsx", sheet = "Summary", detectDates = TRUE)
   newrow <- data.frame(
     date = date,
     github_SHA = commit_sha,
