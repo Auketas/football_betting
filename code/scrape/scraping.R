@@ -100,6 +100,8 @@ extract_data <- function(league,timezone,b,runstats,debug=FALSE){
     if(ncol(matchmatuse)==1){
       matchmatuse <- t(as.matrix(matchmatuse))
     }
+    league_games_attempted <- nrow(matchmatuse)
+    league_games_failed <- 0L
     for (i in seq_len(nrow(matchmatuse))) {
       
       success <- FALSE
@@ -157,6 +159,7 @@ extract_data <- function(league,timezone,b,runstats,debug=FALSE){
       }
       
       if (!success) {
+        league_games_failed <- league_games_failed + 1L
         runstats$games_timed_out <- runstats$games_timed_out + 1
         cat(paste0("❌ Skipping game ", i, " after 5 failed attempts.\n"))
         runstats$consecutive_fails <- runstats$consecutive_fails+1
@@ -226,9 +229,9 @@ extract_data <- function(league,timezone,b,runstats,debug=FALSE){
       matuse <- data.frame(Date = final_dates, dif = dif, matchmatuse = matchmatuse_mat, stringsAsFactors = FALSE)
       matuse$id <- paste0(matuse$Date,"_",matuse$matchmatuse.1,"_",matuse$matchmatuse.2)
       matuse <- matuse[matuse$dif<21,]
-      return(list(result=matuse,browser=b,runstats=runstats))
+      return(list(result=matuse,browser=b,runstats=runstats,league_games_total=league_games_attempted,league_games_failed=league_games_failed))
     }
-    return(list(result=matchmatuse,browser=b,runstats=runstats))
+    return(list(result=matchmatuse,browser=b,runstats=runstats,league_games_total=league_games_attempted,league_games_failed=league_games_failed))
     }
   }
 }
@@ -344,6 +347,9 @@ extract_leagues <- function(){
 write_league <- function(league,timezone,b,version,runstats,debug=FALSE){
   result <- extract_data(league,timezone,b,runstats,debug)
   data <- result$result
+  is_problematic <- !is.null(result$league_games_total) &&
+    result$league_games_failed >= 3 &&
+    result$league_games_failed > result$league_games_total / 2
   if(nrow(data)>0&&length(data)>0){
     b <- result$browser
     runstats <- result$runstats
@@ -496,6 +502,7 @@ write_league <- function(league,timezone,b,version,runstats,debug=FALSE){
       runstats$total_rows <- runstats$total_rows+nrow(new_data)
     }
   }
+  if(is_problematic) runstats$problematic_leagues <- c(runstats$problematic_leagues, league)
   return(list(runstats=runstats,browser=b))
 }
 
@@ -632,7 +639,7 @@ fetch_league_page <- function(link, headers, b) {
 
 loop_over_leagues <- function(v,debug=FALSE,start = 1){
   start_time <- Sys.time()
-  runstats <- list("leagues_scraped"=0,"leagues_added"=0,"games_scraped_total"=0,"games_new_added"=0,"games_updated_existing"=0,"games_score_added"=0,"total_rows"=0,"game_checks"=matrix(nrow=0,ncol=2),"game_check_count"=1,"games_timed_out"=0,"filename"="","fatal_fails"=0,"error_log"=c(),"consecutive_hits"=0,"consecutive_fails"=0,"scrapecount"=0)
+  runstats <- list("leagues_scraped"=0,"leagues_added"=0,"games_scraped_total"=0,"games_new_added"=0,"games_updated_existing"=0,"games_score_added"=0,"total_rows"=0,"game_checks"=matrix(nrow=0,ncol=2),"game_check_count"=1,"games_timed_out"=0,"filename"="","fatal_fails"=0,"error_log"=c(),"consecutive_hits"=0,"consecutive_fails"=0,"scrapecount"=0,"problematic_leagues"=c())
   leaguelist <- read.csv("data/hold/leaguelist.csv")
   leagues <- leaguelist[, 2]
   timezones <- leaguelist[, 3]
@@ -701,9 +708,10 @@ loop_over_leagues <- function(v,debug=FALSE,start = 1){
     games_score_added = runstats$games_score_added,
     total_rows = runstats$total_rows,
     fatal_fails = runstats$fatal_fails,
+    problematic_leagues = paste(runstats$problematic_leagues, collapse=", "),
     stringsAsFactors = FALSE
   )
-  logdata <- rbind(logdata,newrow)
+  logdata <- bind_rows(logdata,newrow)
   writeData(wb, sheet = "Summary", logdata, withFilter = FALSE)
   
   gamechecks <- read.xlsx("data/log/scraper_log.xlsx", sheet="Manual_check")
