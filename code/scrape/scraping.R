@@ -1,6 +1,5 @@
 library(rvest)
 library(lubridate)
-#library(fs)
 library(assertthat)
 library(httr)
 library(tictoc)
