@@ -23,8 +23,7 @@ jobs:
           sudo apt-get install -y \
           libcurl4-openssl-dev \
           libxml2-dev \
-          libssl-dev \
-          chromium-browser
+          libssl-dev
 
       - name: Install base dependencies
         run: Rscript -e 'install.packages(c("dplyr","openxlsx","tidyverse", "httr", "jsonlite", "assertthat", "fs", "lubridate", "xml2", "stringr", "readr", "rvest", "tictoc", "chromote","R.utils"), repos = "https://cloud.r-project.org")'
@@ -37,6 +36,8 @@ jobs:
 
       - name: Run daily scraper
         run: Rscript code/scrape/daily_scraper.R
+        env:
+          CHROMOTE_CHROME: /usr/bin/google-chrome-stable
 
       - name: Commit and push new data
         run: |
