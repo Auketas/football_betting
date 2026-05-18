@@ -1,5 +1,6 @@
 library(rvest)
 library(lubridate)
+#library(fs)
 library(assertthat)
 library(httr)
 library(tictoc)
@@ -99,8 +100,6 @@ extract_data <- function(league,timezone,b,runstats,debug=FALSE){
     if(ncol(matchmatuse)==1){
       matchmatuse <- t(as.matrix(matchmatuse))
     }
-    league_games_attempted <- nrow(matchmatuse)
-    league_games_failed <- 0L
     for (i in seq_len(nrow(matchmatuse))) {
       
       success <- FALSE
@@ -158,7 +157,6 @@ extract_data <- function(league,timezone,b,runstats,debug=FALSE){
       }
       
       if (!success) {
-        league_games_failed <- league_games_failed + 1L
         runstats$games_timed_out <- runstats$games_timed_out + 1
         cat(paste0("❌ Skipping game ", i, " after 5 failed attempts.\n"))
         runstats$consecutive_fails <- runstats$consecutive_fails+1
@@ -228,9 +226,9 @@ extract_data <- function(league,timezone,b,runstats,debug=FALSE){
       matuse <- data.frame(Date = final_dates, dif = dif, matchmatuse = matchmatuse_mat, stringsAsFactors = FALSE)
       matuse$id <- paste0(matuse$Date,"_",matuse$matchmatuse.1,"_",matuse$matchmatuse.2)
       matuse <- matuse[matuse$dif<21,]
-      return(list(result=matuse,browser=b,runstats=runstats,league_games_total=league_games_attempted,league_games_failed=league_games_failed))
+      return(list(result=matuse,browser=b,runstats=runstats))
     }
-    return(list(result=matchmatuse,browser=b,runstats=runstats,league_games_total=league_games_attempted,league_games_failed=league_games_failed))
+    return(list(result=matchmatuse,browser=b,runstats=runstats))
     }
   }
 }
@@ -346,9 +344,6 @@ extract_leagues <- function(){
 write_league <- function(league,timezone,b,version,runstats,debug=FALSE){
   result <- extract_data(league,timezone,b,runstats,debug)
   data <- result$result
-  is_problematic <- !is.null(result$league_games_total) &&
-    result$league_games_failed >= 3 &&
-    result$league_games_failed > result$league_games_total / 2
   if(nrow(data)>0&&length(data)>0){
     b <- result$browser
     runstats <- result$runstats
@@ -501,7 +496,6 @@ write_league <- function(league,timezone,b,version,runstats,debug=FALSE){
       runstats$total_rows <- runstats$total_rows+nrow(new_data)
     }
   }
-  if(is_problematic) runstats$problematic_leagues <- c(runstats$problematic_leagues, league)
   return(list(runstats=runstats,browser=b))
 }
 
@@ -638,7 +632,7 @@ fetch_league_page <- function(link, headers, b) {
 
 loop_over_leagues <- function(v,debug=FALSE,start = 1){
   start_time <- Sys.time()
-  runstats <- list("leagues_scraped"=0,"leagues_added"=0,"games_scraped_total"=0,"games_new_added"=0,"games_updated_existing"=0,"games_score_added"=0,"total_rows"=0,"game_checks"=matrix(nrow=0,ncol=2),"game_check_count"=1,"games_timed_out"=0,"filename"="","fatal_fails"=0,"error_log"=c(),"consecutive_hits"=0,"consecutive_fails"=0,"scrapecount"=0,"problematic_leagues"=c())
+  runstats <- list("leagues_scraped"=0,"leagues_added"=0,"games_scraped_total"=0,"games_new_added"=0,"games_updated_existing"=0,"games_score_added"=0,"total_rows"=0,"game_checks"=matrix(nrow=0,ncol=2),"game_check_count"=1,"games_timed_out"=0,"filename"="","fatal_fails"=0,"error_log"=c(),"consecutive_hits"=0,"consecutive_fails"=0,"scrapecount"=0)
   leaguelist <- read.csv("data/hold/leaguelist.csv")
   leagues <- leaguelist[, 2]
   timezones <- leaguelist[, 3]
@@ -692,44 +686,32 @@ loop_over_leagues <- function(v,debug=FALSE,start = 1){
   }
   end_time <- Sys.time()
   time_elapsed <- as.numeric(difftime(end_time, start_time, units = "mins"))
-  tryCatch({
-    wb <- loadWorkbook("data/log/scraper_log.xlsx")
-    logdata <- read.xlsx("data/log/scraper_log.xlsx", sheet = "Summary")
-    logdata$date <- as.Date(logdata$date, origin = "1899-12-30")
-    logdata$github_SHA <- as.character(logdata$github_SHA)
-    newrow <- data.frame(
-      date = date,
-      github_SHA = commit_sha,
-      script_version = v,
-      time_elapsed = time_elapsed,
-      leagues_scraped = runstats$leagues_scraped,
-      leagues_added = runstats$leagues_added,
-      games_scraped_total = runstats$games_scraped_total,
-      games_new_added = runstats$games_new_added,
-      games_updated_existing = runstats$games_updated_existing,
-      games_score_added = runstats$games_score_added,
-      total_rows = runstats$total_rows,
-      fatal_fails = runstats$fatal_fails,
-      problematic_leagues = paste(runstats$problematic_leagues, collapse=", "),
-      stringsAsFactors = FALSE
-    )
-    logdata <- bind_rows(logdata, newrow)
-    writeData(wb, sheet = "Summary", logdata, withFilter = FALSE)
-
-    gamechecks <- read.xlsx("data/log/scraper_log.xlsx", sheet = "Manual_check")
-    newdata <- as.data.frame(runstats$game_checks)
-    if (nrow(newdata) > 0 && ncol(newdata) == ncol(gamechecks)) {
-      colnames(newdata) <- colnames(gamechecks)
-    }
-    gamechecks <- rbind(gamechecks, newdata)
-    writeData(wb, sheet = "Manual_check", gamechecks, withFilter = FALSE)
-
-    saveWorkbook(wb, "data/log/scraper_log.xlsx", overwrite = TRUE)
-    cat("Log file written successfully.\n")
-  }, error = function(e) {
-    cat("WARNING: Failed to write log file:", e$message, "\n")
-    cat("Log file was NOT updated. The scrape data itself is unaffected.\n")
-  })
+  wb <- loadWorkbook("data/log/scraper_log.xlsx")
+  logdata <- read.xlsx("data/log/scraper_log.xlsx", sheet = "Summary")
+  newrow <- data.frame(
+    date = date,
+    github_SHA = commit_sha,
+    script_version = v,
+    time_elapsed = time_elapsed,
+    leagues_scraped = runstats$leagues_scraped,
+    leagues_added = runstats$leagues_added,
+    games_scraped_total = runstats$games_scraped_total,
+    games_new_added = runstats$games_new_added,
+    games_updated_existing = runstats$games_updated_existing,
+    games_score_added = runstats$games_score_added,
+    total_rows = runstats$total_rows,
+    fatal_fails = runstats$fatal_fails,
+    stringsAsFactors = FALSE
+  )
+  logdata <- rbind(logdata,newrow)
+  writeData(wb, sheet = "Summary", logdata, withFilter = FALSE)
+  
+  gamechecks <- read.xlsx("data/log/scraper_log.xlsx", sheet="Manual_check")
+  newdata <- runstats$game_checks
+  gamechecks <- rbind(gamechecks,newdata)
+  writeData(wb,sheet="Manual_check", gamechecks, withFilter=FALSE)
+  
+  saveWorkbook(wb, "data/log/scraper_log.xlsx", overwrite = TRUE)
 }
 
 write_to_train_test <- function(){
