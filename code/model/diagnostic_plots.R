@@ -1,3 +1,5 @@
+library(gridExtra)
+
 plot_performance_vs_ndays <- function(betmat){
   actual <- betmat$payoff
   pred <- betmat$predicted_payoff
@@ -24,7 +26,6 @@ plot_performance_vs_odds <- function(betmat){
 }
 
 table_win_vs_loose <- function(testgames){
-  library(gridExtra)
   actual_bin <- as.factor(ifelse(testgames$payoff>0,"Win","Loss"))
   pred_bin <- as.factor(ifelse(testgames$predicted_payoff>0,"Predicted win","Predicted loss"))
   png(file="results/plots/win_vs_loss_table.png")

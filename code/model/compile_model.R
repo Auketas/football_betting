@@ -1,3 +1,5 @@
+library(keras)
+
 compile_model <- function(X_seq_train,X_seq_test,X_static_train,X_static_test,y_train,y_test){
   max_timesteps <- 21
   mask_value <- -99  # A value that cannot occur in real odds

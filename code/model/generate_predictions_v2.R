@@ -1,3 +1,5 @@
+library(keras)
+
 source("code/model/compile_model_v2.R")
 source("code/model/data_prep_v2.R")
 

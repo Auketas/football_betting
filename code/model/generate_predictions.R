@@ -1,3 +1,5 @@
+library(keras)
+
 source("code/model/compile_model.R")
 source("code/model/data_prep.R")
 generate_predictions <- function(){

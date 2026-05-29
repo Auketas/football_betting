@@ -1,3 +1,5 @@
+library(keras)
+
 compile_model_v2 <- function(X_seq_train, X_seq_test, X_static_train, X_static_test, y_train, y_test) {
   max_timesteps  <- 21
   n_seq_features <- 6
