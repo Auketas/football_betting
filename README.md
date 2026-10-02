@@ -98,7 +98,8 @@ Rscript code/model/run_daily.R    # optional argument: ensemble size (default 10
 **Automation:** `.github/workflows/predict.yml` ("Daily Predictions") runs this pipeline on GitHub Actions right after the
 afternoon (15:00 UTC) scrape finishes, with an ensemble of 5, and commits the two log files. It can also be started manually
 from the Actions tab (**Run workflow**). Bets are only logged; nothing is placed. The workflow installs CPU TensorFlow in
-the runner (≈10 min setup plus ≈25 min training). The 03:00 scrape does not trigger it, so a game's bet is decided from the
+the runner (≈10 min setup plus ≈25 min training). It is a separate workflow from the scraper: it only starts after a
+successful scrape, and a failure or delay in the prediction run cannot affect scraping. It only writes the two log files. The 03:00 scrape does not trigger it, so a game's bet is decided from the
 afternoon snapshot.
 
 Running twice on the same day does not duplicate bets (existing games are skipped; the prediction log replaces that day's rows).
