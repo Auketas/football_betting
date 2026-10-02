@@ -17,6 +17,11 @@ enrich_with_all_outcomes <- function(allgames) {
   allgames$a_odds_hist <- allgames$odds_history[a_rows]
   allgames$a_sd_hist   <- allgames$sd_history[a_rows]
 
+  # Odds of all three outcomes on this row's day (used for market-implied probability)
+  allgames$h_odds_now <- allgames$odds[h_rows]
+  allgames$d_odds_now <- allgames$odds[d_rows]
+  allgames$a_odds_now <- allgames$odds[a_rows]
+
   allgames
 }
 
@@ -35,11 +40,24 @@ to_sequence_matrix <- function(hist_list, log_transform = FALSE) {
   }))
 }
 
+pick_by_outcome <- function(res, for_home, for_draw, for_away, mh, md, ma) {
+  # Row-wise choice between the home/draw/away matrices depending on the row's outcome.
+  # Argument order is (res, which matrix for home rows, ... for draw rows, ... for away rows, H, D, A).
+  mats <- list(home = mh, draw = md, away = ma)
+  out <- mats[[for_home]]
+  i <- res == "X"; out[i, ] <- mats[[for_draw]][i, ]
+  i <- res == "2"; out[i, ] <- mats[[for_away]][i, ]
+  out
+}
+
 format_seq_data_v2 <- function(allgames) {
-  # 6 features per timestep:
-  #   1-3: log(home/draw/away best odds)  — log scale stabilises LSTM gradients
-  #   4-6: home/draw/away bookmaker SD    — consensus signal
+  # 6 features per timestep, ordered relative to the outcome the row is a bet on:
+  #   1: log best odds of the bet's own outcome
+  #   2-3: log best odds of the other two outcomes (fixed order: home->draw,away; draw->home,away; away->home,draw)
+  #   4-6: bookmaker SD for the same three outcomes
+  # Without this the three rows of a game carry identical inputs and the model cannot tell them apart.
   max_timesteps <- 21
+  res <- allgames$final_result
 
   H    <- to_sequence_matrix(allgames$h_odds_hist, log_transform = TRUE)
   D    <- to_sequence_matrix(allgames$d_odds_hist, log_transform = TRUE)
@@ -48,9 +66,16 @@ format_seq_data_v2 <- function(allgames) {
   D_sd <- to_sequence_matrix(allgames$d_sd_hist)
   A_sd <- to_sequence_matrix(allgames$a_sd_hist)
 
+  own      <- pick_by_outcome(res, "home", "draw", "away", H, D, A)
+  other1   <- pick_by_outcome(res, "draw", "home", "home", H, D, A)
+  other2   <- pick_by_outcome(res, "away", "away", "draw", H, D, A)
+  own_sd    <- pick_by_outcome(res, "home", "draw", "away", H_sd, D_sd, A_sd)
+  other1_sd <- pick_by_outcome(res, "draw", "home", "home", H_sd, D_sd, A_sd)
+  other2_sd <- pick_by_outcome(res, "away", "away", "draw", H_sd, D_sd, A_sd)
+
   array(
-    c(H, D, A, H_sd, D_sd, A_sd),
-    dim = c(nrow(H), max_timesteps, 6)
+    c(own, other1, other2, own_sd, other1_sd, other2_sd),
+    dim = c(nrow(own), max_timesteps, 6)
   )
 }
 
@@ -79,6 +104,8 @@ fit_static_scaler <- function(train) {
     daysout_sd     = sd(train$daysout,    na.rm = TRUE),
     overround_mean = mean(overround_vals, na.rm = TRUE),
     overround_sd   = sd(overround_vals,   na.rm = TRUE),
+    logodds_mean   = mean(log(train$odds), na.rm = TRUE),
+    logodds_sd     = sd(log(train$odds),   na.rm = TRUE),
     league_cols    = league_cols
   )
 }
@@ -95,10 +122,19 @@ format_static_data_v2 <- function(allgames, scaler) {
   # New leagues in test get all-zero columns; leagues only in test are dropped.
   league_mat <- model.matrix(~ league - 1, data = allgames)
   missing    <- setdiff(scaler$league_cols, colnames(league_mat))
-  for (col in missing) league_mat <- cbind(league_mat, setNames(matrix(0, nrow(league_mat), 1), col))
+  for (col in missing) league_mat <- cbind(league_mat, matrix(0, nrow(league_mat), 1, dimnames = list(NULL, col)))
   league_mat <- league_mat[, scaler$league_cols, drop = FALSE]
 
-  cbind(ndays_scaled, daysout_scaled, overround_scaled, league_mat)
+  # Which outcome is being bet on, its odds, and the market-implied (overround-normalised) probability
+  outcome_mat <- cbind(is_home = as.numeric(allgames$final_result == "1"),
+                       is_draw = as.numeric(allgames$final_result == "X"),
+                       is_away = as.numeric(allgames$final_result == "2"))
+  logodds_scaled <- (log(allgames$odds) - scaler$logodds_mean) / scaler$logodds_sd
+  mkt_prob <- (1 / allgames$odds) /
+    (1 / allgames$h_odds_now + 1 / allgames$d_odds_now + 1 / allgames$a_odds_now)
+  mkt_prob[!is.finite(mkt_prob)] <- 1 / 3
+
+  cbind(ndays_scaled, daysout_scaled, overround_scaled, outcome_mat, logodds_scaled, mkt_prob, league_mat)
 }
 
 generate_train_test_data_v2 <- function(allgames, start, end) {

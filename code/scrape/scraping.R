@@ -733,18 +733,12 @@ loop_over_leagues <- function(v,debug=FALSE,start = 1){
   })
 }
 
-write_to_train_test <- function(){
-  temptrain <- read.csv("data/new/hold.csv")
-  temptrain$league <- 0
-  temptrain <- temptrain[,c(1,ncol(temptrain),2:(ncol(temptrain)-1))]
-  temptest <- temptrain
-    
+write_to_train_test <- function(version = "V2"){
   leaguelist <- read.csv("data/hold/leaguelist.csv")
   leagues <- leaguelist[, 2]
-  timezones <- leaguelist[, 3]
   
-  for (i in 1:nrow(leaguelist)) {
-    league <- leagues[i]
+  all_raw <- list()
+  for (league in leagues) {
     trimmed <- sub("^/football/", "", league)
     trimmed <- sub("/$", "", trimmed)
     
@@ -756,79 +750,84 @@ write_to_train_test <- function(){
     
     # Join with underscore
     name <- paste(parts, collapse = "_")
-    if(file.exists(paste0("data/new/",name,".csv"))){
-      tempdata <- read.csv(paste0("data/new/",name,".csv"))
+    path <- paste0("data/new/", version, "/", name, ".csv")
+    if (file.exists(path)) {
+      tempdata <- read.csv(path, colClasses = c(id = "character", result = "character"))
       tempdata$league <- name
-      tempdata <- tempdata[,c(1,ncol(tempdata),2:(ncol(tempdata)-1))]
-      finished <- tempdata[!is.na(tempdata$result),]
-      finished <- finished[,1:ncol(temptrain)]
-      ongoing <- tempdata[is.na(tempdata$result),]
-      ongoing <- ongoing[,1:ncol(temptrain)]
-      temptrain <- rbind(temptrain,finished)
-      temptest <- rbind(temptest,ongoing)  
+      all_raw[[name]] <- tempdata
     }
   }
-  temptrain <- temptrain[nchar(temptrain$id)>2,]
-  temptest <- temptest[nchar(temptest$id)>2,]
-  temptrain_formatted <- convert_data_to_model_format(temptrain,return=TRUE,write=FALSE)
-  temptest_formatted <- convert_data_to_model_format(temptest,return=TRUE,write=FALSE)
+  
+  # Columns are selected by name, so differing column sets between leagues/versions are fine
+  keep <- c("id", "league", "result",
+            paste0(rep(c("home", "draw", "away"), each = 21), "_odds_l", 20:0),
+            paste0(rep(c("home", "draw", "away"), each = 21), "_sd_l", 20:0))
+  all_raw <- lapply(all_raw, function(d) {
+    for (col in setdiff(keep, colnames(d))) d[[col]] <- NA
+    d[, keep]
+  })
+  all_raw <- do.call(rbind, all_raw)
+  all_raw <- all_raw[nchar(all_raw$id) > 2, ]
+  # Source files occasionally contain a duplicated game id; keep the first occurrence
+  all_raw <- all_raw[!duplicated(all_raw$id), ]
+  
+  finished <- all_raw[!is.na(all_raw$result), ]
+  ongoing <- all_raw[is.na(all_raw$result), ]
+  # Games dated before today without a result yet are no longer bettable
+  ongoing <- ongoing[as.Date(substr(ongoing$id, 1, 10)) >= Sys.Date(), ]
+  
+  temptrain_formatted <- convert_data_to_model_format(finished, return = TRUE, write = FALSE)
+  temptest_formatted <- convert_data_to_model_format(ongoing, return = TRUE, write = FALSE)
+  # Keep only the most recent observation (smallest daysout) per game and outcome
   temptest_formatted <- temptest_formatted %>%
-    group_by(id, outcome) %>%
+    group_by(id, final_result) %>%
     slice_min(order_by = daysout, n = 1, with_ties = FALSE) %>%
     ungroup()
-  temptrain_formatted$saveid <- paste0(temptrain_formatted$id,"-",temptrain_formatted$daysout,"-",temptrain_formatted$outcome)
-  train_file <- "data/model/train.rds"
+  temptrain_formatted$saveid <- paste0(temptrain_formatted$id, "-", temptrain_formatted$daysout, "-", temptrain_formatted$final_result)
   
-  train <- temptrain_formatted
-  
-  saveRDS(train, file = "data/model/train.rds")
-  saveRDS(temptest_formatted,file = "data/model/test.rds")
+  saveRDS(temptrain_formatted, file = "data/model/train.rds")
+  saveRDS(temptest_formatted, file = "data/model/test.rds")
 }
 
+# rawdata needs columns id, league, result and the named <home|draw|away>_<odds|sd>_l<20..0> columns.
+# Returns one row per game x days-out x outcome (final_result "1", "X", "2").
 convert_data_to_model_format <- function(rawdata,return=FALSE,write=TRUE){
-  allgames <- matrix(ncol=10)
-  allgames <- data.frame(allgames)
-  colnames(allgames) <- c("id","league","daysout","outcome","odds_history","sd_history","final_result","payoff","odds","ndays")
-  for(i in 1:nrow(rawdata)){
-    row <- rawdata[i,]
-    days <- 21-which(!is.na(row[3:23]))
-    league <- row$league
-    id  <- row$id
-    result  <- row$result
-    gamemat <- matrix(ncol=10)
-    gamemat <- data.frame(gamemat)
-    colnames(gamemat) <- colnames(allgames)
-    for(j in days){
-      homeodds <- row[1,23-j]
-      drawodds <- row[1,44-j]
-      awayodds <- row[1,65-j]
-      oddsvechome <- c(as.numeric(row[ , 3:(23 - j)]),rep(NA,j))
-      oddsvecdraw <- c(as.numeric(row[ , 24:(44 - j)]),rep(NA,j))
-      oddsvecaway <- c(as.numeric(row[ , 45:(65 - j)]),rep(NA,j))
-      sdvechome <- c(as.numeric(row[ , 67:(87 - j )]),rep(NA,j))
-      sdvecdraw <- c(as.numeric(row[ , 88:(108 - j)]),rep(NA,j))
-      sdvecaway <- c(as.numeric(row[ , 109:(129 - j)]),rep(NA,j))
-      minimat <- matrix(ncol=10,nrow=3)
-      minimat  <- data.frame(minimat)
-      colnames(minimat) <- colnames(gamemat)
-      minimat$id <- rep(id,3)
-      minimat$league <- rep(league,3)
-      minimat$daysout <- rep(j,3)
-      minimat$outcome <- rep(result,3)
-      minimat$odds_history <- list(oddsvechome,oddsvecdraw,oddsvecaway)
-      minimat$sd_history <- list(sdvechome,sdvecdraw,sdvecaway)
-      minimat$final_result <- c("1","2","X")
-      homepay <- ifelse(result=="1",homeodds-1,-1)
-      drawpay <- ifelse(result=="X",drawodds-1,-1)
-      awaypay <- ifelse(result=="2",awayodds-1,-1)
-      minimat$payoff <- c(homepay,drawpay,awaypay)
-      minimat$odds <- c(homeodds,drawodds,awayodds)
-      minimat$ndays <- c(sum(!is.na(oddsvechome)),sum(!is.na(oddsvecdraw)),sum(!is.na(oddsvecaway)))
-      gamemat <- rbind(gamemat,minimat)
-    }
-    allgames  <- rbind(allgames,gamemat)
-  }
-  allgames <- allgames[!is.na(allgames$id),]
+  days_seq <- 20:0
+  get_mat <- function(outcome, type) data.matrix(rawdata[, paste0(outcome, "_", type, "_l", days_seq), drop = FALSE])
+  odds_mat <- list(home = get_mat("home", "odds"), draw = get_mat("draw", "odds"), away = get_mat("away", "odds"))
+  sd_mat <- list(home = get_mat("home", "sd"), draw = get_mat("draw", "sd"), away = get_mat("away", "sd"))
+  
+  per_game <- lapply(seq_len(nrow(rawdata)), function(i) {
+    # Days out on which all three odds were observed
+    obs <- which(!is.na(odds_mat$home[i, ]) & !is.na(odds_mat$draw[i, ]) & !is.na(odds_mat$away[i, ]))
+    if (length(obs) == 0) return(NULL)
+    result <- rawdata$result[i]
+    rows <- lapply(obs, function(k) {
+      j <- days_seq[k]  # days before kickoff
+      hist <- function(m) unname(c(m[i, 1:k], rep(NA, 21 - k)))
+      oh <- hist(odds_mat$home); od <- hist(odds_mat$draw); oa <- hist(odds_mat$away)
+      odds <- c(oh[k], od[k], oa[k])
+      outcomes <- c("1", "X", "2")
+      data.frame(
+        id = rawdata$id[i],
+        league = rawdata$league[i],
+        daysout = j,
+        outcome = result,
+        odds_history = I(list(oh, od, oa)),
+        sd_history = I(list(hist(sd_mat$home), hist(sd_mat$draw), hist(sd_mat$away))),
+        final_result = outcomes,
+        payoff = ifelse(result == outcomes, odds - 1, -1),
+        odds = odds,
+        ndays = c(sum(!is.na(oh)), sum(!is.na(od)), sum(!is.na(oa))),
+        stringsAsFactors = FALSE
+      )
+    })
+    do.call(rbind, rows)
+  })
+  allgames <- bind_rows(per_game)
+  # Plain list columns, as in the original format
+  allgames$odds_history <- unclass(allgames$odds_history)
+  allgames$sd_history <- unclass(allgames$sd_history)
   if(return==TRUE){
     return(allgames)
   }

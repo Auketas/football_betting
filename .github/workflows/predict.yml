@@ -1,0 +1,91 @@
+name: Daily Predictions
+
+# Runs after the afternoon "Daily Scraper" run (15:00 UTC): retrains the v2 model on all finished games, predicts the
+# upcoming games and appends suggested bets to results/bets_log.csv and results/predictions_log.csv.
+# Bets are only logged, nothing is placed. Can also be started manually from the Actions tab.
+
+on:
+  workflow_run:
+    workflows: ["Daily Scraper"]
+    types: [completed]
+  workflow_dispatch:
+
+# Share a group with the scraper so the two never push to the repo at the same time
+concurrency:
+  group: data-writes
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  predict:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    # Skip when the scraper failed
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Only run after the afternoon scrape
+        id: gate
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            hour=$(date -u -d "${{ github.event.workflow_run.run_started_at }}" +%H)
+            echo "Scraper run started at hour $hour UTC"
+            if [ "$((10#$hour))" -ge 12 ]; then echo "run=true" >> "$GITHUB_OUTPUT"; else echo "run=false" >> "$GITHUB_OUTPUT"; fi
+          fi
+
+      - name: Checkout repo (latest main, includes the new scrape)
+        if: steps.gate.outputs.run == 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up R
+        if: steps.gate.outputs.run == 'true'
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Set up Python
+        if: steps.gate.outputs.run == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install system dependencies
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libxml2-dev libssl-dev
+
+      - name: Install TensorFlow (CPU)
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "tensorflow-cpu==2.15.0" "numpy<2"
+          echo "RETICULATE_PYTHON=$(which python)" >> "$GITHUB_ENV"
+
+      - name: Install R packages
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          Rscript -e 'install.packages(c("remotes","dplyr","openxlsx","httr","jsonlite","assertthat","lubridate","xml2","stringr","readr","rvest","tictoc","chromote","R.utils","reticulate"), repos = "https://cloud.r-project.org")'
+          Rscript -e 'remotes::install_version("tensorflow", "2.16.0", repos = "https://cloud.r-project.org"); remotes::install_version("keras", "2.15.0", repos = "https://cloud.r-project.org")'
+
+      - name: Run daily pipeline
+        if: steps.gate.outputs.run == 'true'
+        run: Rscript code/model/run_daily.R 5
+
+      - name: Commit bet and prediction logs
+        if: steps.gate.outputs.run == 'true'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add results/bets_log.csv results/predictions_log.csv
+          if git diff --cached --quiet; then
+            echo "No new bets or predictions to commit"
+          else
+            git commit -m "Update bet log [$(date +'%Y-%m-%d')]"
+            git pull --rebase origin main
+            git push
+          fi
