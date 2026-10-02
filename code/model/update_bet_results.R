@@ -7,7 +7,9 @@ suppressMessages(library(dplyr))
 
 settle_log <- function(path, version) {
   if (!file.exists(path)) return(NULL)
-  log <- read.csv(path, stringsAsFactors = FALSE, colClasses = c(id = "character", result = "character"))
+  text_cols <- c("run_date", "data_as_of", "id", "league", "game_date", "outcome", "model_version", "rule", "result")
+  log <- suppressWarnings(read.csv(path, stringsAsFactors = FALSE, colClasses = setNames(rep("character", length(text_cols)), text_cols)))
+  log$payoff <- as.numeric(log$payoff)
   todo <- is.na(log$result) | log$result == ""
   for (lg in unique(log$league[todo])) {
     f <- sprintf("data/new/%s/%s.csv", version, lg)

@@ -6,11 +6,6 @@ on:
     - cron: '0 3 * * *'
   workflow_dispatch:       # Allows manual triggering from GitHub UI
 
-# Share a group with predict.yml so the two never push to the repo at the same time
-concurrency:
-  group: data-writes
-  cancel-in-progress: false
-
 jobs:
   run-r-script:
     runs-on: ubuntu-latest

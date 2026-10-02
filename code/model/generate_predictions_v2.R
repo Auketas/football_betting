@@ -37,10 +37,58 @@ BET_RULE <- list(min_edge = 0.05, max_odds = 10, max_daysout = 1)
 BETS_FILE <- "results/bets_log.csv"
 PREDICTIONS_FILE <- "results/predictions_log.csv"
 
+# Text columns are read as character so that an empty (header-only) log can still be appended to
+LOG_TEXT_COLUMNS <- c("run_date", "data_as_of", "id", "league", "game_date", "outcome", "model_version", "rule", "result")
 read_log <- function(path) {
   if (!file.exists(path)) return(NULL)
-  read.csv(path, stringsAsFactors = FALSE, colClasses = c(id = "character", result = "character"))
+  suppressWarnings(read.csv(path, stringsAsFactors = FALSE, colClasses = setNames(rep("character", length(LOG_TEXT_COLUMNS)), LOG_TEXT_COLUMNS)))
 }
+
+# Apply the betting rule to a data frame of predictions and append to the bet / prediction logs.
+select_and_log_bets <- function(pred, rule, runs, run_date, bets_file, predictions_file) {
+  eligible <- pred[pred$daysout <= rule$max_daysout, ]
+  passes <- eligible$edge > rule$min_edge & eligible$odds < rule$max_odds
+
+  # One bet per game: best outcome among those passing the rule, and never a game already bet on
+  existing_bets <- read_log(bets_file)
+  already_bet <- if (is.null(existing_bets)) character(0) else existing_bets$id
+  cand <- eligible[passes & !(eligible$id %in% already_bet), ]
+  new_bets <- cand %>% group_by(id) %>% slice_max(order_by = edge, n = 1, with_ties = FALSE) %>% ungroup() %>% as.data.frame()
+  n <- nrow(new_bets)
+  new_bets$model_version <- rep(MODEL_VERSION, n)
+  new_bets$n_ensemble <- rep(as.integer(runs), n)
+  new_bets$rule <- rep(sprintf("edge>%.2f;odds<%g;daysout<=%d", rule$min_edge, rule$max_odds, rule$max_daysout), n)
+  new_bets$stake <- rep(1, n)
+  new_bets$result <- rep(NA_character_, n)
+  new_bets$payoff <- rep(NA_real_, n)
+
+  # Prediction log: replace any rows from an earlier run on the same date, flag which rows were bets
+  eligible$bet <- as.integer(paste(eligible$id, eligible$outcome) %in% paste(new_bets$id, new_bets$outcome))
+  eligible$model_version <- rep(MODEL_VERSION, nrow(eligible))
+  eligible$result <- rep(NA_character_, nrow(eligible))
+  eligible$payoff <- rep(NA_real_, nrow(eligible))
+  old_pred <- read_log(predictions_file)
+  if (!is.null(old_pred)) old_pred <- old_pred[old_pred$run_date != as.character(run_date), ]
+  dir.create(dirname(predictions_file), recursive = TRUE, showWarnings = FALSE)
+  write.csv(bind_rows(old_pred, eligible), predictions_file, row.names = FALSE)
+
+  # Always make sure the bet log exists (header only while there are no bets yet)
+  if (n > 0 || is.null(existing_bets)) {
+    dir.create(dirname(bets_file), recursive = TRUE, showWarnings = FALSE)
+    write.csv(bind_rows(existing_bets, new_bets), bets_file, row.names = FALSE)
+  }
+
+  cat(sprintf("
+Data as of %s. Eligible games (daysout <= %d): %d. New bets: %d (largest edge among all eligible outcomes: %.3f)
+",
+              pred$data_as_of[1], rule$max_daysout, length(unique(eligible$id)), n,
+              if (nrow(eligible) > 0) max(eligible$edge) else NA_real_))
+  if (n > 0) {
+    print(new_bets[order(-new_bets$edge), c("game_date", "league", "id", "outcome", "odds", "p_model", "p_market", "edge", "daysout")], row.names = FALSE)
+  }
+  invisible(new_bets)
+}
+
 
 generate_predictions_v2 <- function(runs = 10, rule = BET_RULE, run_date = Sys.Date(),
                                     bets_file = BETS_FILE, predictions_file = PREDICTIONS_FILE,
@@ -99,42 +147,5 @@ generate_predictions_v2 <- function(runs = 10, rule = BET_RULE, run_date = Sys.D
   pred$edge <- pred$p_model - pred$p_market
   pred$ev   <- pred$p_model * pred$odds - 1
 
-  eligible <- pred[pred$daysout <= rule$max_daysout, ]
-  passes <- eligible$edge > rule$min_edge & eligible$odds < rule$max_odds
-
-  # One bet per game: best outcome among those passing the rule, and never a game already bet on
-  existing_bets <- read_log(bets_file)
-  already_bet <- if (is.null(existing_bets)) character(0) else existing_bets$id
-  cand <- eligible[passes & !(eligible$id %in% already_bet), ]
-  new_bets <- cand %>% group_by(id) %>% slice_max(order_by = edge, n = 1, with_ties = FALSE) %>% ungroup() %>% as.data.frame()
-  if (nrow(new_bets) > 0) {
-    new_bets$model_version <- MODEL_VERSION
-    new_bets$n_ensemble <- runs
-    new_bets$rule <- sprintf("edge>%.2f;odds<%g;daysout<=%d", rule$min_edge, rule$max_odds, rule$max_daysout)
-    new_bets$stake <- 1
-    new_bets$result <- NA_character_
-    new_bets$payoff <- NA_real_
-  }
-
-  # Prediction log: replace any rows from an earlier run on the same date, flag which rows were bets
-  eligible$bet <- as.integer(paste(eligible$id, eligible$outcome) %in% paste(new_bets$id, new_bets$outcome))
-  eligible$model_version <- MODEL_VERSION
-  eligible$result <- NA_character_
-  eligible$payoff <- NA_real_
-  old_pred <- read_log(predictions_file)
-  if (!is.null(old_pred)) old_pred <- old_pred[old_pred$run_date != as.character(run_date), ]
-  dir.create(dirname(predictions_file), recursive = TRUE, showWarnings = FALSE)
-  write.csv(bind_rows(old_pred, eligible), predictions_file, row.names = FALSE)
-
-  if (nrow(new_bets) > 0) {
-    dir.create(dirname(bets_file), recursive = TRUE, showWarnings = FALSE)
-    write.csv(bind_rows(existing_bets, new_bets), bets_file, row.names = FALSE)
-  }
-
-  cat(sprintf("\nData as of %s. Eligible games (daysout <= %d): %d. New bets: %d\n",
-              data_as_of, rule$max_daysout, length(unique(eligible$id)), nrow(new_bets)))
-  if (nrow(new_bets) > 0) {
-    print(new_bets[order(-new_bets$edge), c("game_date", "league", "id", "outcome", "odds", "p_model", "p_market", "edge", "daysout")], row.names = FALSE)
-  }
-  invisible(new_bets)
+  select_and_log_bets(pred, rule, runs, run_date, bets_file, predictions_file)
 }

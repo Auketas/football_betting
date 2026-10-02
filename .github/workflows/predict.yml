@@ -10,9 +10,10 @@ on:
     types: [completed]
   workflow_dispatch:
 
-# Share a group with the scraper so the two never push to the repo at the same time
+# Independent of the scraper: this workflow only reads the scraped data and pushes its own two log files.
+# The group just prevents two prediction runs from overlapping.
 concurrency:
-  group: data-writes
+  group: predictions
   cancel-in-progress: false
 
 permissions:
