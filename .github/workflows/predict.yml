@@ -58,7 +58,7 @@ jobs:
         if: steps.gate.outputs.run == 'true'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libcurl4-openssl-dev libxml2-dev libssl-dev
+          sudo apt-get install -y libcurl4-openssl-dev libxml2-dev libssl-dev libpng-dev
 
       - name: Install TensorFlow (CPU)
         if: steps.gate.outputs.run == 'true'
@@ -70,8 +70,11 @@ jobs:
       - name: Install R packages
         if: steps.gate.outputs.run == 'true'
         run: |
-          Rscript -e 'install.packages(c("remotes","dplyr","openxlsx","httr","jsonlite","assertthat","lubridate","xml2","stringr","readr","rvest","tictoc","chromote","R.utils","reticulate"), repos = "https://cloud.r-project.org")'
-          Rscript -e 'remotes::install_version("tensorflow", "2.16.0", repos = "https://cloud.r-project.org"); remotes::install_version("keras", "2.15.0", repos = "https://cloud.r-project.org")'
+          # Turn install warnings (failed builds) into errors so a missing package fails here, not later
+          Rscript -e 'options(warn = 2); install.packages(c("remotes","dplyr","openxlsx","httr","jsonlite","assertthat","lubridate","xml2","stringr","readr","rvest","tictoc","chromote","R.utils","reticulate","tfruns","zeallot","R6","generics","magrittr","png","config","rlang","tidyselect","vctrs","Matrix","whisker","yaml"), repos = "https://cloud.r-project.org")'
+          Rscript -e 'options(warn = 2); remotes::install_version("tensorflow", "2.16.0", repos = "https://cloud.r-project.org", upgrade = "never"); remotes::install_version("keras", "2.15.0", repos = "https://cloud.r-project.org", upgrade = "never")'
+          Rscript -e 'library(keras); library(tensorflow); cat("keras", as.character(packageVersion("keras")), "tensorflow", as.character(packageVersion("tensorflow")), "
+")'
 
       - name: Run daily pipeline
         if: steps.gate.outputs.run == 'true'
