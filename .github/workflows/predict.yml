@@ -89,6 +89,8 @@ jobs:
             echo "No new bets or predictions to commit"
           else
             git commit -m "Update bet log [$(date +'%Y-%m-%d')]"
+            # the pipeline rebuilds the tracked data/model/*.rds files; discard them so the rebase can run
+            git checkout -- .
             git pull --rebase origin main
             git push
           fi
