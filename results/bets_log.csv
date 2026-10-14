@@ -1,1 +1,2 @@
 "run_date","data_as_of","id","league","game_date","outcome","odds","daysout","ndays","p_model","p_market","edge","ev","model_version","n_ensemble","rule","stake","result","payoff"
+"2026-10-14","2026-10-15","2026-10-16_Corum_Rizespor","Turkey_super-lig","2026-10-16","1",2.05,1,5,0.519403654336929,0.46032342986085,0.0590802244760795,0.0647774913907051,"v2-outcome-aware",5,"edge>0.05;odds<10;daysout<=1",1,NA,NA
